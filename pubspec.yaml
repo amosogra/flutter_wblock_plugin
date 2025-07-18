@@ -1,0 +1,31 @@
+name: flutter_wblock_plugin
+description: A Flutter plugin for wBlock - The next-generation ad blocker for Safari on macOS.
+version: 0.2.0
+homepage: https://github.com/yourusername/flutter_wblock_plugin
+
+environment:
+  sdk: '>=2.19.0 <4.0.0'
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.7
+  uuid: ^4.2.1
+  url_launcher: ^6.2.1
+  path_provider: ^2.1.1
+  http: ^1.1.0
+  provider: ^6.1.1
+  shared_preferences: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  plugin:
+    platforms:
+      macos:
+        pluginClass: FlutterWblockPlugin
+        dartPluginClass: FlutterWblockPlugin

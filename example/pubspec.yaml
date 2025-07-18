@@ -1,0 +1,26 @@
+name: flutter_wblock_example
+description: Example app for flutter_wblock_plugin
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  #flutter: ">=3.29.2"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_wblock_plugin:
+    path: ../
+  provider: ^6.1.1
+  macos_ui: ^2.0.0
+  flutter_platform_widgets: ^6.0.2
+  flutter_riverpod: ^2.6.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

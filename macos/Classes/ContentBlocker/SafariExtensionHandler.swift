@@ -237,7 +237,7 @@ class SafariExtensionHandler: NSObject, NSExtensionRequestHandling {
     private func reloadContentBlockers() async {
         let identifiers = [
             "syferlab.wBlock.wBlock-Filters",
-            "syferlab.wBlock.wBlock-Filters-2",
+            "syferlab.wBlock.wBlock-Advance",
             "syferlab.wBlock.wBlock-Scripts"
         ]
         

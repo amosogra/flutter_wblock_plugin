@@ -22,8 +22,8 @@ echo "   - Select 'Safari Extension' under macOS"
 echo "   - Create 3 extensions:"
 echo "     a) Name: 'wBlock Filters'"
 echo "        Bundle ID: syferlab.wBlock.wBlock-Filters"
-echo "     b) Name: 'wBlock Filters 2'"
-echo "        Bundle ID: syferlab.wBlock.wBlock-Filters-2"
+echo "     b) Name: 'wBlock Advance'"
+echo "        Bundle ID: syferlab.wBlock.wBlock-Advance"
 echo "     c) Name: 'wBlock Scripts'"
 echo "        Bundle ID: syferlab.wBlock.wBlock-Scripts"
 echo ""
@@ -36,7 +36,7 @@ echo "4. Configure Info.plist for each extension:"
 echo ""
 
 cat << 'EOF'
-For wBlock Filters and wBlock Filters 2:
+For wBlock Filters and wBlock Advance:
 <key>NSExtension</key>
 <dict>
     <key>NSExtensionPointIdentifier</key>

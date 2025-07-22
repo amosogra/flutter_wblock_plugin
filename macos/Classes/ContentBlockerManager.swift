@@ -6,7 +6,7 @@ class ContentBlockerManager {
     private let appGroupIdentifier = "group.syferlab.wBlock"
     private let contentBlockerIdentifiers = [
         "syferlab.wBlock.wBlock-Filters",
-        "syferlab.wBlock.wBlock-Filters-2",
+        "syferlab.wBlock.wBlock-Advance",
         "syferlab.wBlock.wBlock-Scripts"
     ]
     

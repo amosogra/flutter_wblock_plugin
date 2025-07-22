@@ -19,7 +19,7 @@ class ContentBlockerRequestHandler: NSObject, NSExtensionRequestHandling {
         switch extensionIdentifier {
         case "syferlab.wBlock.wBlock-Filters":
             blockerFileName = "blockerList.json"
-        case "syferlab.wBlock.wBlock-Filters-2":
+        case "syferlab.wBlock.wBlock-Advance":
             blockerFileName = "blockerList2.json"
         case "syferlab.wBlock.wBlock-Scripts":
             blockerFileName = "blockerList3.json"

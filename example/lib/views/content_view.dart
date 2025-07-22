@@ -25,24 +25,21 @@ class _ContentViewState extends State<ContentView> {
   bool _showingAddFilterSheet = false;
   bool _showingCheatSheet = false;
 
+  // Set up keyboard shortcuts
+  final shortcuts = <LogicalKeySet, Intent>{
+    LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyR): RefreshIntent(),
+    LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyS): ApplyChangesIntent(),
+    LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyN): AddCustomFilterIntent(),
+    LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.shift, LogicalKeyboardKey.keyL): ShowLogsIntent(),
+    LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.comma): ShowSettingsIntent(),
+    LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.alt, LogicalKeyboardKey.keyR): ResetToDefaultIntent(),
+    LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.shift, LogicalKeyboardKey.keyF): ToggleEnabledFiltersIntent(),
+    LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.shift, LogicalKeyboardKey.keyK): ShowCheatSheetIntent(),
+  };
+
   @override
   void initState() {
     super.initState();
-    _setupKeyboardShortcuts();
-  }
-
-  void _setupKeyboardShortcuts() {
-    // Set up keyboard shortcuts
-    final shortcuts = <LogicalKeySet, Intent>{
-      LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyR): RefreshIntent(),
-      LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyS): ApplyChangesIntent(),
-      LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyN): AddCustomFilterIntent(),
-      LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.shift, LogicalKeyboardKey.keyL): ShowLogsIntent(),
-      LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.comma): ShowSettingsIntent(),
-      LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.alt, LogicalKeyboardKey.keyR): ResetToDefaultIntent(),
-      LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.shift, LogicalKeyboardKey.keyF): ToggleEnabledFiltersIntent(),
-      LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.shift, LogicalKeyboardKey.keyK): ShowCheatSheetIntent(),
-    };
   }
 
   @override
@@ -50,16 +47,7 @@ class _ContentViewState extends State<ContentView> {
     final filterManager = context.watch<FilterListManager>();
 
     return Shortcuts(
-      shortcuts: <LogicalKeySet, Intent>{
-        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyR): RefreshIntent(),
-        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyS): ApplyChangesIntent(),
-        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.keyN): AddCustomFilterIntent(),
-        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.shift, LogicalKeyboardKey.keyL): ShowLogsIntent(),
-        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.comma): ShowSettingsIntent(),
-        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.alt, LogicalKeyboardKey.keyR): ResetToDefaultIntent(),
-        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.shift, LogicalKeyboardKey.keyF): ToggleEnabledFiltersIntent(),
-        LogicalKeySet(LogicalKeyboardKey.meta, LogicalKeyboardKey.shift, LogicalKeyboardKey.keyK): ShowCheatSheetIntent(),
-      },
+      shortcuts: shortcuts,
       child: Actions(
         actions: <Type, Action<Intent>>{
           RefreshIntent: CallbackAction<RefreshIntent>(
@@ -111,72 +99,72 @@ class _ContentViewState extends State<ContentView> {
             width: 700,
             height: 500,
             child: Stack(
-        children: [
-          Column(
-            children: [
-              _buildToolbar(context, filterManager),
-              Expanded(
-                child: FilterListContentView(
-                  selectedCategory: FilterListCategory.all,
-                  showOnlyEnabledFilters: _showOnlyEnabledFilters,
+              children: [
+                Column(
+                  children: [
+                    _buildToolbar(context, filterManager),
+                    Expanded(
+                      child: FilterListContentView(
+                        selectedCategory: FilterListCategory.all,
+                        showOnlyEnabledFilters: _showOnlyEnabledFilters,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+
+                // Sheets and Dialogs
+                if (filterManager.showProgressView) _buildProgressOverlay(filterManager),
+
+                if (_showingAddFilterSheet)
+                  _buildSheet(
+                    child: AddCustomFilterView(
+                      onDismiss: () => setState(() => _showingAddFilterSheet = false),
+                    ),
+                  ),
+
+                if (_showingLogs)
+                  _buildSheet(
+                    child: LogsView(
+                      onDismiss: () => setState(() => _showingLogs = false),
+                    ),
+                  ),
+
+                if (_showingSettings)
+                  _buildSheet(
+                    child: SettingsView(
+                      onDismiss: () => setState(() => _showingSettings = false),
+                    ),
+                  ),
+
+                if (_showingCheatSheet)
+                  _buildSheet(
+                    child: KeyboardShortcutsView(
+                      onDismiss: () => setState(() => _showingCheatSheet = false),
+                    ),
+                  ),
+
+                if (filterManager.missingFilters.isNotEmpty)
+                  _buildSheet(
+                    child: MissingFiltersView(
+                      missingFilters: filterManager.missingFilters,
+                      onDismiss: () => filterManager.missingFilters.clear(),
+                      onUpdate: () => filterManager.updateMissingFilters(),
+                    ),
+                  ),
+
+                if (filterManager.availableUpdates.isNotEmpty)
+                  _buildSheet(
+                    child: UpdatePopupView(
+                      availableUpdates: filterManager.availableUpdates,
+                      onDismiss: () => filterManager.availableUpdates.clear(),
+                      onUpdate: (filters) => filterManager.updateSelectedFilters(filters),
+                    ),
+                  ),
+              ],
+            ),
           ),
-
-          // Sheets and Dialogs
-          if (filterManager.showProgressView) _buildProgressOverlay(filterManager),
-
-          if (_showingAddFilterSheet)
-            _buildSheet(
-              child: AddCustomFilterView(
-                onDismiss: () => setState(() => _showingAddFilterSheet = false),
-              ),
-            ),
-
-          if (_showingLogs)
-            _buildSheet(
-              child: LogsView(
-                onDismiss: () => setState(() => _showingLogs = false),
-              ),
-            ),
-
-          if (_showingSettings)
-            _buildSheet(
-              child: SettingsView(
-                onDismiss: () => setState(() => _showingSettings = false),
-              ),
-            ),
-
-          if (_showingCheatSheet)
-            _buildSheet(
-              child: KeyboardShortcutsView(
-                onDismiss: () => setState(() => _showingCheatSheet = false),
-              ),
-            ),
-
-          if (filterManager.missingFilters.isNotEmpty)
-            _buildSheet(
-              child: MissingFiltersView(
-                missingFilters: filterManager.missingFilters,
-                onDismiss: () => filterManager.missingFilters.clear(),
-                onUpdate: () => filterManager.updateMissingFilters(),
-              ),
-            ),
-
-          if (filterManager.availableUpdates.isNotEmpty)
-            _buildSheet(
-              child: UpdatePopupView(
-                availableUpdates: filterManager.availableUpdates,
-                onDismiss: () => filterManager.availableUpdates.clear(),
-                onUpdate: (filters) => filterManager.updateSelectedFilters(filters),
-              ),
-            ),
-        ],
+        ),
       ),
-    ),
-  ),
-),
     );
   }
 

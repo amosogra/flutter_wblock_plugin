@@ -5,6 +5,7 @@ A powerful Flutter plugin that brings the wBlock Safari ad blocker to Flutter ap
 ## Project Status
 
 ✅ **Fully Implemented Features:**
+
 - Complete Flutter plugin architecture with platform channels
 - Native macOS/Swift integration with Safari Content Blocker API
 - Filter list management (30+ default filters)
@@ -30,6 +31,7 @@ flutter run -d macos
 ## Architecture
 
 ### Plugin Structure
+
 ```
 flutter_wblock_plugin/
 ├── lib/                         # Dart/Flutter code
@@ -53,6 +55,7 @@ flutter_wblock_plugin/
 ### Key Components
 
 #### 1. Filter Management System
+
 - **FilterListManager**: Main controller for filter operations
 - **FilterListLoader**: Handles loading/saving filter lists
 - **FilterListUpdater**: Manages filter updates and version checking
@@ -60,6 +63,7 @@ flutter_wblock_plugin/
 - **FilterListApplier**: Applies rules to Safari content blockers
 
 #### 2. YouTube Ad Blocking
+
 - **YouTubeAdBlockHandler**: Generates YouTube-specific blocking rules
 - **ScriptletLibrary**: Implements various scriptlets for advanced blocking
 - Script injection for bypassing YouTube's ad system
@@ -67,6 +71,7 @@ flutter_wblock_plugin/
 - Network-level blocking of ad requests
 
 #### 3. Safari Integration
+
 - **ContentBlockerManager**: Interfaces with Safari Content Blocker API
 - **SafariExtensionHandler**: Handles extension messaging
 - Support for 3 content blockers (150,000 rules total)
@@ -75,6 +80,7 @@ flutter_wblock_plugin/
 ## Features
 
 ### Core Functionality
+
 - ✅ Load and manage 30+ pre-configured filter lists
 - ✅ Add/remove custom filter lists
 - ✅ Real-time rule counting per filter
@@ -84,6 +90,7 @@ flutter_wblock_plugin/
 - ✅ Comprehensive logging system
 
 ### YouTube Ad Blocking
+
 - ✅ Script injection to prevent ad loading
 - ✅ CSS rules to hide ad containers
 - ✅ Network blocking of ad requests
@@ -91,6 +98,7 @@ flutter_wblock_plugin/
 - ✅ Automatic ad skip functionality
 
 ### UI Features
+
 - ✅ Native macOS design using macos_ui
 - ✅ Fixed 700x500 window (matching original)
 - ✅ Category-based filter organization
@@ -102,13 +110,16 @@ flutter_wblock_plugin/
 ## Implementation Details
 
 ### Filter Conversion
+
 The plugin converts AdBlock Plus syntax to Safari Content Blocker JSON format:
+
 - Element hiding rules (`##`)
 - Scriptlet injection rules (`##+js`)
 - Exception rules (`@@`)
 - Network blocking rules with options
 
 ### Scriptlets Implemented
+
 - `json-prune`: Remove properties from JSON responses
 - `set-constant`: Set window properties to constant values
 - `abort-on-property-read/write`: Prevent property access
@@ -118,15 +129,16 @@ The plugin converts AdBlock Plus syntax to Safari Content Blocker JSON format:
 - And many more...
 
 ### YouTube-Specific Implementation
+
 ```javascript
 // Intercepts and modifies YouTube's player response
-JSON.parse = function(text) {
-    const obj = origParse(text);
-    if (obj?.playerResponse) {
-        delete obj.playerResponse.adPlacements;
-        delete obj.playerResponse.playerAds;
-    }
-    return obj;
+JSON.parse = function (text) {
+  const obj = origParse(text);
+  if (obj?.playerResponse) {
+    delete obj.playerResponse.adPlacements;
+    delete obj.playerResponse.playerAds;
+  }
+  return obj;
 };
 ```
 
@@ -135,7 +147,7 @@ JSON.parse = function(text) {
 To enable full functionality, you need to create Safari Web Extension targets:
 
 1. **wBlock Filters**: Standard blocking rules
-2. **wBlock Filters 2**: Advanced rules and overflow
+2. **wBlock Advance**: Advanced rules and overflow
 3. **wBlock Scripts**: JavaScript injection for YouTube
 
 ## Performance

@@ -61,7 +61,7 @@ class ContentBlockerRequestHandler: NSObject, NSExtensionRequestHandling {
 </plist>
 ```
 
-## Extension 2: wBlock Filters 2
+## Extension 2: wBlock Advance
 
 This handles overflow rules when the first content blocker reaches its limit.
 

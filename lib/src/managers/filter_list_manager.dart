@@ -3,9 +3,13 @@ import 'package:flutter/foundation.dart';
 import '../models/filter_list.dart';
 import '../models/filter_stats.dart';
 import '../platform/wblock_platform_interface.dart';
+import 'log_manager.dart';
 
 class FilterListManager extends ChangeNotifier {
   final WBlockPlatformInterface _platform = WBlockPlatformInterface.instance;
+  
+  // Local logging (fallback)
+  late final LogManager _logManager;
   
   List<FilterList> _filterLists = [];
   List<FilterList> _customFilterLists = [];
@@ -34,11 +38,19 @@ class FilterListManager extends ChangeNotifier {
   Map<String, int> get ruleCounts => _ruleCounts;
   
   FilterListManager() {
+    // Initialize local logging
+    _logManager = LogManager();
     _init();
   }
 
   Future<void> _init() async {
+    // Load filter lists from native side
     await loadFilterLists();
+    
+    // Load existing logs from native side
+    await loadLogsFromFile();
+    
+    // Set up progress tracking from native operations
     _progressSubscription = _platform.progressStream.listen((progress) {
       _progress = progress;
       notifyListeners();
@@ -53,9 +65,11 @@ class FilterListManager extends ChangeNotifier {
 
   Future<void> loadFilterLists() async {
     try {
-      // Load saved filter lists or use defaults
+      // Load from native side via platform channel (this includes app group container access)
       _filterLists = await _platform.loadFilterLists();
+      
       if (_filterLists.isEmpty) {
+        // If no saved lists, use defaults and save them
         _filterLists = getDefaultFilterLists();
         await _platform.saveFilterLists(_filterLists);
       }
@@ -63,7 +77,7 @@ class FilterListManager extends ChangeNotifier {
       // Separate custom filters
       _customFilterLists = _filterLists.where((f) => f.category == FilterListCategory.custom).toList();
       
-      // Update rule counts
+      // Update rule counts using native side
       for (var filter in _filterLists) {
         if (filter.isSelected) {
           final count = await _platform.getRuleCount(filter);
@@ -83,6 +97,7 @@ class FilterListManager extends ChangeNotifier {
       _filterLists[index].isSelected = !_filterLists[index].isSelected;
       _hasUnappliedChanges = true;
       notifyListeners();
+      // Save via platform channel to ensure native side is updated
       _platform.saveFilterLists(_filterLists);
     }
   }
@@ -98,6 +113,7 @@ class FilterListManager extends ChangeNotifier {
     _missingFilters.clear();
     
     for (var filter in _filterLists.where((f) => f.isSelected)) {
+      // Use platform channel to check file existence (requires app group access)
       final exists = await _platform.filterFileExists(filter);
       if (!exists) {
         _missingFilters.add(filter);
@@ -118,10 +134,11 @@ class FilterListManager extends ChangeNotifier {
     notifyListeners();
     
     try {
+      // CRITICAL: This MUST use platform channel to call native Safari Content Blocker APIs
       await _platform.applyChanges(_filterLists.where((f) => f.isSelected).toList());
       _hasUnappliedChanges = false;
       
-      // Update rule counts
+      // Update rule counts using platform channel
       for (var filter in _filterLists) {
         if (filter.isSelected) {
           final count = await _platform.getRuleCount(filter);
@@ -143,6 +160,7 @@ class FilterListManager extends ChangeNotifier {
     
     try {
       final enabledFilters = _filterLists.where((f) => f.isSelected).toList();
+      // Use platform channel for update checking (requires network access and file operations)
       _availableUpdates = await _platform.checkForUpdates(enabledFilters);
       
       if (_availableUpdates.isEmpty) {
@@ -163,6 +181,7 @@ class FilterListManager extends ChangeNotifier {
     notifyListeners();
     
     try {
+      // Use platform channel for downloading and processing filters
       await _platform.updateFilters(selectedFilters);
       
       // Remove updated filters from available updates
@@ -187,6 +206,7 @@ class FilterListManager extends ChangeNotifier {
     notifyListeners();
     
     try {
+      // Download missing filters using platform channel
       for (var filter in _missingFilters) {
         await _platform.downloadFilter(filter);
       }
@@ -213,6 +233,7 @@ class FilterListManager extends ChangeNotifier {
       _customFilterLists.add(filter);
       _filterLists.add(filter);
       
+      // Save and download using platform channel
       await _platform.addCustomFilter(filter);
       await _platform.saveFilterLists(_filterLists);
       
@@ -236,6 +257,7 @@ class FilterListManager extends ChangeNotifier {
       _customFilterLists.removeWhere((f) => f.id == filter.id);
       _filterLists.removeWhere((f) => f.id == filter.id);
       
+      // Remove using platform channel (handles file cleanup)
       await _platform.removeCustomFilter(filter.id);
       await _platform.saveFilterLists(_filterLists);
       
@@ -271,6 +293,7 @@ class FilterListManager extends ChangeNotifier {
     }
     
     _hasUnappliedChanges = true;
+    // Save using platform channel
     _platform.saveFilterLists(_filterLists);
     notifyListeners();
   }
@@ -291,20 +314,28 @@ class FilterListManager extends ChangeNotifier {
   }
 
   Future<void> appendLog(String message) async {
-    final timestamp = DateTime.now().toIso8601String();
-    _logs += '[$timestamp] $message\n';
+    // Use LogManager for local logging, but also ensure platform side logs
+    await _logManager.log(message);
+    _logs = await _logManager.getAllLogs();
     notifyListeners();
   }
 
   Future<void> clearLogs() async {
     _logs = '';
+    // Clear both local and platform logs
+    await _logManager.clearLogs();
     await _platform.clearLogs();
     notifyListeners();
   }
 
   Future<void> loadLogsFromFile() async {
     try {
-      _logs = await _platform.getLogs();
+      // Try platform logs first, fallback to local logs
+      try {
+        _logs = await _platform.getLogs();
+      } catch (e) {
+        _logs = await _logManager.getAllLogs();
+      }
       notifyListeners();
     } catch (e) {
       debugPrint('Error loading logs: $e');

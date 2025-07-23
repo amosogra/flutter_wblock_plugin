@@ -64,32 +64,10 @@ class SafariExtensionHandler: NSObject, NSExtensionRequestHandling {
     }
     
     private func handleScriptletRequest(_ message: [String: Any], completion: @escaping ([String: Any]?) -> Void) {
-        guard let scriptlets = message["scriptlets"] as? [[String: Any]] else {
-            completion(["error": "Scriptlets not provided"])
-            return
-        }
-        
-        var scriptletPayloads: [[String: Any]] = []
-        
-        for scriptlet in scriptlets {
-            if let name = scriptlet["name"] as? String,
-               let code = loadScriptletCode(name: name) {
-                
-                let payload: [String: Any] = [
-                    "code": code,
-                    "source": [
-                        "name": name,
-                        "args": scriptlet["args"] ?? [],
-                        "engine": "wBlock",
-                        "version": "0.2.0"
-                    ],
-                    "args": scriptlet["args"] ?? []
-                ]
-                scriptletPayloads.append(payload)
-            }
-        }
-        
-        completion(["scriptlets": scriptletPayloads])
+        // This handler is not used in the current architecture
+        // The background.js script handles scriptlet loading directly
+        // from the web_accessible_resources/scriptlets directory
+        completion(["error": "Scriptlet loading is handled by background.js"])
     }
     
     private func handleFilterStatusRequest(completion: @escaping ([String: Any]?) -> Void) {
@@ -116,17 +94,47 @@ class SafariExtensionHandler: NSObject, NSExtensionRequestHandling {
         
         // Load YouTube-specific rules if on YouTube
         if url.host?.contains("youtube") == true || url.host?.contains("youtu.be") == true {
-            blockingData = loadYouTubeBlockingData(containerURL: containerURL)
+            // Use YouTubeAdBlockHandler to generate scriptlet configuration
+            let scriptletConfigs = YouTubeAdBlockHandler.generateScriptletConfiguration()
+            
+            // Convert scriptlet configs to JSON strings for the content script
+            let scriptletStrings = scriptletConfigs.compactMap { config -> String? in
+                guard let data = try? JSONSerialization.data(withJSONObject: config),
+                      let jsonString = String(data: data, encoding: .utf8) else {
+                    return nil
+                }
+                return jsonString
+            }
+            
+            blockingData["scriptlets"] = scriptletStrings
+            
+            // Add YouTube-specific CSS
+            blockingData["cssInject"] = [YouTubeAdBlockHandler.generateYouTubeAdBlockCSS()]
+            
+            // Add YouTube-specific scripts
+            blockingData["scripts"] = [YouTubeAdBlockHandler.generateYouTubeAdBlockScript()]
+            
+            // Add extended CSS selectors
+            blockingData["cssExtended"] = [
+                ":has(ytd-display-ad-renderer)",
+                ":has([id*=\"player-ads\"])",
+                "ytd-rich-item-renderer:has(ytd-promoted-video-renderer)"
+            ]
         }
         
-        // Load general scriptlets
+        // Load general scriptlets from configuration
         let scriptletConfig = containerURL.appendingPathComponent("scriptlet_config.json")
         if let configData = try? Data(contentsOf: scriptletConfig),
            let config = try? JSONSerialization.jsonObject(with: configData) as? [String: Any] {
             
             if config["general"] as? Bool == true {
                 let generalScriptlets = loadScriptlets(from: containerURL.appendingPathComponent("general_scriptlets.json"))
-                blockingData["scriptlets"] = generalScriptlets
+                if var existingScriptlets = blockingData["scriptlets"] as? [String] {
+                    existingScriptlets.append(contentsOf: generalScriptlets)
+                    blockingData["scriptlets"] = existingScriptlets
+                } else {
+                    blockingData["scriptlets"] = generalScriptlets
+                }
             }
         }
         
@@ -138,50 +146,7 @@ class SafariExtensionHandler: NSObject, NSExtensionRequestHandling {
         
         return "{}"
     }
-    
-    private func loadYouTubeBlockingData(containerURL: URL) -> [String: Any] {
-        var data: [String: Any] = [:]
-        
-        // Load YouTube scriptlets
-        let youtubeScriptlets = loadScriptlets(from: containerURL.appendingPathComponent("youtube_scriptlets.json"))
-        
-        // Add hardcoded YouTube scriptlets
-        let additionalScriptlets = [
-            [
-                "name": "json-prune",
-                "args": ["playerResponse.adPlacements", "playerResponse.playerAds", "adSlots"]
-            ],
-            [
-                "name": "set-constant",
-                "args": ["ytInitialPlayerResponse.adPlacements", "undefined"]
-            ],
-            [
-                "name": "abort-on-property-read",
-                "args": ["playerResponse.adPlacements"]
-            ]
-        ]
-        
-        data["scriptlets"] = youtubeScriptlets + additionalScriptlets.map { try? JSONSerialization.data(withJSONObject: $0) }.compactMap { $0 }.map { String(data: $0, encoding: .utf8) }.compactMap { $0 }
-        
-        // Load YouTube CSS
-        if let cssData = try? String(contentsOf: containerURL.appendingPathComponent("youtube-adblock.css")) {
-            data["cssInject"] = [cssData]
-        }
-        
-        // Load YouTube scripts
-        if let scriptData = try? String(contentsOf: containerURL.appendingPathComponent("youtube-adblock.js")) {
-            data["scripts"] = [scriptData]
-        }
-        
-        // Extended CSS for advanced selectors
-        data["cssExtended"] = [
-            ":has(ytd-display-ad-renderer)",
-            ":has([id*=\"player-ads\"])",
-            "ytd-rich-item-renderer:has(ytd-promoted-video-renderer)"
-        ]
-        
-        return data
-    }
+
     
     private func loadScriptlets(from url: URL) -> [String] {
         guard let data = try? Data(contentsOf: url),
@@ -197,12 +162,7 @@ class SafariExtensionHandler: NSObject, NSExtensionRequestHandling {
             return jsonString
         }
     }
-    
-    private func loadScriptletCode(name: String) -> String? {
-        // Map of scriptlet names to their implementations
-        let scriptletCode = ScriptletLibrary.getScriptletCode(for: name)
-        return scriptletCode
-    }
+
     
     private func getFilterStatus() async -> [String: Any] {
         let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.syferlab.wBlock")

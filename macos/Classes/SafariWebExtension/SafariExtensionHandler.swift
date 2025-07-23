@@ -27,13 +27,9 @@ class SafariExtensionHandler: NSObject, NSExtensionRequestHandling {
             handleAdvancedBlockingRequest(message, completion: completion)
             
         case "getScriptlets":
-            handleScriptletRequest(message, completion: completion)
-            
-        case "getFilterStatus":
-            handleFilterStatusRequest(completion: completion)
-            
-        case "reloadFilters":
-            handleReloadRequest(completion: completion)
+            // Note: Scriptlets are now loaded directly by background.js
+            // from web_accessible_resources/scriptlets/
+            completion(["error": "Scriptlet loading is handled by background.js"])
             
         default:
             completion(["error": "Unknown action: \(action)"])
@@ -60,27 +56,6 @@ class SafariExtensionHandler: NSObject, NSExtensionRequestHandling {
             } catch {
                 completion(["error": error.localizedDescription])
             }
-        }
-    }
-    
-    private func handleScriptletRequest(_ message: [String: Any], completion: @escaping ([String: Any]?) -> Void) {
-        // This handler is not used in the current architecture
-        // The background.js script handles scriptlet loading directly
-        // from the web_accessible_resources/scriptlets directory
-        completion(["error": "Scriptlet loading is handled by background.js"])
-    }
-    
-    private func handleFilterStatusRequest(completion: @escaping ([String: Any]?) -> Void) {
-        Task {
-            let status = await getFilterStatus()
-            completion(["status": status])
-        }
-    }
-    
-    private func handleReloadRequest(completion: @escaping ([String: Any]?) -> Void) {
-        Task {
-            await reloadContentBlockers()
-            completion(["success": true])
         }
     }
     
@@ -146,7 +121,6 @@ class SafariExtensionHandler: NSObject, NSExtensionRequestHandling {
         
         return "{}"
     }
-
     
     private func loadScriptlets(from url: URL) -> [String] {
         guard let data = try? Data(contentsOf: url),
@@ -160,53 +134,6 @@ class SafariExtensionHandler: NSObject, NSExtensionRequestHandling {
                 return nil
             }
             return jsonString
-        }
-    }
-
-    
-    private func getFilterStatus() async -> [String: Any] {
-        let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.syferlab.wBlock")
-        
-        var status: [String: Any] = [
-            "enabled": true,
-            "filterCount": 0,
-            "ruleCount": 0
-        ]
-        
-        if let containerURL = containerURL {
-            // Count active filters
-            let filterFiles = try? FileManager.default.contentsOfDirectory(at: containerURL, includingPropertiesForKeys: nil)
-                .filter { $0.pathExtension == "json" && $0.lastPathComponent.starts(with: "blockerList") }
-            
-            status["filterCount"] = filterFiles?.count ?? 0
-            
-            // Count total rules
-            var totalRules = 0
-            for file in filterFiles ?? [] {
-                if let data = try? Data(contentsOf: file),
-                   let rules = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
-                    totalRules += rules.count
-                }
-            }
-            status["ruleCount"] = totalRules
-        }
-        
-        return status
-    }
-    
-    private func reloadContentBlockers() async {
-        let identifiers = [
-            "syferlab.wBlock.wBlock-Filters",
-            "syferlab.wBlock.wBlock-Advance",
-            "syferlab.wBlock.wBlock-Scripts"
-        ]
-        
-        for identifier in identifiers {
-            await withCheckedContinuation { continuation in
-                SFContentBlockerManager.reloadContentBlocker(withIdentifier: identifier) { _ in
-                    continuation.resume()
-                }
-            }
         }
     }
 }

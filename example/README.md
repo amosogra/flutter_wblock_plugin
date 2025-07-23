@@ -19,8 +19,8 @@ Steps to complete manually in Xcode:
    - Create 3 extensions:
      a) Name: 'wBlock Filters'
      Bundle ID: syferlab.wBlock.wBlock-Filters
-     b) Name: 'wBlock Filters 2'
-     Bundle ID: syferlab.wBlock.wBlock-Filters-2
+     b) Name: 'wBlock Advance'
+     Bundle ID: syferlab.wBlock.wBlock-Advance
      c) Name: 'wBlock Scripts'
      Bundle ID: syferlab.wBlock.wBlock-Scripts
 
@@ -32,23 +32,25 @@ Steps to complete manually in Xcode:
 
 4. Configure Info.plist for each extension:
 
-For wBlock Filters and wBlock Filters 2:
+For wBlock Filters and wBlock Advance:
 <key>NSExtension</key>
 <dict>
-<key>NSExtensionPointIdentifier</key>
-<string>com.apple.Safari.content-blocker</string>
-<key>NSExtensionPrincipalClass</key>
-<string>ContentBlockerRequestHandler</string>
+   <key>NSExtensionPointIdentifier</key>
+   <string>com.apple.Safari.content-blocker</string>
+   <key>NSExtensionPrincipalClass</key>
+   <string>ContentBlockerRequestHandler</string>
 </dict>
 
 For wBlock Scripts:
 <key>NSExtension</key>
 <dict>
-<key>NSExtensionPointIdentifier</key>
-<string>com.apple.Safari.web-extension</string>
-<key>NSExtensionPrincipalClass</key>
-<string>SafariWebExtensionHandler</string>
+   <key>NSExtensionPointIdentifier</key>
+   <string>com.apple.Safari.web-extension</string>
+   <key>NSExtensionPrincipalClass</key>
+   <string>SafariWebExtensionHandler</string>
 </dict>
+<key>SFSafariWebExtensionManifest</key>
+<string>Resources/manifest.json</string>
 
 5. Add entitlements for each extension:
 
@@ -66,4 +68,4 @@ After setup, the app will be able to:
 - Inject scripts for YouTube ad blocking
 - Update filters automatically
 
-For more details, see IMPLEMENTATION_COMPLETE.md
+For more details, see [📋 Setup Guide](/SETUP_SAFARI_EXTENSIONS.md)

@@ -1,6 +1,6 @@
 # Flutter wBlock Plugin
 
-A Flutter plugin that brings the power of wBlock - the next-generation ad blocker for Safari - to Flutter applications on macOS. This plugin provides a complete Flutter implementation of the wBlock Safari ad blocker with native macOS integration.
+A Flutter plugin that brings the power of wBlock - the next-generation ad blocker for Safari - to Flutter applications on macOS. This plugin provides a complete Flutter implementation of the wBlock Safari ad blocker API, including advanced YouTube ad blocking through script injection.
 
 ## Features
 
@@ -12,6 +12,22 @@ A Flutter plugin that brings the power of wBlock - the next-generation ad blocke
 - ⚡ **High Performance** - Optimized for minimal memory usage (~40MB idle)
 - 🎯 **Custom Filters** - Add and manage custom filter lists
 - ⌨️ **Keyboard Shortcuts** - Full keyboard shortcut support
+
+## Project Status
+
+✅ **Fully Implemented Features:**
+
+- Complete Flutter plugin architecture with platform channels
+- Native macOS/Swift integration with Safari Content Blocker API
+- Filter list management (30+ default filters)
+- Custom filter support
+- Real-time rule counting and statistics
+- Automatic filter updates with version checking
+- YouTube ad blocking with script injection
+- Scriptlet library for advanced blocking
+- Progress tracking for all operations
+- Concurrent logging system
+- Pixel-perfect UI matching original SwiftUI design
 
 ## Installation
 
@@ -55,7 +71,13 @@ Create or modify `macos/Runner/DebugProfile.entitlements` and `macos/Runner/Rele
 
 3. Configure Safari Extensions (if building the full app with extensions):
 
-You'll need to create Safari Web Extension targets for the content blockers. See the original wBlock source for reference.
+You'll need to create Safari Web Extension targets for the content blockers. To do that in your example app [Click here for Safari Extension setup instructions](SETUP_SAFARI_EXTENSIONS.md)
+[📋 Setup Guide](SETUP_SAFARI_EXTENSIONS.md)
+
+## Quick Links
+- [Setup Guide](SETUP_SAFARI_EXTENSIONS.md)
+- [Architecture](ARCHITECTURE.md)
+- [Architecture Diagram](ARCHITECTURE_DIAGRAM.md)
 
 ## Usage
 
@@ -152,19 +174,6 @@ if (filterManager.availableUpdates.isNotEmpty) {
 }
 ```
 
-#### Keyboard Shortcuts
-
-The plugin supports the following keyboard shortcuts:
-
-- `⌘R` - Check for Updates
-- `⌘S` - Apply Changes
-- `⌘N` - Add Custom Filter
-- `⌘⇧L` - Show Logs
-- `⌘,` - Show Settings
-- `⌘⌥R` - Reset to Default
-- `⌘⇧F` - Toggle Only Enabled Filters
-- `⌘⇧K` - Show Keyboard Shortcuts
-
 ## Default Filter Lists
 
 The plugin includes the following pre-configured filter lists:
@@ -194,23 +203,79 @@ The plugin includes the following pre-configured filter lists:
 
 ### And many more...
 
-## Architecture
+# Flutter wBlock Plugin Architecture
 
-The plugin follows a clean architecture pattern:
+## Directory Structure
 
 ```
 flutter_wblock_plugin/
-├── lib/
-│   ├── src/
-│   │   ├── models/          # Data models
-│   │   ├── managers/        # Business logic
-│   │   └── platform/        # Platform channel interface
+├── lib/                                  # Flutter/Dart code
+│   ├── flutter_wblock_plugin.dart       # Plugin API
+│   └── src/
+│       ├── models/                      # Data models
+│       ├── managers/                    # Business logic
+│       └── platform/                    # Platform interface
+│
 ├── macos/
-│   └── Classes/             # Native Swift implementation
-└── example/
-    └── lib/
-        ├── views/           # UI components
-        └── widgets/         # Reusable widgets
+│   └── Classes/
+│       ├── FlutterWblockPlugin.swift    # Flutter method channel handler
+│       ├── FilterManager.swift          # Filter list management
+│       ├── ContentBlockerManager.swift  # Content blocker rule generation
+│       ├── ContentBlockerConverter.swift # AdBlock to Safari rule converter
+│       ├── YouTubeAdBlockHandler.swift  # YouTube-specific blocking logic
+│       ├── LogManager.swift             # Logging system
+│       ├── NativeFilterList.swift       # Filter list model
+│       │
+│       ├── ContentBlockers/             # Content Blocker Extensions
+│       │   └── ContentBlockerRequestHandler.swift
+│       │
+│       └── SafariWebExtension/          # Safari Web Extension (wBlock Scripts)
+│           ├── SafariExtensionHandler.swift  # Native message handler
+│           └── Resources/               # Web extension resources
+│               ├── manifest.json        # Extension manifest
+│               ├── src/
+│               │   ├── background.js    # Message handling & scriptlet loading
+│               │   ├── content.js       # Script injection into web pages
+│               │   └── extendedCss/
+│               │       └── extended-css.js  # Extended CSS selector support
+│               ├── popup/
+│               │   ├── popup.html       # Extension popup UI
+│               │   ├── popup.js         # Popup logic
+│               │   └── popup.css        # Popup styles
+│               └── web_accessible_resources/
+│                   ├── registry.json    # Scriptlet name mappings
+│                   └── scriptlets/      # All scriptlet implementations
+│                       ├── json-prune.js
+│                       ├── set-constant.js
+│                       └── ... (60+ scriptlets)
+|
+|
+└── example/                    # Example Flutter app
+    └── lib/   
+    |   ├── views/              # UI screens
+    |   ├── widgets/            # Reusable components
+    |   └── widgets/            # Main entrance of the example app
+    |
+    └── macos/
+        ├── wBlock-Filters/
+        │   ├── Info.plist
+        │   └── ContentBlockerRequestHandler.swift (linked)
+        ├── wBlock-Advance/
+        │   ├── Info.plist
+        │   └── ContentBlockerRequestHandler.swift (linked)
+        ├── wBlock-Scripts/
+        │   ├── Info.plist
+        │   ├── SafariExtensionHandler.swift (linked)
+        │   └── Resources/
+        │       ├── manifest.json
+        │       ├── src/
+        │       │   ├── background.js
+        │       │   ├── content.js
+        │       │   └── extendedCss/
+        │       ├── popup/
+        │       └── web_accessible_resources/
+        ├── ContentBlocker.entitlements
+        └── WebExtension.entitlements      
 ```
 
 ## Native Integration
@@ -223,27 +288,142 @@ The plugin uses platform channels to communicate with native macOS code:
 The native implementation handles:
 
 - Safari Content Blocker API integration
+- Safari Extension API integration
 - Filter list downloading and conversion
 - App group shared storage
 - Background updates
 
-## Contributing
+### Key Components
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+#### 1. Filter Management System
 
-### Development Setup
+- **FilterListManager**: Main controller for filter operations
+- **FilterListConverter**: Converts AdBlock syntax to Safari format
+- **FilterListApplier**: Applies rules to Safari content blockers
 
-1. Clone the repository
-2. Run `flutter pub get` in the root directory
-3. Run `cd example && flutter pub get`
-4. Open `example/macos/Runner.xcworkspace` in Xcode
-5. Run the example app
+#### 2. YouTube Ad Blocking
+
+- **YouTubeAdBlockHandler**: Generates YouTube-specific blocking rules
+- Script injection for bypassing YouTube's ad system
+- CSS rules for hiding ad elements
+- Network-level blocking of ad requests
+
+#### 3. Safari Integration
+
+- **ContentBlockerManager**: Interfaces with Safari Content Blocker API
+- **ContentBlockerRequestHandler**: Handles extension messaging
+- **SafariExtensionHandler**: Handles web extension messaging
+- Support for 2 content blockers (100,000 rules total)
+- Support for ad blocking with script injection/scriptlets (50,000 rules)
+- Real-time rule compilation and distribution
+
+#### 4. Keyboard Shortcuts
+
+The plugin supports the following keyboard shortcuts:
+
+- `⌘R` - Check for Updates
+- `⌘S` - Apply Changes
+- `⌘N` - Add Custom Filter
+- `⌘⇧L` - Show Logs
+- `⌘,` - Show Settings
+- `⌘⌥R` - Reset to Default
+- `⌘⇧F` - Toggle Only Enabled Filters
+- `⌘⇧K` - Show Keyboard Shortcuts
+
+## Features
+
+### Core Functionality
+
+- ✅ Load and manage 30+ pre-configured filter lists
+- ✅ Add/remove custom filter lists
+- ✅ Real-time rule counting per filter
+- ✅ Automatic filter updates based on Last-Modified/ETag
+- ✅ Background update scheduling
+- ✅ Progress tracking for all operations
+- ✅ Comprehensive logging system
+
+### YouTube Ad Blocking
+
+- ✅ Script injection to prevent ad loading
+- ✅ CSS rules to hide ad containers
+- ✅ Network blocking of ad requests
+- ✅ Scriptlet support for advanced blocking
+- ✅ Automatic ad skip functionality
+
+### UI Features
+
+- ✅ Native macOS design using macos_ui
+- ✅ Fixed 700x500 window (matching original)
+- ✅ Category-based filter organization
+- ✅ Real-time statistics display
+- ✅ Keyboard shortcuts support
+- ✅ Modal sheets for dialogs
+- ✅ Progress indicators
+
+## Implementation Details
+
+### Filter Conversion
+
+The plugin converts AdBlock Plus syntax to Safari Content Blocker JSON format:
+
+- Element hiding rules (`##`)
+- Scriptlet injection rules (`##+js`)
+- Exception rules (`@@`)
+- Network blocking rules with options
+
+### Scriptlets Implemented
+
+- `json-prune`: Remove properties from JSON responses
+- `set-constant`: Set window properties to constant values
+- `abort-on-property-read/write`: Prevent property access
+- `prevent-addEventListener`: Block event listeners
+- `remove-attr/class`: DOM manipulation
+- `prevent-xhr/fetch`: Block network requests
+- And many more...
+
+### YouTube-Specific Implementation
+
+```javascript
+// Intercepts and modifies YouTube's player response
+JSON.parse = function (text) {
+  const obj = origParse(text);
+  if (obj?.playerResponse) {
+    delete obj.playerResponse.adPlacements;
+    delete obj.playerResponse.playerAds;
+  }
+  return obj;
+};
+```
+
+## Safari Extension Setup
+
+To enable full functionality, you need to create Safari Web Extension targets for the content blockers in the example app:
+
+1. **wBlock Filters**: Standard blocking rules
+2. **wBlock Advance**: Advanced rules and overflow
+3. **wBlock Scripts**: JavaScript injection for YouTube
+
+To do that in your example app [Click here for Safari Extension setup instructions](SETUP_SAFARI_EXTENSIONS.md)
+[📋 Setup Guide](SETUP_SAFARI_EXTENSIONS.md)
+
+## Performance
+
+- Memory usage: ~40MB idle
+- Rule compilation: < 1 second for 150,000 rules
+- Update checking: Parallel HTTP HEAD requests
+- File operations: Concurrent with actor isolation
 
 ### Testing
 
 ```bash
 flutter test
 ```
+
+## Platform Requirements
+
+- macOS 10.14 (Mojave) or higher
+- Flutter 3.0.0 or higher
+- Xcode 14.0 or higher
 
 ## License
 
@@ -255,6 +435,10 @@ This project is licensed under the GPLv3 License - see the LICENSE file for deta
 - AdGuard for filter lists
 - EasyList maintainers
 
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
 ## Support
 
-For issues and feature requests, please use the [GitHub issue tracker](https://github.com/yourusername/flutter_wblock_plugin/issues).
+For issues and feature requests, please use the [GitHub issue tracker](https://github.com/amosogra/flutter_wblock_plugin/issues).

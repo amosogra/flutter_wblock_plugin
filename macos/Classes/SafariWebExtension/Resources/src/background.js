@@ -1,5 +1,5 @@
 // background.js
-const NATIVE_APP_ID = "com.0xcube.wBlock.wBlock-Scripts";
+const NATIVE_APP_ID = "syferlab.wBlock.wBlock-Scripts";
 const LOG_PREFIX = "[wBlock Scripts]";
 const CHUNK_TIMEOUT = 30000; // 30 seconds
 
@@ -16,7 +16,7 @@ const scriptletCache = new Map();
 const loadRegistry = async () => {
   try {
     const url = browser.runtime.getURL(
-      "web_accessible_resources/registry.json",
+      "web_accessible_resources/registry.json"
     );
     const response = await fetch(url);
     const registry = await response.json();
@@ -38,7 +38,7 @@ const getScriptletCode = async (name) => {
   // Direct lookup with case-insensitive fallback
   const exactMatch = scriptletRegistry[name];
   const normalizedMatch = Object.entries(scriptletRegistry).find(
-    ([key]) => key.toLowerCase() === name.toLowerCase(),
+    ([key]) => key.toLowerCase() === name.toLowerCase()
   )?.[1];
 
   const filename = exactMatch || normalizedMatch;
@@ -54,7 +54,7 @@ const getScriptletCode = async (name) => {
   log.info(`(getScriptletCode) Filename: ${filename}`);
   try {
     const url = browser.runtime.getURL(
-      `web_accessible_resources/scriptlets/${filename}`,
+      `web_accessible_resources/scriptlets/${filename}`
     );
     const response = await fetch(url);
     const code = await response.text();
@@ -66,7 +66,7 @@ const getScriptletCode = async (name) => {
   } catch (error) {
     log.error(
       `(getScriptletCode) Failed to load scriptlet file ${filename}:`,
-      error,
+      error
     );
     return null;
   }
@@ -123,7 +123,7 @@ const handleScriptletRequest = async (request) => {
           },
           args,
         };
-      }),
+      })
     );
   }
 };
@@ -136,13 +136,13 @@ const handleBlockingRequest = async (message, sender) => {
   try {
     if (typeof browser.runtime.sendNativeMessage !== "function") {
       log.warn(
-        "(handleBlockingRequest) Native messaging is not supported on this platform.",
+        "(handleBlockingRequest) Native messaging is not supported on this platform."
       );
       return { error: "Native messaging not supported" };
     }
 
     log.info(
-      "(handleBlockingRequest) Native messaging (sendNativeMessage) is supported on this platform.",
+      "(handleBlockingRequest) Native messaging (sendNativeMessage) is supported on this platform."
     );
 
     // Initialize accumulator if starting from the beginning
@@ -151,7 +151,7 @@ const handleBlockingRequest = async (message, sender) => {
         data: "",
         timeout: setTimeout(
           () => cleanupAccumulator(accumulatorKey),
-          CHUNK_TIMEOUT,
+          CHUNK_TIMEOUT
         ),
       });
     }
@@ -207,7 +207,7 @@ const processResponse = (response, accumulatorKey) => {
       data: "",
       timeout: setTimeout(
         () => cleanupAccumulator(accumulatorKey),
-        CHUNK_TIMEOUT,
+        CHUNK_TIMEOUT
       ),
     });
     accumulator = chunkAccumulators.get(accumulatorKey);
@@ -216,7 +216,7 @@ const processResponse = (response, accumulatorKey) => {
     clearTimeout(accumulator.timeout);
     accumulator.timeout = setTimeout(
       () => cleanupAccumulator(accumulatorKey),
-      CHUNK_TIMEOUT,
+      CHUNK_TIMEOUT
     );
   }
 

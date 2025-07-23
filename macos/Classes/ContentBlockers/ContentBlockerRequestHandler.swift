@@ -4,8 +4,8 @@ import SafariServices
 class ContentBlockerRequestHandler: NSObject, NSExtensionRequestHandling {
     
     private let appGroupIdentifier = "group.syferlab.wBlock"
+    
     func beginRequest(with context: NSExtensionContext) {
-        
         guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) else {
             let error = NSError(domain: "wBlock", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to access app group container"])
             context.cancelRequest(withError: error)
@@ -21,9 +21,8 @@ class ContentBlockerRequestHandler: NSObject, NSExtensionRequestHandling {
             blockerFileName = "blockerList.json"
         case "syferlab.wBlock.wBlock-Advance":
             blockerFileName = "blockerList2.json"
-        case "syferlab.wBlock.wBlock-Scripts":
-            blockerFileName = "blockerList3.json"
         default:
+            // Default to standard blocker list
             blockerFileName = "blockerList.json"
         }
         

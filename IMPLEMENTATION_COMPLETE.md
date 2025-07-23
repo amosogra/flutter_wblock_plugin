@@ -28,28 +28,79 @@ flutter pub get
 flutter run -d macos
 ```
 
-## Architecture
+# Flutter wBlock Plugin Architecture
 
-### Plugin Structure
+## Directory Structure
 
 ```
 flutter_wblock_plugin/
-├── lib/                         # Dart/Flutter code
+├── lib/                                  # Flutter/Dart code
+│   ├── flutter_wblock_plugin.dart       # Plugin API
 │   └── src/
-│       ├── models/             # Data models
-│       ├── managers/           # Business logic
-│       ├── platform/           # Platform interface
-│       └── utilities/          # Helper utilities
-├── macos/                      # Native Swift code
+│       ├── models/                      # Data models
+│       ├── managers/                    # Business logic
+│       └── platform/                    # Platform interface
+│
+├── macos/
 │   └── Classes/
-│       ├── ContentBlocker/     # Safari extension handlers
-│       ├── FilterManager.swift # Filter operations
-│       ├── ContentBlockerManager.swift
-│       └── YouTubeAdBlockHandler.swift
+│       ├── FlutterWblockPlugin.swift    # Flutter method channel handler
+│       ├── FilterManager.swift          # Filter list management
+│       ├── ContentBlockerManager.swift  # Content blocker rule generation
+│       ├── ContentBlockerConverter.swift # AdBlock to Safari rule converter
+│       ├── YouTubeAdBlockHandler.swift  # YouTube-specific blocking logic
+│       ├── LogManager.swift             # Logging system
+│       ├── NativeFilterList.swift       # Filter list model
+│       │
+│       ├── ContentBlockers/             # Content Blocker Extensions
+│       │   └── ContentBlockerRequestHandler.swift
+│       │
+│       └── SafariWebExtension/          # Safari Web Extension (wBlock Scripts)
+│           ├── SafariExtensionHandler.swift  # Native message handler
+│           └── Resources/               # Web extension resources
+│               ├── manifest.json        # Extension manifest
+│               ├── src/
+│               │   ├── background.js    # Message handling & scriptlet loading
+│               │   ├── content.js       # Script injection into web pages
+│               │   └── extendedCss/
+│               │       └── extended-css.js  # Extended CSS selector support
+│               ├── popup/
+│               │   ├── popup.html       # Extension popup UI
+│               │   ├── popup.js         # Popup logic
+│               │   └── popup.css        # Popup styles
+│               └── web_accessible_resources/
+│                   ├── registry.json    # Scriptlet name mappings
+│                   └── scriptlets/      # All scriptlet implementations
+│                       ├── json-prune.js
+│                       ├── set-constant.js
+│                       └── ... (60+ scriptlets)
+|
+|
 └── example/                    # Example Flutter app
-    └── lib/
-        ├── views/              # UI screens
-        └── widgets/            # Reusable components
+    └── lib/   
+    |   ├── views/              # UI screens
+    |   ├── widgets/            # Reusable components
+    |   └── widgets/            # Main entrance of the example app
+    |
+    └── macos/
+        ├── wBlock-Filters/
+        │   ├── Info.plist
+        │   └── ContentBlockerRequestHandler.swift (linked)
+        ├── wBlock-Advance/
+        │   ├── Info.plist
+        │   └── ContentBlockerRequestHandler.swift (linked)
+        ├── wBlock-Scripts/
+        │   ├── Info.plist
+        │   ├── SafariExtensionHandler.swift (linked)
+        │   └── Resources/
+        │       ├── manifest.json
+        │       ├── src/
+        │       │   ├── background.js
+        │       │   ├── content.js
+        │       │   └── extendedCss/
+        │       ├── popup/
+        │       └── web_accessible_resources/
+        ├── ContentBlocker.entitlements
+        └── WebExtension.entitlements      
 ```
 
 ### Key Components
@@ -57,15 +108,12 @@ flutter_wblock_plugin/
 #### 1. Filter Management System
 
 - **FilterListManager**: Main controller for filter operations
-- **FilterListLoader**: Handles loading/saving filter lists
-- **FilterListUpdater**: Manages filter updates and version checking
 - **FilterListConverter**: Converts AdBlock syntax to Safari format
 - **FilterListApplier**: Applies rules to Safari content blockers
 
 #### 2. YouTube Ad Blocking
 
 - **YouTubeAdBlockHandler**: Generates YouTube-specific blocking rules
-- **ScriptletLibrary**: Implements various scriptlets for advanced blocking
 - Script injection for bypassing YouTube's ad system
 - CSS rules for hiding ad elements
 - Network-level blocking of ad requests
@@ -73,8 +121,10 @@ flutter_wblock_plugin/
 #### 3. Safari Integration
 
 - **ContentBlockerManager**: Interfaces with Safari Content Blocker API
-- **SafariExtensionHandler**: Handles extension messaging
-- Support for 3 content blockers (150,000 rules total)
+- **ContentBlockerRequestHandler**: Handles extension messaging
+- **SafariExtensionHandler**: Handles web extension messaging
+- Support for 2 content blockers (100,000 rules total)
+- Support for ad blocking with script injection/scriptlets (50,000 rules)
 - Real-time rule compilation and distribution
 
 ## Features
@@ -144,7 +194,7 @@ JSON.parse = function (text) {
 
 ## Safari Extension Setup
 
-To enable full functionality, you need to create Safari Web Extension targets:
+To enable full functionality, you need to create Safari Web Extension targets in the example app:
 
 1. **wBlock Filters**: Standard blocking rules
 2. **wBlock Advance**: Advanced rules and overflow

@@ -10,6 +10,9 @@ class ContentBlockerManager {
         "syferlab.wBlock.wBlock-Scripts"
     ]
     
+    // Version for converter - increment this when converter logic changes
+    private let converterVersion = 2
+    
     private let converter = ContentBlockerConverter()
     
     private var containerURL: URL? {
@@ -121,9 +124,20 @@ class ContentBlockerManager {
         let standardFileURL = containerURL.appendingPathComponent("\(filter.name).json")
         let advancedFileURL = containerURL.appendingPathComponent("\(filter.name)_advanced.json")
         let scriptletFileURL = containerURL.appendingPathComponent("\(filter.name)_scriptlets.json")
+        let versionFileURL = containerURL.appendingPathComponent("\(filter.name)_version.txt")
         
-        // Check if already converted
-        if FileManager.default.fileExists(atPath: standardFileURL.path) {
+        // Check if already converted with current converter version
+        var needsReconversion = true
+        if let versionData = try? Data(contentsOf: versionFileURL),
+           let versionString = String(data: versionData, encoding: .utf8),
+           let savedVersion = Int(versionString.trimmingCharacters(in: .whitespacesAndNewlines)),
+           savedVersion == converterVersion,
+           FileManager.default.fileExists(atPath: standardFileURL.path) {
+            // Version matches and files exist, use cached conversion
+            needsReconversion = false
+        }
+        
+        if !needsReconversion {
             let standard = loadJSON(from: standardFileURL) ?? []
             let advanced = loadJSON(from: advancedFileURL) ?? []
             let scriptlet = loadJSON(from: scriptletFileURL) ?? []
@@ -142,6 +156,9 @@ class ContentBlockerManager {
         saveJSON(result.standardRules, to: standardFileURL)
         saveJSON(result.advancedRules, to: advancedFileURL)
         saveJSON(result.scriptletRules, to: scriptletFileURL)
+        
+        // Save converter version
+        try? "\(converterVersion)".write(to: versionFileURL, atomically: true, encoding: .utf8)
         
         return (result.standardRules, result.advancedRules, result.scriptletRules)
     }
@@ -256,10 +273,17 @@ class ContentBlockerManager {
             "#player-ads"
         ]
         
+        // Ensure all domains are lowercase
+        let youtubeDomains = [
+            "youtube.com",
+            "youtu.be",
+            "youtube-nocookie.com"
+        ].map { $0.lowercased() }
+        
         return [[
             "trigger": [
                 "url-filter": ".*",
-                "if-domain": ["youtube.com", "youtu.be", "youtube-nocookie.com"]
+                "if-domain": youtubeDomains
             ],
             "action": [
                 "type": "css-display-none",

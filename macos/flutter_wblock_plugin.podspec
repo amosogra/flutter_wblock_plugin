@@ -15,8 +15,24 @@ A Flutter plugin that provides native integration with Safari Content Blocker AP
 
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
+  s.resources = ['Classes/SafariWebExtension/Resources/**/*']
+  
+  # Explicitly exclude problematic resource directories
+  s.exclude_files = [
+    'Classes/SafariWebExtension/**/*',
+    'Classes/**/Resources/**/*',
+  ]
+  
+  # Don't try to include the Safari extension resources in the pod
+  # These should be handled by your app target directly
+
+
   s.dependency 'FlutterMacOS'
-  s.platform = :osx, '10.14'
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  s.platform = :osx, '10.15'
+  # Module configuration
+  s.pod_target_xcconfig = { 
+    'DEFINES_MODULE' => 'YES',
+    'SWIFT_VERSION' => '5.0'
+  }
   s.swift_version = '5.0'
 end

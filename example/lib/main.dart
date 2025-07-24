@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_wblock_example/configs/config.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_wblock_plugin/flutter_wblock_plugin.dart';
@@ -20,6 +21,7 @@ class WBlockApp extends StatelessWidget {
       ],
       child: MacosApp(
         title: 'wBlock',
+        navigatorKey: navigatorKey,
         theme: MacosThemeData(
           brightness: Brightness.light,
           accentColor: AccentColor.blue,

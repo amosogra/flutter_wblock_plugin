@@ -212,6 +212,9 @@ EOF
         # Link SafariExtensionHandler.swift
         ln -sf "$SAFARI_EXT_DIR/SafariExtensionHandler.swift" "$SCRIPTS_EXT/"
         
+        # Copy YouTubeAdBlockHandler.swift (needed by SafariExtensionHandler)
+        cp "$CLASSES_DIR/YouTubeAdBlockHandler.swift" "$SCRIPTS_EXT/"
+        
         # Copy Resources
         cp -R "$SAFARI_EXT_DIR/Resources" "$SCRIPTS_EXT/"
         
@@ -337,6 +340,12 @@ verify_installation() {
     
     if [ ! -L "$EXTENSIONS_DIR/wBlock-Scripts/SafariExtensionHandler.swift" ]; then
         echo -e "${RED}✗ wBlock-Scripts SafariExtensionHandler.swift symlink missing${NC}"
+        all_good=false
+    fi
+    
+    # Check YouTubeAdBlockHandler
+    if [ ! -f "$EXTENSIONS_DIR/wBlock-Scripts/YouTubeAdBlockHandler.swift" ]; then
+        echo -e "${RED}✗ wBlock-Scripts YouTubeAdBlockHandler.swift missing${NC}"
         all_good=false
     fi
     

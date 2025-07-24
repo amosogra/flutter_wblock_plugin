@@ -23,18 +23,28 @@ class ContentBlockerConverter {
                 continue
             }
             
-            if let rule = parseRule(trimmedLine) {
-                if let action = rule["action"] as? [String: Any],
-                   let actionType = action["type"] as? String {
-                    if actionType == "scriptlet" {
-                        scriptletRules.append(rule)
-                    } else if isAdvancedRule(rule) {
-                        advancedRules.append(rule)
+            if let rules = parseRule(trimmedLine) {
+                // parseRule now returns an array of rules to handle split rules
+                for rule in rules {
+                    // Validate each rule before categorizing
+                    if validateRule(rule) {
+                        if let action = rule["action"] as? [String: Any],
+                           let actionType = action["type"] as? String {
+                            if actionType == "scriptlet" {
+                                scriptletRules.append(rule)
+                            } else if isAdvancedRule(rule) {
+                                advancedRules.append(rule)
+                            } else {
+                                standardRules.append(rule)
+                            }
+                        } else {
+                            standardRules.append(rule)
+                        }
                     } else {
-                        standardRules.append(rule)
+                        // Rule failed validation, skip it
+                        // Don't log here to avoid async issues
+                        print("Skipping invalid rule: \(rule)")
                     }
-                } else {
-                    standardRules.append(rule)
                 }
             }
         }
@@ -46,7 +56,7 @@ class ContentBlockerConverter {
         )
     }
     
-    private func parseRule(_ rule: String) -> [String: Any]? {
+    private func parseRule(_ rule: String) -> [[String: Any]]? {
         // Handle element hiding rules (##)
         if rule.contains("##") {
             return parseElementHidingRule(rule)
@@ -54,7 +64,10 @@ class ContentBlockerConverter {
         
         // Handle scriptlet injection rules (##+js)
         if rule.contains("##+js(") {
-            return parseScriptletRule(rule)
+            if let scriptletRule = parseScriptletRule(rule) {
+                return [scriptletRule]
+            }
+            return nil
         }
         
         // Handle exception rules (@@)
@@ -66,7 +79,7 @@ class ContentBlockerConverter {
         return parseNetworkRule(rule)
     }
     
-    private func parseElementHidingRule(_ rule: String) -> [String: Any]? {
+    private func parseElementHidingRule(_ rule: String) -> [[String: Any]]? {
         let parts = rule.components(separatedBy: "##")
         guard parts.count == 2 else { return nil }
         
@@ -75,7 +88,7 @@ class ContentBlockerConverter {
         
         guard !selector.isEmpty else { return nil }
         
-        var ruleMap: [String: Any] = [
+        var baseRule: [String: Any] = [
             "action": [
                 "type": "css-display-none",
                 "selector": selector
@@ -88,19 +101,61 @@ class ContentBlockerConverter {
         // Add domain conditions if specified
         if !domains.isEmpty {
             let domainInfo = parseDomains(domains)
-            var trigger = ruleMap["trigger"] as? [String: Any] ?? [:]
+            let ifDomains = domainInfo["if-domain"] as? [String] ?? []
+            let unlessDomains = domainInfo["unless-domain"] as? [String] ?? []
             
-            if let ifDomains = domainInfo["if-domain"] as? [String], !ifDomains.isEmpty {
+            // Check if we have multiple exclusive conditions
+            if !ifDomains.isEmpty && !unlessDomains.isEmpty {
+                // Create multiple rules to handle both conditions
+                var rules: [[String: Any]] = []
+                
+                // Rule 1: Apply CSS hiding on if-domains
+                var ifDomainRule = baseRule
+                var trigger1 = ifDomainRule["trigger"] as? [String: Any] ?? [:]
+                trigger1["if-domain"] = ifDomains
+                ifDomainRule["trigger"] = trigger1
+                rules.append(ifDomainRule)
+                
+                // Rule 2: Exception rule for unless-domains
+                let unlessDomainRule: [String: Any] = [
+                    "action": ["type": "ignore-previous-rules"],
+                    "trigger": [
+                        "url-filter": ".*",
+                        "if-domain": unlessDomains
+                    ]
+                ]
+                rules.append(unlessDomainRule)
+                
+                return rules
+            } else if !ifDomains.isEmpty {
+                // Only if-domain condition
+                var trigger = baseRule["trigger"] as? [String: Any] ?? [:]
                 trigger["if-domain"] = ifDomains
+                baseRule["trigger"] = trigger
+                return [baseRule]
+            } else if !unlessDomains.isEmpty {
+                // Only unless-domain - need to handle this differently
+                // Create a general rule and then an exception
+                var rules: [[String: Any]] = []
+                
+                // First add the general rule (without domain restriction)
+                rules.append(baseRule)
+                
+                // Then add exception for the unless-domains
+                let exceptionRule: [String: Any] = [
+                    "action": ["type": "ignore-previous-rules"],
+                    "trigger": [
+                        "url-filter": ".*",
+                        "if-domain": unlessDomains
+                    ]
+                ]
+                rules.append(exceptionRule)
+                
+                return rules
             }
-            if let unlessDomains = domainInfo["unless-domain"] as? [String], !unlessDomains.isEmpty {
-                trigger["unless-domain"] = unlessDomains
-            }
-            
-            ruleMap["trigger"] = trigger
         }
         
-        return ruleMap
+        return [baseRule]
     }
     
     private func parseScriptletRule(_ rule: String) -> [String: Any]? {
@@ -134,14 +189,19 @@ class ContentBlockerConverter {
         ]
     }
     
-    private func parseExceptionRule(_ rule: String) -> [String: Any]? {
+    private func parseExceptionRule(_ rule: String) -> [[String: Any]]? {
         let baseRule = String(rule.dropFirst(2)) // Remove @@
-        var parsedRule = parseNetworkRule(baseRule)
-        parsedRule?["action"] = ["type": "ignore-previous-rules"]
-        return parsedRule
+        guard var parsedRules = parseNetworkRule(baseRule) else { return nil }
+        
+        // Update all rules to be exception rules
+        for i in 0..<parsedRules.count {
+            parsedRules[i]["action"] = ["type": "ignore-previous-rules"]
+        }
+        
+        return parsedRules
     }
     
-    private func parseNetworkRule(_ rule: String) -> [String: Any]? {
+    private func parseNetworkRule(_ rule: String) -> [[String: Any]]? {
         var pattern = rule
         var options: [String: Any] = [:]
         
@@ -156,30 +216,165 @@ class ContentBlockerConverter {
         let urlFilter = convertPatternToRegex(pattern)
         guard !urlFilter.isEmpty else { return nil }
         
-        var trigger: [String: Any] = ["url-filter": urlFilter]
-        
-        // Apply options to trigger
-        if let domains = options["domain"] as? [String: [String]] {
-            if let includeDomains = domains["include"], !includeDomains.isEmpty {
-                trigger["if-domain"] = includeDomains
-            }
-            if let excludeDomains = domains["exclude"], !excludeDomains.isEmpty {
-                trigger["unless-domain"] = excludeDomains
-            }
-        }
-        
-        if options["third-party"] != nil {
-            trigger["load-type"] = ["third-party"]
-        }
-        
-        if let resourceTypes = options["resource-type"] as? [String] {
-            trigger["resource-type"] = resourceTypes
-        }
-        
-        return [
+        var baseRule: [String: Any] = [
             "action": ["type": "block"],
-            "trigger": trigger
+            "trigger": ["url-filter": urlFilter]
         ]
+        
+        // Collect all conditions
+        var conditions: [String: Any] = [:]
+        
+        // Domain conditions
+        if let domains = options["domain"] as? [String: [String]] {
+            if let include = domains["include"], !include.isEmpty {
+                conditions["if-domain"] = include
+            }
+            if let exclude = domains["exclude"], !exclude.isEmpty {
+                conditions["unless-domain"] = exclude
+            }
+        }
+        
+        // Top URL conditions (if present in options)
+        if let topUrls = options["top-url"] as? [String: [String]] {
+            if let include = topUrls["include"], !include.isEmpty {
+                conditions["if-top-url"] = include
+            }
+            if let exclude = topUrls["exclude"], !exclude.isEmpty {
+                conditions["unless-top-url"] = exclude
+            }
+        }
+        
+        // Load type
+        if options["third-party"] != nil {
+            conditions["load-type"] = ["third-party"]
+        }
+        
+        // Resource types
+        if let resourceTypes = options["resource-type"] as? [String] {
+            conditions["resource-type"] = resourceTypes
+        }
+        
+        // Check if we have multiple exclusive conditions
+        let hasMultipleExclusiveConditions = 
+            (conditions["if-domain"] != nil ? 1 : 0) +
+            (conditions["unless-domain"] != nil ? 1 : 0) +
+            (conditions["if-top-url"] != nil ? 1 : 0) +
+            (conditions["unless-top-url"] != nil ? 1 : 0) > 1
+        
+        if hasMultipleExclusiveConditions {
+            // Need to split into multiple rules
+            return splitIntoMultipleRules(baseRule: baseRule, conditions: conditions)
+        } else {
+            // Single rule is sufficient
+            var trigger = baseRule["trigger"] as? [String: Any] ?? [:]
+            for (key, value) in conditions {
+                trigger[key] = value
+            }
+            baseRule["trigger"] = trigger
+            return [baseRule]
+        }
+    }
+    
+    private func splitIntoMultipleRules(baseRule: [String: Any], conditions: [String: Any]) -> [[String: Any]] {
+        var rules: [[String: Any]] = []
+        
+        // Priority order: if-domain, if-top-url, unless-domain, unless-top-url
+        // Create the main rule with if-conditions
+        var mainRule = baseRule
+        var mainTrigger = mainRule["trigger"] as? [String: Any] ?? [:]
+        var hasMainCondition = false
+        
+        if let ifDomain = conditions["if-domain"] {
+            mainTrigger["if-domain"] = ifDomain
+            hasMainCondition = true
+        } else if let ifTopUrl = conditions["if-top-url"] {
+            mainTrigger["if-top-url"] = ifTopUrl
+            hasMainCondition = true
+        }
+        
+        // Add non-exclusive conditions
+        if let loadType = conditions["load-type"] {
+            mainTrigger["load-type"] = loadType
+        }
+        if let resourceType = conditions["resource-type"] {
+            mainTrigger["resource-type"] = resourceType
+        }
+        
+        if hasMainCondition {
+            mainRule["trigger"] = mainTrigger
+            rules.append(mainRule)
+        }
+        
+        // Create exception rules for unless-conditions
+        if let unlessDomain = conditions["unless-domain"] {
+            var exceptionRule = baseRule
+            exceptionRule["action"] = ["type": "ignore-previous-rules"]
+            var trigger = exceptionRule["trigger"] as? [String: Any] ?? [:]
+            trigger["if-domain"] = unlessDomain // Convert unless to if for exception
+            
+            // Copy non-exclusive conditions
+            if let loadType = conditions["load-type"] {
+                trigger["load-type"] = loadType
+            }
+            if let resourceType = conditions["resource-type"] {
+                trigger["resource-type"] = resourceType
+            }
+            
+            exceptionRule["trigger"] = trigger
+            rules.append(exceptionRule)
+        }
+        
+        if let unlessTopUrl = conditions["unless-top-url"] {
+            var exceptionRule = baseRule
+            exceptionRule["action"] = ["type": "ignore-previous-rules"]
+            var trigger = exceptionRule["trigger"] as? [String: Any] ?? [:]
+            trigger["if-top-url"] = unlessTopUrl // Convert unless to if for exception
+            
+            // Copy non-exclusive conditions
+            if let loadType = conditions["load-type"] {
+                trigger["load-type"] = loadType
+            }
+            if let resourceType = conditions["resource-type"] {
+                trigger["resource-type"] = resourceType
+            }
+            
+            exceptionRule["trigger"] = trigger
+            rules.append(exceptionRule)
+        }
+        
+        // If we only had unless-conditions and no if-conditions, create a base blocking rule
+        if !hasMainCondition && rules.isEmpty {
+            var blockAllRule = baseRule
+            var trigger = blockAllRule["trigger"] as? [String: Any] ?? [:]
+            
+            // Add non-exclusive conditions
+            if let loadType = conditions["load-type"] {
+                trigger["load-type"] = loadType
+            }
+            if let resourceType = conditions["resource-type"] {
+                trigger["resource-type"] = resourceType
+            }
+            
+            blockAllRule["trigger"] = trigger
+            rules.insert(blockAllRule, at: 0)
+        }
+        
+        return rules
+    }
+    
+    // Helper function to normalize and validate domains
+    private func normalizeDomain(_ domain: String) -> String {
+        var normalized = domain.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Handle punycode conversion for international domains
+        if normalized.contains(where: { $0.unicodeScalars.first?.value ?? 0 > 127 }) {
+            // Convert to punycode
+            if let punycoded = normalized.applyingPunycode() {
+                normalized = punycoded
+            }
+        }
+        
+        return normalized
     }
     
     private func convertPatternToRegex(_ pattern: String) -> String {
@@ -236,39 +431,84 @@ class ContentBlockerConverter {
         let optionsList = optionsStr.components(separatedBy: ",")
         
         for option in optionsList {
-            if option.hasPrefix("domain=") {
-                let domainStr = String(option.dropFirst("domain=".count))
+            let trimmedOption = option.trimmingCharacters(in: .whitespaces)
+            
+            if trimmedOption.hasPrefix("domain=") {
+                let domainStr = String(trimmedOption.dropFirst("domain=".count))
                 options["domain"] = parseDomainOption(domainStr)
-            } else if option == "third-party" || option == "3p" {
+            } else if trimmedOption.hasPrefix("from=") {
+                // Handle top-url conditions (from= is used in some filter lists)
+                let topUrlStr = String(trimmedOption.dropFirst("from=".count))
+                options["top-url"] = parseTopUrlOption(topUrlStr)
+            } else if trimmedOption == "third-party" || trimmedOption == "3p" {
                 options["third-party"] = true
-            } else if option == "~third-party" || option == "~3p" || option == "1p" {
+            } else if trimmedOption == "~third-party" || trimmedOption == "~3p" || trimmedOption == "1p" {
                 options["first-party"] = true
-            } else if option == "script" {
+            } else if trimmedOption == "script" {
                 var types = options["resource-type"] as? [String] ?? []
                 types.append("script")
                 options["resource-type"] = types
-            } else if option == "image" {
+            } else if trimmedOption == "image" {
                 var types = options["resource-type"] as? [String] ?? []
                 types.append("image")
                 options["resource-type"] = types
-            } else if option == "stylesheet" || option == "css" {
+            } else if trimmedOption == "stylesheet" || trimmedOption == "css" {
                 var types = options["resource-type"] as? [String] ?? []
                 types.append("style-sheet")
                 options["resource-type"] = types
-            } else if option == "xmlhttprequest" || option == "xhr" {
+            } else if trimmedOption == "xmlhttprequest" || trimmedOption == "xhr" {
                 var types = options["resource-type"] as? [String] ?? []
                 types.append("raw")
                 options["resource-type"] = types
-            } else if option == "media" {
+            } else if trimmedOption == "media" {
                 var types = options["resource-type"] as? [String] ?? []
                 types.append("media")
                 options["resource-type"] = types
-            } else if option == "font" {
+            } else if trimmedOption == "font" {
                 var types = options["resource-type"] as? [String] ?? []
                 types.append("font")
                 options["resource-type"] = types
+            } else if trimmedOption == "subdocument" || trimmedOption == "frame" {
+                var types = options["resource-type"] as? [String] ?? []
+                types.append("document")
+                options["resource-type"] = types
             }
         }
+    }
+    
+    private func parseTopUrlOption(_ topUrlStr: String) -> [String: [String]] {
+        let urls = topUrlStr.components(separatedBy: "|")
+        var include: [String] = []
+        var exclude: [String] = []
+        
+        for url in urls {
+            let trimmed = url.trimmingCharacters(in: .whitespaces)
+            if trimmed.hasPrefix("~") {
+                let urlPattern = String(trimmed.dropFirst())
+                if !urlPattern.isEmpty {
+                    exclude.append(normalizeTopUrl(urlPattern))
+                }
+            } else if !trimmed.isEmpty {
+                include.append(normalizeTopUrl(trimmed))
+            }
+        }
+        
+        return [
+            "include": include,
+            "exclude": exclude
+        ]
+    }
+    
+    private func normalizeTopUrl(_ url: String) -> String {
+        // Convert domain patterns to proper URL patterns for top-url
+        var normalized = url.lowercased()
+        
+        // If it's just a domain, convert to a URL pattern
+        if !normalized.contains("://") && !normalized.hasPrefix("*") {
+            normalized = "*://\(normalized)/*"
+        }
+        
+        return normalized
     }
     
     private func parseDomains(_ domainsStr: String) -> [String: Any] {
@@ -279,9 +519,15 @@ class ContentBlockerConverter {
         for domain in domains {
             let trimmed = domain.trimmingCharacters(in: .whitespaces)
             if trimmed.hasPrefix("~") {
-                excludeDomains.append(String(trimmed.dropFirst()))
+                let domainName = normalizeDomain(String(trimmed.dropFirst()))
+                if !domainName.isEmpty {
+                    excludeDomains.append(domainName)
+                }
             } else if !trimmed.isEmpty {
-                includeDomains.append(trimmed)
+                let domainName = normalizeDomain(trimmed)
+                if !domainName.isEmpty {
+                    includeDomains.append(domainName)
+                }
             }
         }
         
@@ -297,10 +543,17 @@ class ContentBlockerConverter {
         var exclude: [String] = []
         
         for domain in domains {
-            if domain.hasPrefix("~") {
-                exclude.append(String(domain.dropFirst()))
-            } else {
-                include.append(domain)
+            let trimmed = domain.trimmingCharacters(in: .whitespaces)
+            if trimmed.hasPrefix("~") {
+                let domainName = normalizeDomain(String(trimmed.dropFirst()))
+                if !domainName.isEmpty {
+                    exclude.append(domainName)
+                }
+            } else if !trimmed.isEmpty {
+                let domainName = normalizeDomain(trimmed)
+                if !domainName.isEmpty {
+                    include.append(domainName)
+                }
             }
         }
         
@@ -335,6 +588,14 @@ class ContentBlockerConverter {
     }
     
     private func createYouTubeBlockingRule(_ scriptletName: String, args: [String]) -> [String: Any] {
+        // Ensure YouTube domains are lowercase
+        let youtubeDomains = [
+            "*youtube.com",
+            "*youtube-nocookie.com",
+            "*googlevideo.com",
+            "*ytimg.com"
+        ].map { normalizeDomain($0) }
+        
         return [
             "action": [
                 "type": "scriptlet",
@@ -343,14 +604,58 @@ class ContentBlockerConverter {
             ],
             "trigger": [
                 "url-filter": ".*",
-                "if-domain": [
-                    "*youtube.com",
-                    "*youtube-nocookie.com",
-                    "*googlevideo.com",
-                    "*ytimg.com"
-                ],
+                "if-domain": youtubeDomains,
                 "resource-type": ["document", "script"]
             ]
         ]
+    }
+    
+    // Validation function to ensure Safari compatibility
+    private func validateRule(_ rule: [String: Any]) -> Bool {
+        guard let trigger = rule["trigger"] as? [String: Any] else { return false }
+        
+        // Check for multiple exclusive conditions
+        let exclusiveConditions = ["if-domain", "unless-domain", "if-top-url", "unless-top-url"]
+        let presentConditions = exclusiveConditions.filter { trigger[$0] != nil }
+        
+        if presentConditions.count > 1 {
+            // Multiple exclusive conditions found - rule is invalid
+            print("WARNING: Rule has multiple exclusive conditions: \(presentConditions)")
+            return false
+        }
+        
+        // Validate domains are lowercase
+        for condition in ["if-domain", "unless-domain"] {
+            if let domains = trigger[condition] as? [String] {
+                for domain in domains {
+                    if domain != domain.lowercased() {
+                        // Domain not lowercase
+                        print("WARNING: Domain not lowercase: \(domain)")
+                        return false
+                    }
+                    // Check for non-ASCII characters
+                    if domain.unicodeScalars.contains(where: { $0.value > 127 }) {
+                        // Domain contains non-ASCII characters
+                        print("WARNING: Domain contains non-ASCII characters: \(domain)")
+                        return false
+                    }
+                }
+            }
+        }
+        
+        return true
+    }
+}
+
+// Extension to handle punycode conversion
+extension String {
+    func applyingPunycode() -> String? {
+        // Try to convert using IDN
+        guard let encoded = self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed),
+              let url = URL(string: "https://\(encoded)"),
+              let host = url.host else {
+            return nil
+        }
+        return host
     }
 }

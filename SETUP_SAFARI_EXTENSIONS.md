@@ -48,7 +48,7 @@ The script will:
 - Create extension directory structures
 - Generate Info.plist files for each extension
 - Create entitlement files
-- Copy/link necessary files
+- Copy/link necessary files (including YouTubeAdBlockHandler.swift)
 
 ### 2. Verify Installation
 
@@ -136,11 +136,15 @@ For each content blocker (wBlock-Filters and wBlock-Advance):
      - `web_accessible_resources/scriptlets/` (60+ files)
      - `popup/` folder
 
-4. **Update SafariExtensionHandler**
+4. **Update Extension Swift Files**
 
    - Replace the auto-generated handler with:
      ```
      macos/Classes/SafariWebExtension/SafariExtensionHandler.swift
+     ```
+   - Add YouTubeAdBlockHandler.swift from:
+     ```
+     macos/Classes/YouTubeAdBlockHandler.swift
      ```
 
 5. **Update Info.plist**
@@ -221,13 +225,19 @@ For all three extensions:
      ```
    - Verify entitlements include the mach-lookup exception
 
-3. **"Scriptlets not loading"**
+3. **"YouTubeAdBlockHandler not found"**
+
+   - Ensure YouTubeAdBlockHandler.swift is copied to the web extension
+   - Add the file to the wBlock-Scripts target in Xcode
+   - Check that it's included in the build phases
+
+4. **"Scriptlets not loading"**
 
    - Ensure all scriptlet files are included in the web extension
    - Check web_accessible_resources in manifest.json
    - Verify registry.json is present
 
-4. **"Content blockers not updating"**
+5. **"Content blockers not updating"**
    - Check shared container access (app groups)
    - Verify JSON files are being written to the container
    - Manually reload content blockers in Safari
@@ -261,6 +271,7 @@ macos/SafariExtensions/
 ├── wBlock-Scripts/
 │   ├── Info.plist
 │   ├── SafariExtensionHandler.swift (linked)
+│   ├── YouTubeAdBlockHandler.swift (copied)
 │   └── Resources/
 │       ├── manifest.json
 │       ├── src/

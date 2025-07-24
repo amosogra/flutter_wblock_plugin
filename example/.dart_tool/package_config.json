@@ -113,7 +113,7 @@
       "name": "flutter_wblock_plugin",
       "rootUri": "../../",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "flutter_web_plugins",
@@ -452,7 +452,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2025-07-22T17:39:39.921069Z",
+  "generated": "2025-07-24T10:40:44.759889Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///Users/amos/development/flutter",

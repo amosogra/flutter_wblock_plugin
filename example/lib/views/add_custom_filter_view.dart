@@ -103,7 +103,7 @@ class _AddCustomFilterViewState extends State<AddCustomFilterView> {
                     children: [
                       Expanded(
                         child: PushButton(
-                          controlSize: ControlSize.small,
+                          controlSize: ControlSize.large,
                           onPressed: widget.onDismiss,
                           secondary: true,
                           child: const Text('Cancel'),
@@ -112,7 +112,7 @@ class _AddCustomFilterViewState extends State<AddCustomFilterView> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: PushButton(
-                          controlSize: ControlSize.small,
+                          controlSize: ControlSize.large,
                           onPressed: _canAdd ? _addFilter : null,
                           child: const Text('Add'),
                         ),

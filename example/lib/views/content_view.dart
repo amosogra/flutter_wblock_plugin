@@ -224,12 +224,12 @@ class _ContentViewState extends State<ContentView> {
           // More Menu
           MacosPopupButton<String>(
             hint: const MacosIcon(Icons.more_horiz),
-            items: [
-              const MacosPopupMenuItem(
+            items: const [
+              MacosPopupMenuItem(
                 value: 'logs',
                 child: Text('Show Logs'),
               ),
-              const MacosPopupMenuItem(
+              MacosPopupMenuItem(
                 value: 'reset',
                 child: Text('Reset to Default'),
               ),
@@ -294,7 +294,7 @@ class _ContentViewState extends State<ContentView> {
           'This will reset all filter selections to the recommended defaults. Are you sure?',
         ),
         primaryButton: PushButton(
-          controlSize: ControlSize.regular,
+          controlSize: ControlSize.large,
           onPressed: () {
             filterManager.resetToDefaultLists();
             Navigator.of(context).pop();
@@ -303,7 +303,7 @@ class _ContentViewState extends State<ContentView> {
           child: const Text('Reset'),
         ),
         secondaryButton: PushButton(
-          controlSize: ControlSize.regular,
+          controlSize: ControlSize.large,
           onPressed: () => Navigator.of(context).pop(),
           secondary: true,
           child: const Text('Cancel'),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_wblock_example/configs/config.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_wblock_plugin/flutter_wblock_plugin.dart';
@@ -76,7 +77,7 @@ class _LogsViewState extends State<LogsView> {
                   icon: const MacosIcon(Icons.copy),
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: filterManager.logs));
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    ScaffoldMessenger.of(navigatorKey.currentState!.context).showSnackBar(
                       const SnackBar(content: Text('Logs copied to clipboard')),
                     );
                   },

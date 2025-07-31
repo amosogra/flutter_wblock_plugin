@@ -57,10 +57,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   ContentBlockerConverter: c8a68db0849f62e979ffca8c528b5349021b162b
-  FilterEngine: 76898729a662fffd18a5e20f75f694788634c511
+  FilterEngine: 15e70ebe18ef30a2ef1677992ebed63699f57f76
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_wblock_plugin: c21261c5b4c89e27d4219e441e147d2527832c41
-  PublicSuffixList: 45fd8a0dbc8151c3040e067bc5252bb931a1061f
+  PublicSuffixList: 1e13491685e08bdb50469a32e49a5417ece34620
   Punycode: 177e2ef2a9b3678cbdae851be6df1ee4d27f036b
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe

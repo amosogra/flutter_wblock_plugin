@@ -1,0 +1,72 @@
+PODS:
+  - ContentBlockerConverter (2.0.48):
+    - Punycode (= 3.0.0)
+  - FilterEngine (2.0.48):
+    - ContentBlockerConverter (= 2.0.48)
+    - PublicSuffixList (~> 1.1.47)
+  - flutter_wblock_plugin (1.0.0):
+    - FlutterMacOS
+    - wBlockCoreService (= 1.0.0)
+  - FlutterMacOS (1.0.0)
+  - PublicSuffixList (1.1.47)
+  - Punycode (3.0.0)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - url_launcher_macos (0.0.1):
+    - FlutterMacOS
+  - wBlockCoreService (1.0.0):
+    - ContentBlockerConverter (= 2.0.48)
+    - FilterEngine (= 2.0.48)
+    - ZIPFoundation (= 0.9.19)
+  - ZIPFoundation (0.9.19)
+
+DEPENDENCIES:
+  - ContentBlockerConverter (from `../../macos/Podspecs`)
+  - FilterEngine (from `../../macos/Podspecs`)
+  - flutter_wblock_plugin (from `Flutter/ephemeral/.symlinks/plugins/flutter_wblock_plugin/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - PublicSuffixList (from `../../macos/Podspecs`)
+  - Punycode (from `../../macos/Podspecs`)
+  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
+  - wBlockCoreService (from `../../macos/Podspecs`)
+  - ZIPFoundation (from `../../macos/Podspecs/ZipFoundation.podspec`)
+
+EXTERNAL SOURCES:
+  ContentBlockerConverter:
+    :podspec: "../../macos/Podspecs"
+  FilterEngine:
+    :podspec: "../../macos/Podspecs"
+  flutter_wblock_plugin:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_wblock_plugin/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  PublicSuffixList:
+    :podspec: "../../macos/Podspecs"
+  Punycode:
+    :podspec: "../../macos/Podspecs"
+  shared_preferences_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
+  url_launcher_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
+  wBlockCoreService:
+    :podspec: "../../macos/Podspecs"
+  ZIPFoundation:
+    :podspec: "../../macos/Podspecs/ZipFoundation.podspec"
+
+SPEC CHECKSUMS:
+  ContentBlockerConverter: c8a68db0849f62e979ffca8c528b5349021b162b
+  FilterEngine: 15e70ebe18ef30a2ef1677992ebed63699f57f76
+  flutter_wblock_plugin: c49dbf1711bc3e2b88fc076dd183b32b192d6029
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  PublicSuffixList: 1e13491685e08bdb50469a32e49a5417ece34620
+  Punycode: 177e2ef2a9b3678cbdae851be6df1ee4d27f036b
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  url_launcher_macos: c82c93949963e55b228a30115bd219499a6fe404
+  wBlockCoreService: ab8a3907e9f784022def3fa4f9bb48187762a979
+  ZIPFoundation: bcece1699f80b5d63488c3886daa80a14ebe0a60
+
+PODFILE CHECKSUM: a593b11c10d91263b183ac591c48303586efd858
+
+COCOAPODS: 1.16.2

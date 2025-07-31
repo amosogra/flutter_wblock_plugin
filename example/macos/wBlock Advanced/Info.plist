@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>AppIdentifierPrefix</key>
+    <string>$(AppIdentifierPrefix)</string>
+    <key>NSExtension</key>
+    <dict>
+        <key>NSExtensionPointIdentifier</key>
+        <string>com.apple.Safari.extension</string>
+        <key>NSExtensionPrincipalClass</key>
+        <string>$(PRODUCT_MODULE_NAME).SafariExtensionHandler</string>
+        <key>SFSafariAssociatedContentBlockers</key>
+        <array>
+            <string>syferlab.wBlock.wBlock-Custom</string>
+            <string>syferlab.wBlock.wBlock-Foreign-Experimental</string>
+            <string>syferlab.wBlock.wBlock-Annoyances</string>
+            <string>syferlab.wBlock.wBlock-Security-Multipurpose</string>
+            <string>syferlab.wBlock.wBlock-Ads-Privacy</string>
+        </array>
+        <key>SFSafariContentScript</key>
+        <array>
+            <dict>
+                <key>Script</key>
+                <string>script.js</string>
+            </dict>
+            <dict>
+                <key>Script</key>
+                <string>userscript-injector.js</string>
+            </dict>
+        </array>
+        <key>SFSafariToolbarItem</key>
+        <dict>
+            <key>Action</key>
+            <string>Popover</string>
+            <key>Identifier</key>
+            <string>Button</string>
+            <key>Image</key>
+            <string>ToolbarItemIcon.png</string>
+            <key>Label</key>
+            <string>App Extension</string>
+        </dict>
+        <key>SFSafariWebsiteAccess</key>
+        <dict>
+            <key>Level</key>
+            <string>All</string>
+        </dict>
+    </dict>
+    <key>NSHumanReadableDescription</key>
+    <string>Advanced extension for enhanced filtering capabilities and website compatibility fixes. Displays a toolbar button to view number of blocked elements on a webpage. Element Zapper: Visual element removal tool for permanently blocking specific page elements.</string>
+</dict>
+</plist>

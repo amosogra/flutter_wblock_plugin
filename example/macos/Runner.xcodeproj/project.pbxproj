@@ -169,97 +169,34 @@
 		D571F4D26F4B367B4A4EE31D /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B082662D2E3BEFC2002A26B8 /* Exceptions for "wBlock Ads & Privacy" folder in "wBlock Ads & Privacy" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = B082661F2E3BEFC2002A26B8 /* wBlock Ads & Privacy */;
-		};
-		B082664B2E3BF2C8002A26B8 /* Exceptions for "wBlock Annoyances" folder in "wBlock Annoyances" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = B082663E2E3BF2C8002A26B8 /* wBlock Annoyances */;
-		};
-		B08266652E3BF53D002A26B8 /* Exceptions for "wBlock Security & Multipurpose" folder in "wBlock Security & Multipurpose" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = B08266582E3BF53D002A26B8 /* wBlock Security & Multipurpose */;
-		};
-		B082667E2E3BF7EA002A26B8 /* Exceptions for "wBlock Foreign & Experimental" folder in "wBlock Foreign & Experimental" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = B08266712E3BF7EA002A26B8 /* wBlock Foreign & Experimental */;
-		};
-		B08266972E3BF8A8002A26B8 /* Exceptions for "wBlock Custom" folder in "wBlock Custom" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = B082668A2E3BF8A8002A26B8 /* wBlock Custom */;
-		};
-		B08266B72E3BF956002A26B8 /* Exceptions for "wBlock Advanced" folder in "wBlock Advanced" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = B08266A32E3BF955002A26B8 /* wBlock Advanced */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B08266232E3BEFC2002A26B8 /* wBlock Ads & Privacy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				B082662D2E3BEFC2002A26B8 /* Exceptions for "wBlock Ads & Privacy" folder in "wBlock Ads & Privacy" target */,
-			);
 			path = "wBlock Ads & Privacy";
 			sourceTree = "<group>";
 		};
 		B08266412E3BF2C8002A26B8 /* wBlock Annoyances */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				B082664B2E3BF2C8002A26B8 /* Exceptions for "wBlock Annoyances" folder in "wBlock Annoyances" target */,
-			);
 			path = "wBlock Annoyances";
 			sourceTree = "<group>";
 		};
 		B082665B2E3BF53D002A26B8 /* wBlock Security & Multipurpose */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				B08266652E3BF53D002A26B8 /* Exceptions for "wBlock Security & Multipurpose" folder in "wBlock Security & Multipurpose" target */,
-			);
 			path = "wBlock Security & Multipurpose";
 			sourceTree = "<group>";
 		};
 		B08266742E3BF7EA002A26B8 /* wBlock Foreign & Experimental */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				B082667E2E3BF7EA002A26B8 /* Exceptions for "wBlock Foreign & Experimental" folder in "wBlock Foreign & Experimental" target */,
-			);
 			path = "wBlock Foreign & Experimental";
 			sourceTree = "<group>";
 		};
 		B082668D2E3BF8A8002A26B8 /* wBlock Custom */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				B08266972E3BF8A8002A26B8 /* Exceptions for "wBlock Custom" folder in "wBlock Custom" target */,
-			);
 			path = "wBlock Custom";
 			sourceTree = "<group>";
 		};
 		B08266A52E3BF956002A26B8 /* wBlock Advanced */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				B08266B72E3BF956002A26B8 /* Exceptions for "wBlock Advanced" folder in "wBlock Advanced" target */,
-			);
 			path = "wBlock Advanced";
 			sourceTree = "<group>";
 		};

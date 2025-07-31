@@ -27,10 +27,16 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 
 flutter_ios_podfile_setup
 
+# Add wBlockCoreService from GitHub
+# Note: When ready for production, remove the local podspecs and use only this GitHub source
+# pod 'wBlockCoreService', :git => 'https://github.com/amosogra/wBlockCoreService_Package.git', :tag => '1.0.0'
+
 target 'Runner' do
   use_frameworks!
 
   # 1) CocoaPods will now load your all podspecs from ios/Podspecs
+  # TEMPORARY: Using local podspecs for development
+  # When ready for production, comment out these lines and uncomment the GitHub source above
   pod 'Punycode', :podspec => '../../ios/Podspecs'
   pod 'FilterEngine', :podspec => '../../ios/Podspecs'
   pod 'PublicSuffixList', :podspec => '../../ios/Podspecs'

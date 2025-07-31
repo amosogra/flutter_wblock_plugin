@@ -52,6 +52,16 @@ abstract class FlutterWblockPluginPlatform extends PlatformInterface {
   Future<void> resetOnboarding();
   Future<bool> hasCompletedOnboarding();
   Future<void> setOnboardingCompleted(bool completed);
+  Future<Map<String, dynamic>?> getApplyProgress();
+  Future<Map<String, int>?> getRuleCountsByCategory();
+  Future<List<String>?> getCategoriesApproachingLimit();
+  Future<List<Map<String, dynamic>>?> checkForFilterUpdates();
+  Future<void> applyFilterUpdates(List<String> updateIds);
+  Future<void> downloadMissingFilters();
+  Future<void> updateMissingFilters();
+  Future<void> downloadSelectedFilters(List<String> filterIds);
+  Future<void> resetToDefaultLists();
+  Future<void> setUserScriptManager();
 }
 
 /// An implementation of [FlutterWblockPluginPlatform] that uses method channels.
@@ -220,6 +230,80 @@ class MethodChannelFlutterWblockPlugin extends FlutterWblockPluginPlatform {
   Future<void> setOnboardingCompleted(bool completed) async {
     await methodChannel.invokeMethod('setOnboardingCompleted', {'completed': completed});
   }
+
+  @override
+  Future<Map<String, dynamic>?> getApplyProgress() async {
+    try {
+      final result = await methodChannel.invokeMethod<Map>('getApplyProgress');
+      return result?.cast<String, dynamic>();
+    } catch (e) {
+      debugPrint('Error getting apply progress: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<Map<String, int>?> getRuleCountsByCategory() async {
+    try {
+      final result = await methodChannel.invokeMethod<Map>('getRuleCountsByCategory');
+      return result?.cast<String, int>();
+    } catch (e) {
+      debugPrint('Error getting rule counts by category: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<List<String>?> getCategoriesApproachingLimit() async {
+    try {
+      final result = await methodChannel.invokeMethod<List>('getCategoriesApproachingLimit');
+      return result?.cast<String>();
+    } catch (e) {
+      debugPrint('Error getting categories approaching limit: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>?> checkForFilterUpdates() async {
+    try {
+      final result = await methodChannel.invokeMethod<List>('checkForFilterUpdates');
+      return result?.map((e) => Map<String, dynamic>.from(e)).toList();
+    } catch (e) {
+      debugPrint('Error checking for filter updates: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<void> applyFilterUpdates(List<String> updateIds) async {
+    await methodChannel.invokeMethod('applyFilterUpdates', {'updateIds': updateIds});
+  }
+
+  @override
+  Future<void> downloadMissingFilters() async {
+    await methodChannel.invokeMethod('downloadMissingFilters');
+  }
+
+  @override
+  Future<void> updateMissingFilters() async {
+    await methodChannel.invokeMethod('updateMissingFilters');
+  }
+
+  @override
+  Future<void> downloadSelectedFilters(List<String> filterIds) async {
+    await methodChannel.invokeMethod('downloadSelectedFilters', {'filterIds': filterIds});
+  }
+
+  @override
+  Future<void> resetToDefaultLists() async {
+    await methodChannel.invokeMethod('resetToDefaultLists');
+  }
+
+  @override
+  Future<void> setUserScriptManager() async {
+    await methodChannel.invokeMethod('setUserScriptManager');
+  }
 }
 
 /// The main plugin class
@@ -364,5 +448,55 @@ class FlutterWblockPlugin {
   /// Set onboarding completed
   static Future<void> setOnboardingCompleted(bool completed) {
     return _platform.setOnboardingCompleted(completed);
+  }
+
+  /// Get apply progress
+  static Future<Map<String, dynamic>?> getApplyProgress() {
+    return _platform.getApplyProgress();
+  }
+
+  /// Get rule counts by category
+  static Future<Map<String, int>?> getRuleCountsByCategory() {
+    return _platform.getRuleCountsByCategory();
+  }
+
+  /// Get categories approaching limit
+  static Future<List<String>?> getCategoriesApproachingLimit() {
+    return _platform.getCategoriesApproachingLimit();
+  }
+
+  /// Check for filter updates
+  static Future<List<Map<String, dynamic>>?> checkForFilterUpdates() {
+    return _platform.checkForFilterUpdates();
+  }
+
+  /// Apply filter updates
+  static Future<void> applyFilterUpdates(List<String> updateIds) {
+    return _platform.applyFilterUpdates(updateIds);
+  }
+
+  /// Download missing filters
+  static Future<void> downloadMissingFilters() {
+    return _platform.downloadMissingFilters();
+  }
+
+  /// Update missing filters
+  static Future<void> updateMissingFilters() {
+    return _platform.updateMissingFilters();
+  }
+
+  /// Download selected filters
+  static Future<void> downloadSelectedFilters(List<String> filterIds) {
+    return _platform.downloadSelectedFilters(filterIds);
+  }
+
+  /// Reset to default lists
+  static Future<void> resetToDefaultLists() {
+    return _platform.resetToDefaultLists();
+  }
+
+  /// Set user script manager
+  static Future<void> setUserScriptManager() {
+    return _platform.setUserScriptManager();
   }
 }

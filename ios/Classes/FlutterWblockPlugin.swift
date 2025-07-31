@@ -174,6 +174,46 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             }
             setOnboardingCompleted(completed: completed, result: result)
             
+        case "getApplyProgress":
+            getApplyProgress(result: result)
+            
+        case "getRuleCountsByCategory":
+            getRuleCountsByCategory(result: result)
+            
+        case "getCategoriesApproachingLimit":
+            getCategoriesApproachingLimit(result: result)
+            
+        case "checkForFilterUpdates":
+            checkForFilterUpdates(result: result)
+            
+        case "applyFilterUpdates":
+            guard let args = call.arguments as? [String: Any],
+                  let updateIds = args["updateIds"] as? [String] else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing updateIds", details: nil))
+                return
+            }
+            applyFilterUpdates(updateIds: updateIds, result: result)
+            
+        case "downloadMissingFilters":
+            downloadMissingFilters(result: result)
+            
+        case "updateMissingFilters":
+            updateMissingFilters(result: result)
+            
+        case "downloadSelectedFilters":
+            guard let args = call.arguments as? [String: Any],
+                  let filterIds = args["filterIds"] as? [String] else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing filterIds", details: nil))
+                return
+            }
+            downloadSelectedFilters(filterIds: filterIds, result: result)
+            
+        case "resetToDefaultLists":
+            resetToDefaultLists(result: result)
+            
+        case "setUserScriptManager":
+            setUserScriptManager(result: result)
+            
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -339,22 +379,22 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
     }
     
     private func getWhitelistedDomains(result: @escaping FlutterResult) {
-        let domains = filterManager?.whitelistedDomains ?? []
+        let domains = filterManager?.whitelistViewModel.whitelistedDomains ?? []
         result(domains)
     }
     
     private func addWhitelistedDomain(domain: String, result: @escaping FlutterResult) {
-        filterManager?.addWhitelistedDomain(domain)
+        filterManager?.whitelistViewModel.addWhitelistedDomain(domain)
         result(nil)
     }
     
     private func removeWhitelistedDomain(domain: String, result: @escaping FlutterResult) {
-        filterManager?.removeWhitelistedDomain(domain)
+        filterManager?.whitelistViewModel.removeWhitelistedDomain(domain)
         result(nil)
     }
     
     private func updateWhitelistedDomains(domains: [String], result: @escaping FlutterResult) {
-        filterManager?.updateWhitelistedDomains(domains)
+        filterManager?.whitelistViewModel.updateWhitelistedDomains(domains)
         result(nil)
     }
     
@@ -390,6 +430,138 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
     
     private func setOnboardingCompleted(completed: Bool, result: @escaping FlutterResult) {
         UserDefaults.standard.set(completed, forKey: "hasCompletedOnboarding")
+        result(nil)
+    }
+    
+    private func getApplyProgress(result: @escaping FlutterResult) {
+        guard let filterManager = filterManager else {
+            result(nil)
+            return
+        }
+        
+        let progressData: [String: Any] = [
+            "progress": filterManager.progress,
+            "stageDescription": filterManager.conversionStageDescription,
+            "currentFilterName": filterManager.currentFilterName,
+            "processedFiltersCount": filterManager.processedFiltersCount,
+            "totalFiltersCount": filterManager.totalFiltersCount,
+            "isInConversionPhase": filterManager.isInConversionPhase,
+            "isInSavingPhase": filterManager.isInSavingPhase,
+            "isInEnginePhase": filterManager.isInEnginePhase,
+            "isInReloadPhase": filterManager.isInReloadPhase,
+            "sourceRulesCount": filterManager.sourceRulesCount,
+            "lastConversionTime": filterManager.lastConversionTime,
+            "lastReloadTime": filterManager.lastReloadTime,
+            "lastRuleCount": filterManager.lastRuleCount,
+            "hasError": filterManager.hasError,
+            "ruleCountsByCategory": filterManager.ruleCountsByCategory.reduce(into: [String: Int]()) { result, pair in
+                result[pair.key.rawValue] = pair.value
+            },
+            "categoriesApproachingLimit": filterManager.categoriesApproachingLimit.map { $0.rawValue }
+        ]
+        
+        result(progressData)
+    }
+    
+    private func getRuleCountsByCategory(result: @escaping FlutterResult) {
+        guard let filterManager = filterManager else {
+            result(nil)
+            return
+        }
+        
+        let categoryRuleCounts = filterManager.ruleCountsByCategory.reduce(into: [String: Int]()) { result, pair in
+            result[pair.key.rawValue] = pair.value
+        }
+        
+        result(categoryRuleCounts)
+    }
+    
+    private func getCategoriesApproachingLimit(result: @escaping FlutterResult) {
+        guard let filterManager = filterManager else {
+            result(nil)
+            return
+        }
+        
+        let categories = filterManager.categoriesApproachingLimit.map { $0.rawValue }
+        result(categories)
+    }
+    
+    private func checkForFilterUpdates(result: @escaping FlutterResult) {
+        guard let filterManager = filterManager else {
+            result(nil)
+            return
+        }
+        
+        let updates = filterManager.availableUpdates.map { filter in
+            return [
+                "id": filter.id.uuidString,
+                "name": filter.name,
+                "description": filter.description,
+                "category": filter.category.rawValue,
+                "url": filter.url.absoluteString,
+                "version": filter.version,
+                "isSelected": filter.isSelected,
+                "sourceRuleCount": filter.sourceRuleCount as Any
+            ]
+        }
+        
+        result(updates)
+    }
+    
+    private func applyFilterUpdates(updateIds: [String], result: @escaping FlutterResult) {
+        guard let filterManager = filterManager else {
+            result(FlutterError(code: "NO_MANAGER", message: "Filter manager not initialized", details: nil))
+            return
+        }
+        
+        let selectedUpdates = filterManager.availableUpdates.filter { filter in
+            updateIds.contains(filter.id.uuidString)
+        }
+        
+        Task {
+            await filterManager.updateSelectedFilters(selectedUpdates)
+            result(nil)
+        }
+    }
+    
+    private func downloadMissingFilters(result: @escaping FlutterResult) {
+        Task {
+            await filterManager?.downloadMissingFilters()
+            result(nil)
+        }
+    }
+    
+    private func updateMissingFilters(result: @escaping FlutterResult) {
+        Task {
+            await filterManager?.updateMissingFilters()
+            result(nil)
+        }
+    }
+    
+    private func downloadSelectedFilters(filterIds: [String], result: @escaping FlutterResult) {
+        guard let filterManager = filterManager else {
+            result(FlutterError(code: "NO_MANAGER", message: "Filter manager not initialized", details: nil))
+            return
+        }
+        
+        let selectedFilters = filterManager.filterLists.filter { filter in
+            filterIds.contains(filter.id.uuidString)
+        }
+        
+        Task {
+            await filterManager.downloadSelectedFilters(selectedFilters)
+            result(nil)
+        }
+    }
+    
+    private func resetToDefaultLists(result: @escaping FlutterResult) {
+        filterManager?.resetToDefaultLists()
+        result(nil)
+    }
+    
+    private func setUserScriptManager(result: @escaping FlutterResult) {
+        // UserScriptManager is already set during setupManagers
+        // This method exists for API compatibility
         result(nil)
     }
 }

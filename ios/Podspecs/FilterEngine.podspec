@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage     = 'https://github.com/AdguardTeam/SafariConverterLib'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { 'AdGuard' => 'support@adguard.com' }
-  s.source       = { :git => 'https://github.com/AdguardTeam/SafariConverterLib.git', :commit => '9e431a2' }
+  s.source       = { :git => 'https://github.com/amosogra/SafariConverterLib.git', :tag => '2.0.0' }
   
   s.ios.deployment_target = '13.0'
   s.osx.deployment_target = '10.15'

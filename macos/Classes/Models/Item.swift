@@ -6,8 +6,12 @@
 //
 
 import Foundation
+#if canImport(SwiftData)
 import SwiftData
+#endif
 
+#if canImport(SwiftData)
+@available(macOS 14.0, *)
 @Model
 final class Item {
     var timestamp: Date
@@ -16,3 +20,13 @@ final class Item {
         self.timestamp = timestamp
     }
 }
+#else
+// Fallback implementation for older systems
+class Item {
+    var timestamp: Date
+    
+    init(timestamp: Date) {
+        self.timestamp = timestamp
+    }
+}
+#endif

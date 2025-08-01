@@ -21,5 +21,5 @@ A Flutter plugin that provides content blocking functionality for Safari with su
   s.swift_version = '5.9'
 
   # Add dependency to wBlockCoreService package
-  s.dependency 'wBlockCoreService', '2.0.0'
+  s.dependency 'wBlockCoreService', '3.0.0'
 end

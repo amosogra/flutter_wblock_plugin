@@ -68,3 +68,29 @@ When ready for production:
 - Searched for "In real implementation", "TODO", "Simulate" patterns - none found
 - All methods now properly call native implementations
 - No placeholder or simulated logic remains in the codebase
+
+## Latest Fixes (Method Names and MainActor Isolation)
+
+### Fixed Method Name Issues
+1. **WhitelistViewModel Methods**
+   - Changed `addWhitelistedDomain()` → `addDomain()` 
+   - Changed `removeWhitelistedDomain()` → `removeDomain()`
+   - Implemented missing `updateWhitelistedDomains()` by directly setting the array
+
+2. **UserScriptManager Methods**
+   - Fixed to find script objects first before calling methods
+   - `toggleScript(id:)` → `toggleUserScript(_:)`
+   - `removeScript(id:)` → `removeUserScript(_:)`
+   - `addScript()` marked as not implemented (expects URL)
+
+3. **ConcurrentLogManager Methods**
+   - Changed to use `getAllLogs()` which returns a formatted string
+   - Updated Flutter interface to return String instead of List
+   - Updated LogsView to display pre-formatted string
+
+### Fixed MainActor Isolation (macOS)
+- Added `@MainActor` annotations where needed
+- Wrapped all MainActor-isolated property/method accesses in `Task { @MainActor in ... }`
+- Ensured thread-safe access to all UI-related properties
+
+All compilation errors have been resolved.

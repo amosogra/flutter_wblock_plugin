@@ -87,11 +87,6 @@ class MockFlutterWblockPluginPlatform
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getLogs() async {
-    return [];
-  }
-
-  @override
   Future<void> clearLogs() async {
     // Mock implementation
   }
@@ -213,6 +208,12 @@ class MockFlutterWblockPluginPlatform
   @override
   Future<void> updateMissingFilters() {
     // TODO: implement updateMissingFilters
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<String> getLogs() {
+    // TODO: implement getLogs
     throw UnimplementedError();
   }
 }

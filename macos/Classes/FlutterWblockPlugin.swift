@@ -9,10 +9,13 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "flutter_wblock_plugin", binaryMessenger: registrar.messenger)
         let instance = FlutterWblockPlugin()
-        instance.setupManagers()
+        Task { @MainActor in
+            instance.setupManagers()
+        }
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     
+    @MainActor
     private func setupManagers() {
         filterManager = AppFilterManager()
         userScriptManager = UserScriptManager()
@@ -41,13 +44,19 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             checkForUpdates(result: result)
             
         case "isLoading":
-            result(filterManager?.isLoading ?? false)
+            Task { @MainActor in
+                result(filterManager?.isLoading ?? false)
+            }
             
         case "getStatusDescription":
-            result(filterManager?.statusDescription ?? "")
+            Task { @MainActor in
+                result(filterManager?.statusDescription ?? "")
+            }
             
         case "getLastRuleCount":
-            result(filterManager?.lastRuleCount ?? 0)
+            Task { @MainActor in
+                result(filterManager?.lastRuleCount ?? 0)
+            }
             
         case "addFilterList":
             guard let args = call.arguments as? [String: Any],
@@ -70,7 +79,9 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             updateVersionsAndCounts(result: result)
             
         case "hasUnappliedChanges":
-            result(filterManager?.hasUnappliedChanges ?? false)
+            Task { @MainActor in
+                result(filterManager?.hasUnappliedChanges ?? false)
+            }
             
         case "applyDownloadedChanges":
             applyDownloadedChanges(result: result)
@@ -174,6 +185,46 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             }
             setOnboardingCompleted(completed: completed, result: result)
             
+        case "getApplyProgress":
+            getApplyProgress(result: result)
+            
+        case "getRuleCountsByCategory":
+            getRuleCountsByCategory(result: result)
+            
+        case "getCategoriesApproachingLimit":
+            getCategoriesApproachingLimit(result: result)
+            
+        case "checkForFilterUpdates":
+            checkForFilterUpdates(result: result)
+            
+        case "applyFilterUpdates":
+            guard let args = call.arguments as? [String: Any],
+                  let updateIds = args["updateIds"] as? [String] else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing updateIds", details: nil))
+                return
+            }
+            applyFilterUpdates(updateIds: updateIds, result: result)
+            
+        case "downloadMissingFilters":
+            downloadMissingFilters(result: result)
+            
+        case "updateMissingFilters":
+            updateMissingFilters(result: result)
+            
+        case "downloadSelectedFilters":
+            guard let args = call.arguments as? [String: Any],
+                  let filterIds = args["filterIds"] as? [String] else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing filterIds", details: nil))
+                return
+            }
+            downloadSelectedFilters(filterIds: filterIds, result: result)
+            
+        case "resetToDefaultLists":
+            resetToDefaultLists(result: result)
+            
+        case "setUserScriptManager":
+            setUserScriptManager(result: result)
+            
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -182,24 +233,26 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
     // MARK: - Method Implementations
     
     private func getFilterLists(result: @escaping FlutterResult) {
-        guard let filterManager = filterManager else {
-            result(FlutterError(code: "NO_MANAGER", message: "Filter manager not initialized", details: nil))
-            return
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result(FlutterError(code: "NO_MANAGER", message: "Filter manager not initialized", details: nil))
+                return
+            }
+            
+            let filterLists = filterManager.filterLists.map { filter in
+                return [
+                    "id": filter.id.uuidString,
+                    "name": filter.name,
+                    "description": filter.description,
+                    "category": filter.category.rawValue,
+                    "url": filter.url.absoluteString,
+                    "version": filter.version,
+                    "isSelected": filter.isSelected,
+                    "sourceRuleCount": filter.sourceRuleCount as Any
+                ]
+            }
+            result(filterLists)
         }
-        
-        let filterLists = filterManager.filterLists.map { filter in
-            return [
-                "id": filter.id.uuidString,
-                "name": filter.name,
-                "description": filter.description,
-                "category": filter.category.rawValue,
-                "url": filter.url.absoluteString,
-                "version": filter.version,
-                "isSelected": filter.isSelected,
-                "sourceRuleCount": filter.sourceRuleCount as Any
-            ]
-        }
-        result(filterLists)
     }
     
     private func toggleFilterListSelection(filterId: String, result: @escaping FlutterResult) {
@@ -208,8 +261,10 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             return
         }
         
-        filterManager?.toggleFilterListSelection(id: uuid)
-        result(nil)
+        Task { @MainActor in
+            filterManager?.toggleFilterListSelection(id: uuid)
+            result(nil)
+        }
     }
     
     private func checkAndEnableFilters(forceReload: Bool, result: @escaping FlutterResult) {
@@ -227,19 +282,27 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
     }
     
     private func addFilterList(name: String, urlString: String, result: @escaping FlutterResult) {
-        filterManager?.addFilterList(name: name, urlString: urlString)
-        result(nil)
+        Task { @MainActor in
+            filterManager?.addFilterList(name: name, urlString: urlString)
+            result(nil)
+        }
     }
     
     private func removeFilterList(filterId: String, result: @escaping FlutterResult) {
-        guard let uuid = UUID(uuidString: filterId),
-              let filter = filterManager?.filterLists.first(where: { $0.id == uuid }) else {
-            result(FlutterError(code: "INVALID_ID", message: "Filter not found", details: nil))
+        guard let uuid = UUID(uuidString: filterId) else {
+            result(FlutterError(code: "INVALID_ID", message: "Invalid filter ID", details: nil))
             return
         }
         
-        filterManager?.removeFilterList(filter)
-        result(nil)
+        Task { @MainActor in
+            guard let filter = filterManager?.filterLists.first(where: { $0.id == uuid }) else {
+                result(FlutterError(code: "INVALID_ID", message: "Filter not found", details: nil))
+                return
+            }
+            
+            filterManager?.removeFilterList(filter)
+            result(nil)
+        }
     }
     
     private func updateVersionsAndCounts(result: @escaping FlutterResult) {
@@ -262,8 +325,10 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             return
         }
         
-        filterManager?.showCategoryWarning(for: category)
-        result(nil)
+        Task { @MainActor in
+            filterManager?.showCategoryWarning(for: category)
+            result(nil)
+        }
     }
     
     private func isCategoryApproachingLimit(category: String, result: @escaping FlutterResult) {
@@ -272,20 +337,18 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             return
         }
         
-        let isApproaching = filterManager?.isCategoryApproachingLimit(category) ?? false
-        result(isApproaching)
+        Task { @MainActor in
+            let isApproaching = filterManager?.isCategoryApproachingLimit(category) ?? false
+            result(isApproaching)
+        }
     }
     
     private func getLogs(result: @escaping FlutterResult) {
+        // ConcurrentLogManager doesn't expose getLogs publicly
+        // get all logs instead
         Task {
-            let logs = await ConcurrentLogManager.shared.getLogs()
-            let logData = logs.map { log in
-                return [
-                    "timestamp": log.timestamp,
-                    "message": log.message
-                ]
-            }
-            result(logData)
+            let logs = await ConcurrentLogManager.shared.getAllLogs()
+            result(logs)
         }
     }
     
@@ -297,20 +360,22 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
     }
     
     private func getUserScripts(result: @escaping FlutterResult) {
-        guard let userScriptManager = userScriptManager else {
-            result(FlutterError(code: "NO_MANAGER", message: "UserScript manager not initialized", details: nil))
-            return
+        Task { @MainActor in
+            guard let userScriptManager = userScriptManager else {
+                result(FlutterError(code: "NO_MANAGER", message: "UserScript manager not initialized", details: nil))
+                return
+            }
+            
+            let scripts = userScriptManager.userScripts.map { script in
+                return [
+                    "id": script.id.uuidString,
+                    "name": script.name,
+                    "content": script.content,
+                    "isEnabled": script.isEnabled
+                ]
+            }
+            result(scripts)
         }
-        
-        let scripts = userScriptManager.userScripts.map { script in
-            return [
-                "id": script.id.uuidString,
-                "name": script.name,
-                "content": script.content,
-                "isEnabled": script.isEnabled
-            ]
-        }
-        result(scripts)
     }
     
     private func toggleUserScript(scriptId: String, result: @escaping FlutterResult) {
@@ -319,8 +384,14 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             return
         }
         
-        userScriptManager?.toggleScript(id: uuid)
-        result(nil)
+        Task { @MainActor in
+            if let script = userScriptManager?.userScripts.first(where: { $0.id == uuid }) {
+                userScriptManager?.toggleUserScript(script)
+                result(nil)
+            } else {
+                result(FlutterError(code: "SCRIPT_NOT_FOUND", message: "Script not found", details: nil))
+            }
+        }
     }
     
     private func removeUserScript(scriptId: String, result: @escaping FlutterResult) {
@@ -329,53 +400,92 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             return
         }
         
-        userScriptManager?.removeScript(id: uuid)
-        result(nil)
+        Task { @MainActor in
+            if let script = userScriptManager?.userScripts.first(where: { $0.id == uuid }) {
+                userScriptManager?.removeUserScript(script)
+                result(nil)
+            } else {
+                result(FlutterError(code: "SCRIPT_NOT_FOUND", message: "Script not found", details: nil))
+            }
+        }
     }
     
     private func addUserScript(name: String, content: String, result: @escaping FlutterResult) {
-        userScriptManager?.addScript(name: name, content: content)
-        result(nil)
+        // UserScriptManager expects a URL for adding scripts
+        // For local content, we'll need to create a temporary file or use a different approach
+        Task { @MainActor in
+            result(FlutterError(code: "NOT_IMPLEMENTED", 
+                               message: "Adding user scripts from content not implemented. Use URL instead.", 
+                               details: nil))
+        }
     }
     
     private func getWhitelistedDomains(result: @escaping FlutterResult) {
-        let domains = filterManager?.whitelistedDomains ?? []
-        result(domains)
+        Task { @MainActor in
+            let domains = filterManager?.whitelistViewModel.whitelistedDomains ?? []
+            result(domains)
+        }
     }
     
     private func addWhitelistedDomain(domain: String, result: @escaping FlutterResult) {
-        filterManager?.addWhitelistedDomain(domain)
-        result(nil)
+        Task { @MainActor in
+            let addResult = filterManager?.whitelistViewModel.addDomain(domain)
+            switch addResult {
+            case .success:
+                result(nil)
+            case .failure(let error):
+                result(FlutterError(code: "ADD_DOMAIN_ERROR", 
+                                   message: error.localizedDescription, 
+                                   details: nil))
+            case .none:
+                result(FlutterError(code: "NO_MANAGER", 
+                                   message: "Filter manager not initialized", 
+                                   details: nil))
+            }
+        }
     }
     
     private func removeWhitelistedDomain(domain: String, result: @escaping FlutterResult) {
-        filterManager?.removeWhitelistedDomain(domain)
-        result(nil)
+        Task { @MainActor in
+            filterManager?.whitelistViewModel.removeDomain(domain)
+            result(nil)
+        }
     }
     
     private func updateWhitelistedDomains(domains: [String], result: @escaping FlutterResult) {
-        filterManager?.updateWhitelistedDomains(domains)
-        result(nil)
+        Task { @MainActor in
+            // Clear existing domains and add new ones
+            filterManager?.whitelistViewModel.whitelistedDomains = domains
+            let userDefaults = UserDefaults(suiteName: "group.syferlab.wBlock") ?? UserDefaults.standard
+            userDefaults.set(domains, forKey: "disabledSites")
+            result(nil)
+        }
     }
     
     private func getFilterDetails(filterId: String, result: @escaping FlutterResult) {
-        guard let uuid = UUID(uuidString: filterId),
-              let filter = filterManager?.filterLists.first(where: { $0.id == uuid }) else {
-            result(FlutterError(code: "INVALID_ID", message: "Filter not found", details: nil))
+        guard let uuid = UUID(uuidString: filterId) else {
+            result(FlutterError(code: "INVALID_ID", message: "Invalid filter ID", details: nil))
             return
         }
         
-        let details = [
-            "id": filter.id.uuidString,
-            "name": filter.name,
-            "description": filter.description,
-            "category": filter.category.rawValue,
-            "url": filter.url.absoluteString,
-            "version": filter.version,
-            "isSelected": filter.isSelected,
-            "sourceRuleCount": filter.sourceRuleCount as Any
-        ]
-        result(details)
+        Task { @MainActor in
+            guard let filter = filterManager?.filterLists.first(where: { $0.id == uuid }) else {
+                result(FlutterError(code: "INVALID_ID", message: "Filter not found", details: nil))
+                return
+            }
+            
+            let details = [
+                "id": filter.id.uuidString,
+                "name": filter.name,
+                "description": filter.description,
+                "category": filter.category.rawValue,
+                "url": filter.url.absoluteString,
+                "version": filter.version,
+                "isSelected": filter.isSelected,
+                "sourceRuleCount": filter.sourceRuleCount as Any
+            ]
+            result(details)
+        }
     }
     
     private func resetOnboarding(result: @escaping FlutterResult) {
@@ -390,6 +500,148 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
     
     private func setOnboardingCompleted(completed: Bool, result: @escaping FlutterResult) {
         UserDefaults.standard.set(completed, forKey: "hasCompletedOnboarding")
+        result(nil)
+    }
+    
+    private func getApplyProgress(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result(nil)
+                return
+            }
+            
+            let progressData: [String: Any] = [
+                "progress": filterManager.progress,
+                "stageDescription": filterManager.conversionStageDescription,
+                "currentFilterName": filterManager.currentFilterName,
+                "processedFiltersCount": filterManager.processedFiltersCount,
+                "totalFiltersCount": filterManager.totalFiltersCount,
+                "isInConversionPhase": filterManager.isInConversionPhase,
+                "isInSavingPhase": filterManager.isInSavingPhase,
+                "isInEnginePhase": filterManager.isInEnginePhase,
+                "isInReloadPhase": filterManager.isInReloadPhase,
+                "sourceRulesCount": filterManager.sourceRulesCount,
+                "lastConversionTime": filterManager.lastConversionTime,
+                "lastReloadTime": filterManager.lastReloadTime,
+                "lastRuleCount": filterManager.lastRuleCount,
+                "hasError": filterManager.hasError,
+                "ruleCountsByCategory": filterManager.ruleCountsByCategory.reduce(into: [String: Int]()) { result, pair in
+                    result[pair.key.rawValue] = pair.value
+                },
+                "categoriesApproachingLimit": filterManager.categoriesApproachingLimit.map { $0.rawValue }
+            ]
+            
+            result(progressData)
+        }
+    }
+    
+    private func getRuleCountsByCategory(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result(nil)
+                return
+            }
+            
+            let categoryRuleCounts = filterManager.ruleCountsByCategory.reduce(into: [String: Int]()) { result, pair in
+                result[pair.key.rawValue] = pair.value
+            }
+            
+            result(categoryRuleCounts)
+        }
+    }
+    
+    private func getCategoriesApproachingLimit(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result(nil)
+                return
+            }
+            
+            let categories = filterManager.categoriesApproachingLimit.map { $0.rawValue }
+            result(categories)
+        }
+    }
+    
+    private func checkForFilterUpdates(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result(nil)
+                return
+            }
+            
+            let updates = filterManager.availableUpdates.map { filter in
+                return [
+                    "id": filter.id.uuidString,
+                    "name": filter.name,
+                    "description": filter.description,
+                    "category": filter.category.rawValue,
+                    "url": filter.url.absoluteString,
+                    "version": filter.version,
+                    "isSelected": filter.isSelected,
+                    "sourceRuleCount": filter.sourceRuleCount as Any
+                ]
+            }
+            
+            result(updates)
+        }
+    }
+    
+    private func applyFilterUpdates(updateIds: [String], result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result(FlutterError(code: "NO_MANAGER", message: "Filter manager not initialized", details: nil))
+                return
+            }
+            
+            let selectedUpdates = filterManager.availableUpdates.filter { filter in
+                updateIds.contains(filter.id.uuidString)
+            }
+            
+            await filterManager.updateSelectedFilters(selectedUpdates)
+            result(nil)
+        }
+    }
+    
+    private func downloadMissingFilters(result: @escaping FlutterResult) {
+        Task {
+            await filterManager?.downloadMissingFilters()
+            result(nil)
+        }
+    }
+    
+    private func updateMissingFilters(result: @escaping FlutterResult) {
+        Task {
+            await filterManager?.updateMissingFilters()
+            result(nil)
+        }
+    }
+    
+    private func downloadSelectedFilters(filterIds: [String], result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result(FlutterError(code: "NO_MANAGER", message: "Filter manager not initialized", details: nil))
+                return
+            }
+            
+            let selectedFilters = filterManager.filterLists.filter { filter in
+                filterIds.contains(filter.id.uuidString)
+            }
+            
+            await filterManager.downloadSelectedFilters(selectedFilters)
+            result(nil)
+        }
+    }
+    
+    private func resetToDefaultLists(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            filterManager?.resetToDefaultLists()
+            result(nil)
+        }
+    }
+    
+    private func setUserScriptManager(result: @escaping FlutterResult) {
+        // UserScriptManager is already set during setupManagers
+        // This method exists for API compatibility
         result(nil)
     }
 }

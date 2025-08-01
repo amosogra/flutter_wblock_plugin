@@ -103,8 +103,8 @@ class _UserScriptManagerViewState extends State<UserScriptManagerView> {
         ),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
-          child: Icon(_showAddScriptView ? CupertinoIcons.xmark : CupertinoIcons.add),
           onPressed: _toggleAddScriptView,
+          child: Icon(_showAddScriptView ? CupertinoIcons.xmark : CupertinoIcons.add),
         ),
       ),
       child: SafeArea(

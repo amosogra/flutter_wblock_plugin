@@ -38,7 +38,7 @@ abstract class FlutterWblockPluginPlatform extends PlatformInterface {
   Future<void> applyDownloadedChanges();
   Future<void> showCategoryWarning(String category);
   Future<bool> isCategoryApproachingLimit(String category);
-  Future<List<Map<String, dynamic>>> getLogs();
+  Future<String> getLogs();
   Future<void> clearLogs();
   Future<List<Map<String, dynamic>>> getUserScripts();
   Future<void> toggleUserScript(String scriptId);
@@ -152,9 +152,9 @@ class MethodChannelFlutterWblockPlugin extends FlutterWblockPluginPlatform {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getLogs() async {
-    final result = await methodChannel.invokeMethod<List>('getLogs');
-    return (result ?? []).map((e) => Map<String, dynamic>.from(e)).toList();
+  Future<String> getLogs() async {
+    final result = await methodChannel.invokeMethod<String>('getLogs');
+    return result ?? '';
   }
 
   @override
@@ -381,7 +381,7 @@ class FlutterWblockPlugin {
   }
 
   /// Get logs
-  static Future<List<Map<String, dynamic>>> getLogs() {
+  static Future<String> getLogs() {
     return _platform.getLogs();
   }
 

@@ -12,7 +12,7 @@ class LogsView extends StatefulWidget {
 }
 
 class _LogsViewState extends State<LogsView> {
-  List<Map<String, dynamic>> _logs = [];
+  String _logsText = '';
   bool _isLoading = true;
 
   @override
@@ -27,10 +27,10 @@ class _LogsViewState extends State<LogsView> {
         _isLoading = true;
       });
       
-      final logs = await FlutterWblockPlugin.getLogs();
+      final logsText = await FlutterWblockPlugin.getLogs();
       
       setState(() {
-        _logs = logs;
+        _logsText = logsText;
         _isLoading = false;
       });
     } catch (e) {
@@ -45,7 +45,7 @@ class _LogsViewState extends State<LogsView> {
     try {
       await FlutterWblockPlugin.clearLogs();
       setState(() {
-        _logs = [];
+        _logsText = '';
       });
     } catch (e) {
       debugPrint('Error clearing logs: $e');
@@ -53,13 +53,7 @@ class _LogsViewState extends State<LogsView> {
   }
 
   void _copyAllLogs() {
-    final logsText = _logs.map((log) {
-      final timestamp = log['timestamp'] ?? '';
-      final message = log['message'] ?? '';
-      return '$timestamp: $message';
-    }).join('\n');
-    
-    Clipboard.setData(ClipboardData(text: logsText));
+    Clipboard.setData(ClipboardData(text: _logsText));
     
     // Show feedback
     if (Platform.isIOS) {
@@ -83,25 +77,6 @@ class _LogsViewState extends State<LogsView> {
     }
   }
 
-  void _copyLogEntry(Map<String, dynamic> log) {
-    final timestamp = log['timestamp'] ?? '';
-    final message = log['message'] ?? '';
-    final text = '$timestamp: $message';
-    
-    Clipboard.setData(ClipboardData(text: text));
-    
-    // Show feedback
-    if (Platform.isIOS) {
-      // No feedback for individual entries on iOS to match native behavior
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Log entry copied to clipboard'),
-          duration: Duration(seconds: 1),
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,13 +101,13 @@ class _LogsViewState extends State<LogsView> {
           children: [
             CupertinoButton(
               padding: EdgeInsets.zero,
+              onPressed: _logsText.isEmpty ? null : _copyAllLogs,
               child: const Icon(CupertinoIcons.doc_on_clipboard),
-              onPressed: _logs.isEmpty ? null : _copyAllLogs,
             ),
             CupertinoButton(
               padding: EdgeInsets.zero,
+              onPressed: _logsText.isEmpty ? null : () => _showClearConfirmation(),
               child: const Icon(CupertinoIcons.trash),
-              onPressed: _logs.isEmpty ? null : () => _showClearConfirmation(),
             ),
           ],
         ),
@@ -153,12 +128,12 @@ class _LogsViewState extends State<LogsView> {
           ),
           IconButton(
             icon: const Icon(Icons.copy),
-            onPressed: _logs.isEmpty ? null : _copyAllLogs,
+            onPressed: _logsText.isEmpty ? null : _copyAllLogs,
             tooltip: 'Copy All',
           ),
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: _logs.isEmpty ? null : () => _showClearConfirmation(),
+            onPressed: _logsText.isEmpty ? null : () => _showClearConfirmation(),
             tooltip: 'Clear Logs',
           ),
         ],
@@ -176,7 +151,7 @@ class _LogsViewState extends State<LogsView> {
       );
     }
 
-    if (_logs.isEmpty) {
+    if (_logsText.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -216,24 +191,9 @@ class _LogsViewState extends State<LogsView> {
       );
     }
 
-    return ListView.builder(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
-      itemCount: _logs.length,
-      itemBuilder: (context, index) {
-        final log = _logs[index];
-        return _buildLogEntry(log);
-      },
-    );
-  }
-
-  Widget _buildLogEntry(Map<String, dynamic> log) {
-    final timestamp = log['timestamp'] ?? '';
-    final message = log['message'] ?? '';
-    
-    return GestureDetector(
-      onLongPress: () => _copyLogEntry(log),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Platform.isIOS
@@ -247,32 +207,18 @@ class _LogsViewState extends State<LogsView> {
             width: 0.5,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              timestamp,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w500,
-                color: Platform.isIOS
-                    ? CupertinoColors.secondaryLabel.resolveFrom(context)
-                    : Theme.of(context).textTheme.bodySmall?.color,
-                fontFamily: Platform.isIOS ? 'SF Mono' : 'monospace',
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              message,
-              style: const TextStyle(
-                fontSize: 13,
-              ),
-            ),
-          ],
+        child: SelectableText(
+          _logsText,
+          style: TextStyle(
+            fontSize: 13,
+            fontFamily: Platform.isIOS ? 'SF Mono' : 'monospace',
+            height: 1.5,
+          ),
         ),
       ),
     );
   }
+
 
   void _showClearConfirmation() {
     if (Platform.isIOS) {

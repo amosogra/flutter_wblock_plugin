@@ -60,7 +60,7 @@ public actor ConcurrentLogManager {
     
     /// Returns all log entries as single string.
     public func getAllLogs() -> String {
-        logEntries.joined(separator: "\n\n") // Added an extra newline for better separation in TextEditor
+        return logEntries.joined(separator: "\n\n") // Added an extra newline for better separation in TextEditor
     }
     
     /// Clears all log entries.

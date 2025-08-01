@@ -317,15 +317,11 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
     }
     
     private func getLogs(result: @escaping FlutterResult) {
+        // ConcurrentLogManager doesn't expose getLogs publicly
+        // get all logs instead
         Task {
-            let logs = await ConcurrentLogManager.shared.getLogs()
-            let logData = logs.map { log in
-                return [
-                    "timestamp": log.timestamp,
-                    "message": log.message
-                ]
-            }
-            result(logData)
+            let logs = await ConcurrentLogManager.shared.getAllLogs()
+            result(logs)
         }
     }
     
@@ -359,8 +355,12 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             return
         }
         
-        userScriptManager?.toggleScript(id: uuid)
-        result(nil)
+        if let script = userScriptManager?.userScripts.first(where: { $0.id == uuid }) {
+            userScriptManager?.toggleUserScript(script)
+            result(nil)
+        } else {
+            result(FlutterError(code: "SCRIPT_NOT_FOUND", message: "Script not found", details: nil))
+        }
     }
     
     private func removeUserScript(scriptId: String, result: @escaping FlutterResult) {
@@ -369,13 +369,20 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
             return
         }
         
-        userScriptManager?.removeScript(id: uuid)
-        result(nil)
+        if let script = userScriptManager?.userScripts.first(where: { $0.id == uuid }) {
+            userScriptManager?.removeUserScript(script)
+            result(nil)
+        } else {
+            result(FlutterError(code: "SCRIPT_NOT_FOUND", message: "Script not found", details: nil))
+        }
     }
     
     private func addUserScript(name: String, content: String, result: @escaping FlutterResult) {
-        userScriptManager?.addScript(name: name, content: content)
-        result(nil)
+        // UserScriptManager expects a URL for adding scripts
+        // For local content, we'll need to create a temporary file or use a different approach
+        result(FlutterError(code: "NOT_IMPLEMENTED", 
+                           message: "Adding user scripts from content not implemented. Use URL instead.", 
+                           details: nil))
     }
     
     private func getWhitelistedDomains(result: @escaping FlutterResult) {
@@ -384,17 +391,31 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
     }
     
     private func addWhitelistedDomain(domain: String, result: @escaping FlutterResult) {
-        filterManager?.whitelistViewModel.addWhitelistedDomain(domain)
-        result(nil)
+        let addResult = filterManager?.whitelistViewModel.addDomain(domain)
+        switch addResult {
+        case .success:
+            result(nil)
+        case .failure(let error):
+            result(FlutterError(code: "ADD_DOMAIN_ERROR", 
+                               message: error.localizedDescription, 
+                               details: nil))
+        case .none:
+            result(FlutterError(code: "NO_MANAGER", 
+                               message: "Filter manager not initialized", 
+                               details: nil))
+        }
     }
     
     private func removeWhitelistedDomain(domain: String, result: @escaping FlutterResult) {
-        filterManager?.whitelistViewModel.removeWhitelistedDomain(domain)
+        filterManager?.whitelistViewModel.removeDomain(domain)
         result(nil)
     }
     
     private func updateWhitelistedDomains(domains: [String], result: @escaping FlutterResult) {
-        filterManager?.whitelistViewModel.updateWhitelistedDomains(domains)
+        // Clear existing domains and add new ones
+        filterManager?.whitelistViewModel.whitelistedDomains = domains
+        let userDefaults = UserDefaults(suiteName: "group.syferlab.wBlock") ?? UserDefaults.standard
+        userDefaults.set(domains, forKey: "disabledSites")
         result(nil)
     }
     

@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
 
   # declare by version (must match what’s in ContentBlockerConverter.podspec)
   s.dependency 'ContentBlockerConverter', '2.0.48'
-  s.dependency 'PublicSuffixList', '~> 1.1.47'
+  s.dependency 'PublicSuffixList', '1.0.0'
 end

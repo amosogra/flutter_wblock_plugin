@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,24 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		B082686F2E3C4014002A26B8 /* wBlock Ads.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08268662E3C4014002A26B8 /* wBlock Ads.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B08268772E3C402F002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08268762E3C402F002A26B8 /* wBlockCoreService.framework */; };
+		B082688E2E3C4220002A26B8 /* wBlock Privacy.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08268852E3C4220002A26B8 /* wBlock Privacy.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B08268952E3C4242002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08268942E3C4242002A26B8 /* wBlockCoreService.framework */; };
+		B08268A62E3C438B002A26B8 /* wBlock Security.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B082689D2E3C438B002A26B8 /* wBlock Security.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B08268AD2E3C43A9002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08268AC2E3C43A9002A26B8 /* wBlockCoreService.framework */; };
+		B08269152E3C473C002A26B8 /* wBlock Annoyances.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B082690C2E3C473C002A26B8 /* wBlock Annoyances.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B082691C2E3C4752002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B082691B2E3C4752002A26B8 /* wBlockCoreService.framework */; };
+		B082692D2E3C4A2A002A26B8 /* wBlock Multipurpose.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08269242E3C4A2A002A26B8 /* wBlock Multipurpose.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B08269352E3C4A5A002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08269342E3C4A5A002A26B8 /* wBlockCoreService.framework */; };
+		B08269452E3C4AA4002A26B8 /* wBlock Foreign.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B082693C2E3C4AA4002A26B8 /* wBlock Foreign.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B082694C2E3C4AB6002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B082694B2E3C4AB6002A26B8 /* wBlockCoreService.framework */; };
+		B082695D2E3C4B42002A26B8 /* wBlock Experimental.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08269542E3C4B42002A26B8 /* wBlock Experimental.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B08269642E3C4B51002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08269632E3C4B51002A26B8 /* wBlockCoreService.framework */; };
+		B08269752E3C4C30002A26B8 /* wBlock Custom.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B082696C2E3C4C2F002A26B8 /* wBlock Custom.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B082697C2E3C4C3E002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B082697B2E3C4C3E002A26B8 /* wBlockCoreService.framework */; };
+		B082699C2E3C514B002A26B8 /* wBlock Scripts.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08269842E3C514B002A26B8 /* wBlock Scripts.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B08269B32E3C5361002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08269B22E3C5361002A26B8 /* wBlockCoreService.framework */; };
 		B81D2533B003A80AC19F3B5C /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3025EC8BAE633B3FBB4A29B /* Pods_RunnerTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,17 +44,89 @@
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
 			remoteInfo = Runner;
 		};
+		B082686D2E3C4014002A26B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B08268652E3C4014002A26B8;
+			remoteInfo = "wBlock Ads";
+		};
+		B082688C2E3C4220002A26B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B08268842E3C4220002A26B8;
+			remoteInfo = "wBlock Privacy";
+		};
+		B08268A42E3C438B002A26B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B082689C2E3C438B002A26B8;
+			remoteInfo = "wBlock Security";
+		};
+		B08269132E3C473C002A26B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B082690B2E3C473C002A26B8;
+			remoteInfo = "wBlock Annoyances";
+		};
+		B082692B2E3C4A2A002A26B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B08269232E3C4A2A002A26B8;
+			remoteInfo = "wBlock Multipurpose";
+		};
+		B08269432E3C4AA4002A26B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B082693B2E3C4AA4002A26B8;
+			remoteInfo = "wBlock Foreign";
+		};
+		B082695B2E3C4B42002A26B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B08269532E3C4B42002A26B8;
+			remoteInfo = "wBlock Experimental";
+		};
+		B08269732E3C4C30002A26B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B082696B2E3C4C2F002A26B8;
+			remoteInfo = "wBlock Custom";
+		};
+		B082699A2E3C514B002A26B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B08269832E3C514B002A26B8;
+			remoteInfo = "wBlock Scripts";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
+		B08268702E3C4014002A26B8 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 10;
+			dstSubfolderSpec = 13;
 			files = (
+				B08269152E3C473C002A26B8 /* wBlock Annoyances.appex in Embed Foundation Extensions */,
+				B082695D2E3C4B42002A26B8 /* wBlock Experimental.appex in Embed Foundation Extensions */,
+				B082692D2E3C4A2A002A26B8 /* wBlock Multipurpose.appex in Embed Foundation Extensions */,
+				B08269452E3C4AA4002A26B8 /* wBlock Foreign.appex in Embed Foundation Extensions */,
+				B08269752E3C4C30002A26B8 /* wBlock Custom.appex in Embed Foundation Extensions */,
+				B082688E2E3C4220002A26B8 /* wBlock Privacy.appex in Embed Foundation Extensions */,
+				B082686F2E3C4014002A26B8 /* wBlock Ads.appex in Embed Foundation Extensions */,
+				B08268A62E3C438B002A26B8 /* wBlock Security.appex in Embed Foundation Extensions */,
+				B082699C2E3C514B002A26B8 /* wBlock Scripts.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed Frameworks";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -62,11 +152,176 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FBD02DC3DA30EE5E753E61E /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		B082679B2E3C37B2002A26B8 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		B08268662E3C4014002A26B8 /* wBlock Ads.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Ads.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08268762E3C402F002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B082687B2E3C41B3002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08268852E3C4220002A26B8 /* wBlock Privacy.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Privacy.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08268942E3C4242002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B082689D2E3C438B002A26B8 /* wBlock Security.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Security.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08268AC2E3C43A9002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B082690C2E3C473C002A26B8 /* wBlock Annoyances.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Annoyances.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B082691B2E3C4752002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08269242E3C4A2A002A26B8 /* wBlock Multipurpose.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Multipurpose.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08269342E3C4A5A002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B082693C2E3C4AA4002A26B8 /* wBlock Foreign.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Foreign.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B082694B2E3C4AB6002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08269542E3C4B42002A26B8 /* wBlock Experimental.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Experimental.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08269632E3C4B51002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B082696C2E3C4C2F002A26B8 /* wBlock Custom.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Custom.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B082697B2E3C4C3E002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08269842E3C514B002A26B8 /* wBlock Scripts.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Scripts.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08269B22E3C5361002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2B44B54A0432857B0BDCF8D /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		BEACA058793D9208E4562CBC /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F3025EC8BAE633B3FBB4A29B /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFFA09180DAFB0769BC5ABE7 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B08268742E3C4014002A26B8 /* Exceptions for "wBlock Ads" folder in "wBlock Ads" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B08268652E3C4014002A26B8 /* wBlock Ads */;
+		};
+		B082688F2E3C4220002A26B8 /* Exceptions for "wBlock Privacy" folder in "wBlock Privacy" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B08268842E3C4220002A26B8 /* wBlock Privacy */;
+		};
+		B08268A72E3C438B002A26B8 /* Exceptions for "wBlock Security" folder in "wBlock Security" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B082689C2E3C438B002A26B8 /* wBlock Security */;
+		};
+		B08269162E3C473C002A26B8 /* Exceptions for "wBlock Annoyances" folder in "wBlock Annoyances" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B082690B2E3C473C002A26B8 /* wBlock Annoyances */;
+		};
+		B082692E2E3C4A2A002A26B8 /* Exceptions for "wBlock Multipurpose" folder in "wBlock Multipurpose" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B08269232E3C4A2A002A26B8 /* wBlock Multipurpose */;
+		};
+		B08269462E3C4AA4002A26B8 /* Exceptions for "wBlock Foreign" folder in "wBlock Foreign" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B082693B2E3C4AA4002A26B8 /* wBlock Foreign */;
+		};
+		B082695E2E3C4B42002A26B8 /* Exceptions for "wBlock Experimental" folder in "wBlock Experimental" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B08269532E3C4B42002A26B8 /* wBlock Experimental */;
+		};
+		B08269762E3C4C30002A26B8 /* Exceptions for "wBlock Custom" folder in "wBlock Custom" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B082696B2E3C4C2F002A26B8 /* wBlock Custom */;
+		};
+		B082699D2E3C514B002A26B8 /* Exceptions for "wBlock Scripts" folder in "wBlock Scripts" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B08269832E3C514B002A26B8 /* wBlock Scripts */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		B08268672E3C4014002A26B8 /* wBlock Ads */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B08268742E3C4014002A26B8 /* Exceptions for "wBlock Ads" folder in "wBlock Ads" target */,
+			);
+			path = "wBlock Ads";
+			sourceTree = "<group>";
+		};
+		B08268862E3C4220002A26B8 /* wBlock Privacy */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B082688F2E3C4220002A26B8 /* Exceptions for "wBlock Privacy" folder in "wBlock Privacy" target */,
+			);
+			path = "wBlock Privacy";
+			sourceTree = "<group>";
+		};
+		B082689E2E3C438B002A26B8 /* wBlock Security */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B08268A72E3C438B002A26B8 /* Exceptions for "wBlock Security" folder in "wBlock Security" target */,
+			);
+			path = "wBlock Security";
+			sourceTree = "<group>";
+		};
+		B082690D2E3C473C002A26B8 /* wBlock Annoyances */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B08269162E3C473C002A26B8 /* Exceptions for "wBlock Annoyances" folder in "wBlock Annoyances" target */,
+			);
+			path = "wBlock Annoyances";
+			sourceTree = "<group>";
+		};
+		B08269252E3C4A2A002A26B8 /* wBlock Multipurpose */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B082692E2E3C4A2A002A26B8 /* Exceptions for "wBlock Multipurpose" folder in "wBlock Multipurpose" target */,
+			);
+			path = "wBlock Multipurpose";
+			sourceTree = "<group>";
+		};
+		B082693D2E3C4AA4002A26B8 /* wBlock Foreign */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B08269462E3C4AA4002A26B8 /* Exceptions for "wBlock Foreign" folder in "wBlock Foreign" target */,
+			);
+			path = "wBlock Foreign";
+			sourceTree = "<group>";
+		};
+		B08269552E3C4B42002A26B8 /* wBlock Experimental */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B082695E2E3C4B42002A26B8 /* Exceptions for "wBlock Experimental" folder in "wBlock Experimental" target */,
+			);
+			path = "wBlock Experimental";
+			sourceTree = "<group>";
+		};
+		B082696D2E3C4C30002A26B8 /* wBlock Custom */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B08269762E3C4C30002A26B8 /* Exceptions for "wBlock Custom" folder in "wBlock Custom" target */,
+			);
+			path = "wBlock Custom";
+			sourceTree = "<group>";
+		};
+		B08269852E3C514B002A26B8 /* wBlock Scripts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B082699D2E3C514B002A26B8 /* Exceptions for "wBlock Scripts" folder in "wBlock Scripts" target */,
+			);
+			explicitFolders = (
+				Resources/_locales,
+				Resources/assets,
+				Resources/pages,
+			);
+			path = "wBlock Scripts";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		97C146EB1CF9000F007C117D /* Frameworks */ = {
@@ -82,6 +337,78 @@
 			buildActionMask = 2147483647;
 			files = (
 				B81D2533B003A80AC19F3B5C /* Pods_RunnerTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08268632E3C4014002A26B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B08268772E3C402F002A26B8 /* wBlockCoreService.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08268822E3C4220002A26B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B08268952E3C4242002A26B8 /* wBlockCoreService.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B082689A2E3C438B002A26B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B08268AD2E3C43A9002A26B8 /* wBlockCoreService.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269092E3C473C002A26B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B082691C2E3C4752002A26B8 /* wBlockCoreService.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269212E3C4A2A002A26B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B08269352E3C4A5A002A26B8 /* wBlockCoreService.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269392E3C4AA4002A26B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B082694C2E3C4AB6002A26B8 /* wBlockCoreService.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269512E3C4B42002A26B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B08269642E3C4B51002A26B8 /* wBlockCoreService.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269692E3C4C2F002A26B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B082697C2E3C4C3E002A26B8 /* wBlockCoreService.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269812E3C514B002A26B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B08269B32E3C5361002A26B8 /* wBlockCoreService.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +452,15 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
+				B08268672E3C4014002A26B8 /* wBlock Ads */,
+				B08268862E3C4220002A26B8 /* wBlock Privacy */,
+				B082689E2E3C438B002A26B8 /* wBlock Security */,
+				B082690D2E3C473C002A26B8 /* wBlock Annoyances */,
+				B08269252E3C4A2A002A26B8 /* wBlock Multipurpose */,
+				B082693D2E3C4AA4002A26B8 /* wBlock Foreign */,
+				B08269552E3C4B42002A26B8 /* wBlock Experimental */,
+				B082696D2E3C4C30002A26B8 /* wBlock Custom */,
+				B08269852E3C514B002A26B8 /* wBlock Scripts */,
 				97C146EF1CF9000F007C117D /* Products */,
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				28E8A5F640B3891B0EAFC6F1 /* Pods */,
@@ -137,6 +473,15 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
+				B08268662E3C4014002A26B8 /* wBlock Ads.appex */,
+				B08268852E3C4220002A26B8 /* wBlock Privacy.appex */,
+				B082689D2E3C438B002A26B8 /* wBlock Security.appex */,
+				B082690C2E3C473C002A26B8 /* wBlock Annoyances.appex */,
+				B08269242E3C4A2A002A26B8 /* wBlock Multipurpose.appex */,
+				B082693C2E3C4AA4002A26B8 /* wBlock Foreign.appex */,
+				B08269542E3C4B42002A26B8 /* wBlock Experimental.appex */,
+				B082696C2E3C4C2F002A26B8 /* wBlock Custom.appex */,
+				B08269842E3C514B002A26B8 /* wBlock Scripts.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -160,6 +505,16 @@
 		CF6E672101AF92C6C29AADA1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B08269B22E3C5361002A26B8 /* wBlockCoreService.framework */,
+				B082697B2E3C4C3E002A26B8 /* wBlockCoreService.framework */,
+				B08269632E3C4B51002A26B8 /* wBlockCoreService.framework */,
+				B082694B2E3C4AB6002A26B8 /* wBlockCoreService.framework */,
+				B08269342E3C4A5A002A26B8 /* wBlockCoreService.framework */,
+				B082691B2E3C4752002A26B8 /* wBlockCoreService.framework */,
+				B08268AC2E3C43A9002A26B8 /* wBlockCoreService.framework */,
+				B08268942E3C4242002A26B8 /* wBlockCoreService.framework */,
+				B082687B2E3C41B3002A26B8 /* wBlockCoreService.framework */,
+				B08268762E3C402F002A26B8 /* wBlockCoreService.framework */,
 				7271488F59E93DFB3990AD99 /* Pods_Runner.framework */,
 				F3025EC8BAE633B3FBB4A29B /* Pods_RunnerTests.framework */,
 			);
@@ -197,18 +552,225 @@
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
-				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				1B84817C940D2E102D053F92 /* [CP] Embed Pods Frameworks */,
+				B08268702E3C4014002A26B8 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B082686E2E3C4014002A26B8 /* PBXTargetDependency */,
+				B082688D2E3C4220002A26B8 /* PBXTargetDependency */,
+				B08268A52E3C438B002A26B8 /* PBXTargetDependency */,
+				B08269142E3C473C002A26B8 /* PBXTargetDependency */,
+				B082692C2E3C4A2A002A26B8 /* PBXTargetDependency */,
+				B08269442E3C4AA4002A26B8 /* PBXTargetDependency */,
+				B082695C2E3C4B42002A26B8 /* PBXTargetDependency */,
+				B08269742E3C4C30002A26B8 /* PBXTargetDependency */,
+				B082699B2E3C514B002A26B8 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
+		};
+		B08268652E3C4014002A26B8 /* wBlock Ads */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B08268752E3C4014002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Ads" */;
+			buildPhases = (
+				B08268622E3C4014002A26B8 /* Sources */,
+				B08268632E3C4014002A26B8 /* Frameworks */,
+				B08268642E3C4014002A26B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B08268672E3C4014002A26B8 /* wBlock Ads */,
+			);
+			name = "wBlock Ads";
+			packageProductDependencies = (
+			);
+			productName = "wBlock Ads";
+			productReference = B08268662E3C4014002A26B8 /* wBlock Ads.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B08268842E3C4220002A26B8 /* wBlock Privacy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B08268902E3C4220002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Privacy" */;
+			buildPhases = (
+				B08268812E3C4220002A26B8 /* Sources */,
+				B08268822E3C4220002A26B8 /* Frameworks */,
+				B08268832E3C4220002A26B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B08268862E3C4220002A26B8 /* wBlock Privacy */,
+			);
+			name = "wBlock Privacy";
+			packageProductDependencies = (
+			);
+			productName = "wBlock Privacy";
+			productReference = B08268852E3C4220002A26B8 /* wBlock Privacy.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B082689C2E3C438B002A26B8 /* wBlock Security */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B08268A82E3C438B002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Security" */;
+			buildPhases = (
+				B08268992E3C438B002A26B8 /* Sources */,
+				B082689A2E3C438B002A26B8 /* Frameworks */,
+				B082689B2E3C438B002A26B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B082689E2E3C438B002A26B8 /* wBlock Security */,
+			);
+			name = "wBlock Security";
+			packageProductDependencies = (
+			);
+			productName = "wBlock Security";
+			productReference = B082689D2E3C438B002A26B8 /* wBlock Security.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B082690B2E3C473C002A26B8 /* wBlock Annoyances */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B08269172E3C473C002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Annoyances" */;
+			buildPhases = (
+				B08269082E3C473C002A26B8 /* Sources */,
+				B08269092E3C473C002A26B8 /* Frameworks */,
+				B082690A2E3C473C002A26B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B082690D2E3C473C002A26B8 /* wBlock Annoyances */,
+			);
+			name = "wBlock Annoyances";
+			packageProductDependencies = (
+			);
+			productName = "wBlock Annoyances";
+			productReference = B082690C2E3C473C002A26B8 /* wBlock Annoyances.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B08269232E3C4A2A002A26B8 /* wBlock Multipurpose */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B082692F2E3C4A2A002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Multipurpose" */;
+			buildPhases = (
+				B08269202E3C4A2A002A26B8 /* Sources */,
+				B08269212E3C4A2A002A26B8 /* Frameworks */,
+				B08269222E3C4A2A002A26B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B08269252E3C4A2A002A26B8 /* wBlock Multipurpose */,
+			);
+			name = "wBlock Multipurpose";
+			packageProductDependencies = (
+			);
+			productName = "wBlock Multipurpose";
+			productReference = B08269242E3C4A2A002A26B8 /* wBlock Multipurpose.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B082693B2E3C4AA4002A26B8 /* wBlock Foreign */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B08269472E3C4AA4002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Foreign" */;
+			buildPhases = (
+				B08269382E3C4AA4002A26B8 /* Sources */,
+				B08269392E3C4AA4002A26B8 /* Frameworks */,
+				B082693A2E3C4AA4002A26B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B082693D2E3C4AA4002A26B8 /* wBlock Foreign */,
+			);
+			name = "wBlock Foreign";
+			packageProductDependencies = (
+			);
+			productName = "wBlock Foreign";
+			productReference = B082693C2E3C4AA4002A26B8 /* wBlock Foreign.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B08269532E3C4B42002A26B8 /* wBlock Experimental */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B082695F2E3C4B42002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Experimental" */;
+			buildPhases = (
+				B08269502E3C4B42002A26B8 /* Sources */,
+				B08269512E3C4B42002A26B8 /* Frameworks */,
+				B08269522E3C4B42002A26B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B08269552E3C4B42002A26B8 /* wBlock Experimental */,
+			);
+			name = "wBlock Experimental";
+			packageProductDependencies = (
+			);
+			productName = "wBlock Experimental";
+			productReference = B08269542E3C4B42002A26B8 /* wBlock Experimental.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B082696B2E3C4C2F002A26B8 /* wBlock Custom */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B08269772E3C4C30002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Custom" */;
+			buildPhases = (
+				B08269682E3C4C2F002A26B8 /* Sources */,
+				B08269692E3C4C2F002A26B8 /* Frameworks */,
+				B082696A2E3C4C2F002A26B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B082696D2E3C4C30002A26B8 /* wBlock Custom */,
+			);
+			name = "wBlock Custom";
+			packageProductDependencies = (
+			);
+			productName = "wBlock Custom";
+			productReference = B082696C2E3C4C2F002A26B8 /* wBlock Custom.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B08269832E3C514B002A26B8 /* wBlock Scripts */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B082699E2E3C514B002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Scripts" */;
+			buildPhases = (
+				B08269802E3C514B002A26B8 /* Sources */,
+				B08269812E3C514B002A26B8 /* Frameworks */,
+				B08269822E3C514B002A26B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B08269852E3C514B002A26B8 /* wBlock Scripts */,
+			);
+			name = "wBlock Scripts";
+			packageProductDependencies = (
+			);
+			productName = "wBlock Scripts";
+			productReference = B08269842E3C514B002A26B8 /* wBlock Scripts.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -217,6 +779,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -228,10 +791,36 @@
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1100;
 					};
+					B08268652E3C4014002A26B8 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B08268842E3C4220002A26B8 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B082689C2E3C438B002A26B8 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B082690B2E3C473C002A26B8 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B08269232E3C4A2A002A26B8 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B082693B2E3C4AA4002A26B8 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B08269532E3C4B42002A26B8 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B082696B2E3C4C2F002A26B8 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B08269832E3C514B002A26B8 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 				};
 			};
 			buildConfigurationList = 97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Runner" */;
-			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -239,12 +828,22 @@
 				Base,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
+				B08268652E3C4014002A26B8 /* wBlock Ads */,
+				B08268842E3C4220002A26B8 /* wBlock Privacy */,
+				B082689C2E3C438B002A26B8 /* wBlock Security */,
+				B082690B2E3C473C002A26B8 /* wBlock Annoyances */,
+				B08269232E3C4A2A002A26B8 /* wBlock Multipurpose */,
+				B082693B2E3C4AA4002A26B8 /* wBlock Foreign */,
+				B08269532E3C4B42002A26B8 /* wBlock Experimental */,
+				B082696B2E3C4C2F002A26B8 /* wBlock Custom */,
+				B08269832E3C514B002A26B8 /* wBlock Scripts */,
 			);
 		};
 /* End PBXProject section */
@@ -265,6 +864,69 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08268642E3C4014002A26B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08268832E3C4220002A26B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B082689B2E3C438B002A26B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B082690A2E3C473C002A26B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269222E3C4A2A002A26B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B082693A2E3C4AA4002A26B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269522E3C4B42002A26B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B082696A2E3C4C2F002A26B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269822E3C514B002A26B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +1045,69 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B08268622E3C4014002A26B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08268812E3C4220002A26B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08268992E3C438B002A26B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269082E3C473C002A26B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269202E3C4A2A002A26B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269382E3C4AA4002A26B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269502E3C4B42002A26B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269682E3C4C2F002A26B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B08269802E3C514B002A26B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -390,6 +1115,51 @@
 			isa = PBXTargetDependency;
 			target = 97C146ED1CF9000F007C117D /* Runner */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
+		};
+		B082686E2E3C4014002A26B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B08268652E3C4014002A26B8 /* wBlock Ads */;
+			targetProxy = B082686D2E3C4014002A26B8 /* PBXContainerItemProxy */;
+		};
+		B082688D2E3C4220002A26B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B08268842E3C4220002A26B8 /* wBlock Privacy */;
+			targetProxy = B082688C2E3C4220002A26B8 /* PBXContainerItemProxy */;
+		};
+		B08268A52E3C438B002A26B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B082689C2E3C438B002A26B8 /* wBlock Security */;
+			targetProxy = B08268A42E3C438B002A26B8 /* PBXContainerItemProxy */;
+		};
+		B08269142E3C473C002A26B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B082690B2E3C473C002A26B8 /* wBlock Annoyances */;
+			targetProxy = B08269132E3C473C002A26B8 /* PBXContainerItemProxy */;
+		};
+		B082692C2E3C4A2A002A26B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B08269232E3C4A2A002A26B8 /* wBlock Multipurpose */;
+			targetProxy = B082692B2E3C4A2A002A26B8 /* PBXContainerItemProxy */;
+		};
+		B08269442E3C4AA4002A26B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B082693B2E3C4AA4002A26B8 /* wBlock Foreign */;
+			targetProxy = B08269432E3C4AA4002A26B8 /* PBXContainerItemProxy */;
+		};
+		B082695C2E3C4B42002A26B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B08269532E3C4B42002A26B8 /* wBlock Experimental */;
+			targetProxy = B082695B2E3C4B42002A26B8 /* PBXContainerItemProxy */;
+		};
+		B08269742E3C4C30002A26B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B082696B2E3C4C2F002A26B8 /* wBlock Custom */;
+			targetProxy = B08269732E3C4C30002A26B8 /* PBXContainerItemProxy */;
+		};
+		B082699B2E3C514B002A26B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B08269832E3C514B002A26B8 /* wBlock Scripts */;
+			targetProxy = B082699A2E3C514B002A26B8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -708,6 +1478,1071 @@
 			};
 			name = Release;
 		};
+		B08268712E3C4014002A26B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Ads/wBlock Ads.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Ads/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Ads";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Ads";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B08268722E3C4014002A26B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Ads/wBlock Ads.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Ads/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Ads";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Ads";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B08268732E3C4014002A26B8 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Ads/wBlock Ads.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Ads/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Ads";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Ads";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		B08268912E3C4220002A26B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Privacy/wBlock Privacy.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Privacy/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Privacy";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Privacy";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B08268922E3C4220002A26B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Privacy/wBlock Privacy.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Privacy/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Privacy";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Privacy";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B08268932E3C4220002A26B8 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Privacy/wBlock Privacy.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Privacy/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Privacy";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Privacy";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		B08268A92E3C438B002A26B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Security/wBlock Security.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Security/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Security";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Security";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B08268AA2E3C438B002A26B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Security/wBlock Security.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Security/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Security";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Security";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B08268AB2E3C438B002A26B8 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Security/wBlock Security.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Security/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Security";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Security";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		B08269182E3C473C002A26B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Annoyances/wBlock Annoyances.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Annoyances/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Annoyances";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Annoyances";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B08269192E3C473C002A26B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Annoyances/wBlock Annoyances.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Annoyances/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Annoyances";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Annoyances";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B082691A2E3C473C002A26B8 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Annoyances/wBlock Annoyances.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Annoyances/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Annoyances";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Annoyances";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		B08269302E3C4A2A002A26B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Multipurpose/wBlock Multipurpose.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Multipurpose/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Multipurpose";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Multipurpose";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B08269312E3C4A2A002A26B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Multipurpose/wBlock Multipurpose.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Multipurpose/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Multipurpose";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Multipurpose";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B08269322E3C4A2A002A26B8 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Multipurpose/wBlock Multipurpose.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Multipurpose/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Multipurpose";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Multipurpose";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		B08269482E3C4AA4002A26B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Foreign/wBlock Foreign.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Foreign/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Foreign";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Foreign";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B08269492E3C4AA4002A26B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Foreign/wBlock Foreign.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Foreign/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Foreign";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Foreign";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B082694A2E3C4AA4002A26B8 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Foreign/wBlock Foreign.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Foreign/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Foreign";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Foreign";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		B08269602E3C4B42002A26B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Experimental/wBlock Experimental.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Experimental/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Experimental";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Experimental";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B08269612E3C4B42002A26B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Experimental/wBlock Experimental.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Experimental/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Experimental";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Experimental";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B08269622E3C4B42002A26B8 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Experimental/wBlock Experimental.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Experimental/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Experimental";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Experimental";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		B08269782E3C4C30002A26B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Custom/wBlock Custom.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Custom/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Custom";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Custom";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B08269792E3C4C30002A26B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Custom/wBlock Custom.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Custom/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Custom";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Custom";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B082697A2E3C4C30002A26B8 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Custom/wBlock Custom.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Custom/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Custom";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Custom";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		B082699F2E3C514B002A26B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Scripts/wBlock Scripts.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Scripts/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Scripts";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Scripts";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B08269A02E3C514B002A26B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Scripts/wBlock Scripts.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Scripts/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Scripts";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Scripts";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B08269A12E3C514B002A26B8 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "wBlock Scripts/wBlock Scripts.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5ZPWU6AY92;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "wBlock Scripts/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "wBlock Scripts";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0.0;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Scripts";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -737,6 +2572,96 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B08268752E3C4014002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Ads" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B08268712E3C4014002A26B8 /* Debug */,
+				B08268722E3C4014002A26B8 /* Release */,
+				B08268732E3C4014002A26B8 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B08268902E3C4220002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Privacy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B08268912E3C4220002A26B8 /* Debug */,
+				B08268922E3C4220002A26B8 /* Release */,
+				B08268932E3C4220002A26B8 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B08268A82E3C438B002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Security" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B08268A92E3C438B002A26B8 /* Debug */,
+				B08268AA2E3C438B002A26B8 /* Release */,
+				B08268AB2E3C438B002A26B8 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B08269172E3C473C002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Annoyances" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B08269182E3C473C002A26B8 /* Debug */,
+				B08269192E3C473C002A26B8 /* Release */,
+				B082691A2E3C473C002A26B8 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B082692F2E3C4A2A002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Multipurpose" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B08269302E3C4A2A002A26B8 /* Debug */,
+				B08269312E3C4A2A002A26B8 /* Release */,
+				B08269322E3C4A2A002A26B8 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B08269472E3C4AA4002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Foreign" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B08269482E3C4AA4002A26B8 /* Debug */,
+				B08269492E3C4AA4002A26B8 /* Release */,
+				B082694A2E3C4AA4002A26B8 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B082695F2E3C4B42002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Experimental" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B08269602E3C4B42002A26B8 /* Debug */,
+				B08269612E3C4B42002A26B8 /* Release */,
+				B08269622E3C4B42002A26B8 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B08269772E3C4C30002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Custom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B08269782E3C4C30002A26B8 /* Debug */,
+				B08269792E3C4C30002A26B8 /* Release */,
+				B082697A2E3C4C30002A26B8 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B082699E2E3C514B002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Scripts" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B082699F2E3C514B002A26B8 /* Debug */,
+				B08269A02E3C514B002A26B8 /* Release */,
+				B08269A12E3C514B002A26B8 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

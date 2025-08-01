@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_wblock_plugin/flutter_wblock_plugin.dart';
-import 'package:flutter_wblock_plugin/flutter_wblock_plugin_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockFlutterWblockPluginPlatform
@@ -155,6 +154,66 @@ class MockFlutterWblockPluginPlatform
   @override
   Future<void> setOnboardingCompleted(bool completed) async {
     // Mock implementation
+  }
+  
+  @override
+  Future<void> applyFilterUpdates(List<String> updateIds) {
+    // TODO: implement applyFilterUpdates
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<Map<String, dynamic>>?> checkForFilterUpdates() {
+    // TODO: implement checkForFilterUpdates
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> downloadMissingFilters() {
+    // TODO: implement downloadMissingFilters
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> downloadSelectedFilters(List<String> filterIds) {
+    // TODO: implement downloadSelectedFilters
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Map<String, dynamic>?> getApplyProgress() {
+    // TODO: implement getApplyProgress
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<String>?> getCategoriesApproachingLimit() {
+    // TODO: implement getCategoriesApproachingLimit
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Map<String, int>?> getRuleCountsByCategory() {
+    // TODO: implement getRuleCountsByCategory
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> resetToDefaultLists() {
+    // TODO: implement resetToDefaultLists
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> setUserScriptManager() {
+    // TODO: implement setUserScriptManager
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateMissingFilters() {
+    // TODO: implement updateMissingFilters
+    throw UnimplementedError();
   }
 }
 

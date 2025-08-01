@@ -1,0 +1,72 @@
+PODS:
+  - ContentBlockerConverter (2.0.48):
+    - Punycode (= 3.0.0)
+  - FilterEngine (2.0.48):
+    - ContentBlockerConverter (= 2.0.48)
+    - PublicSuffixList (= 2.0.0)
+  - Flutter (1.0.0)
+  - flutter_wblock_plugin (2.0.0):
+    - Flutter
+    - wBlockCoreService (= 2.0.0)
+  - PublicSuffixList (2.0.0)
+  - Punycode (3.0.0)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - url_launcher_ios (0.0.1):
+    - Flutter
+  - wBlockCoreService (2.0.0):
+    - ContentBlockerConverter (= 2.0.48)
+    - FilterEngine (= 2.0.48)
+    - ZIPFoundation (= 0.9.19)
+  - ZIPFoundation (0.9.19)
+
+DEPENDENCIES:
+  - ContentBlockerConverter (from `../../ios/Podspecs`)
+  - FilterEngine (from `../../ios/Podspecs`)
+  - Flutter (from `Flutter`)
+  - flutter_wblock_plugin (from `.symlinks/plugins/flutter_wblock_plugin/ios`)
+  - PublicSuffixList (from `../../ios/Podspecs`)
+  - Punycode (from `../../ios/Podspecs`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - wBlockCoreService (from `../../ios/Podspecs`)
+  - ZIPFoundation (from `../../ios/Podspecs/ZipFoundation.podspec`)
+
+EXTERNAL SOURCES:
+  ContentBlockerConverter:
+    :podspec: "../../ios/Podspecs"
+  FilterEngine:
+    :podspec: "../../ios/Podspecs"
+  Flutter:
+    :path: Flutter
+  flutter_wblock_plugin:
+    :path: ".symlinks/plugins/flutter_wblock_plugin/ios"
+  PublicSuffixList:
+    :podspec: "../../ios/Podspecs"
+  Punycode:
+    :podspec: "../../ios/Podspecs"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+  wBlockCoreService:
+    :podspec: "../../ios/Podspecs"
+  ZIPFoundation:
+    :podspec: "../../ios/Podspecs/ZipFoundation.podspec"
+
+SPEC CHECKSUMS:
+  ContentBlockerConverter: c8a68db0849f62e979ffca8c528b5349021b162b
+  FilterEngine: fb9000e1a60ecefa39b7f36208263e38bd12465b
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_wblock_plugin: 639e9e5dd9c08f7d1e65b748ac3d419c569a7334
+  PublicSuffixList: a721f52d168f67a8787bb867f25ddda90a9b4ffa
+  Punycode: 177e2ef2a9b3678cbdae851be6df1ee4d27f036b
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  wBlockCoreService: 3c54627713111e2db1bcad4d64c1516e631e6276
+  ZIPFoundation: bcece1699f80b5d63488c3886daa80a14ebe0a60
+
+PODFILE CHECKSUM: 5653dfb287506d73d5f3ad80adc72b27eee47816
+
+COCOAPODS: 1.16.2

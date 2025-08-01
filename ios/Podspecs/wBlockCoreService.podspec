@@ -1,13 +1,13 @@
 # ios/Podspecs/SafariConverterLib.podspec
 Pod::Spec.new do |s|
   s.name         = 'wBlockCoreService'
-  s.version      = '1.0.0'
+  s.version      = '2.0.0'
   s.summary      = 'Swift package with wBlock functionality'
   s.description  = 'A Swift package with content blocking capabilities.'
   s.homepage     = 'https://github.com/amosogra/wBlockCoreService_Package'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { 'Amos Ogra' => 'floodcoding@gmail.com' }
-  s.source       = { :git => 'https://github.com/amosogra/wBlockCoreService_Package.git', :tag => '1.0.0' }
+  s.source       = { :git => 'https://github.com/amosogra/wBlockCoreService_Package.git', :tag => '2.0.0' }
   
   s.ios.deployment_target = '15.0'
   s.osx.deployment_target = '13.0'

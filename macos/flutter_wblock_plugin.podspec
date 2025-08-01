@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_wblock_plugin'
-  s.version          = '1.0.0'
+  s.version          = '2.0.0'
   s.summary          = 'A Flutter plugin for wBlock content blocking functionality.'
   s.description      = <<-DESC
 A Flutter plugin that provides content blocking functionality for Safari with support for up to 750,000 rules on macOS and 500,000 on iOS.
@@ -21,5 +21,5 @@ A Flutter plugin that provides content blocking functionality for Safari with su
   s.swift_version = '5.9'
 
   # Add dependency to wBlockCoreService package
-  s.dependency 'wBlockCoreService', '1.0.0'
+  s.dependency 'wBlockCoreService', '2.0.0'
 end

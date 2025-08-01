@@ -3,12 +3,12 @@ PODS:
     - Punycode (= 3.0.0)
   - FilterEngine (2.0.48):
     - ContentBlockerConverter (= 2.0.48)
-    - PublicSuffixList (~> 1.1.47)
+    - PublicSuffixList (= 2.0.0)
   - flutter_wblock_plugin (2.0.0):
     - FlutterMacOS
     - wBlockCoreService (= 2.0.0)
   - FlutterMacOS (1.0.0)
-  - PublicSuffixList (1.1.47)
+  - PublicSuffixList (2.0.0)
   - Punycode (3.0.0)
   - shared_preferences_foundation (0.0.1):
     - Flutter
@@ -57,10 +57,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   ContentBlockerConverter: c8a68db0849f62e979ffca8c528b5349021b162b
-  FilterEngine: 15e70ebe18ef30a2ef1677992ebed63699f57f76
+  FilterEngine: fb9000e1a60ecefa39b7f36208263e38bd12465b
   flutter_wblock_plugin: 561d1dee139f9b3ce500458ed21acd58df22fc1f
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  PublicSuffixList: 97aa7a1ea972d60ff29e65fb0a9ae78364a85f48
+  PublicSuffixList: a721f52d168f67a8787bb867f25ddda90a9b4ffa
   Punycode: 177e2ef2a9b3678cbdae851be6df1ee4d27f036b
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   url_launcher_macos: c82c93949963e55b228a30115bd219499a6fe404

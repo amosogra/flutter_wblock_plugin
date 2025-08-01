@@ -155,7 +155,7 @@ public class PopoverViewModel: ObservableObject {
                 return
             }
             
-            await page.reload()
+            page.reload()
             os_log(.info, "PopoverViewModel: Reloaded current page after rule deletion")
         }
     }

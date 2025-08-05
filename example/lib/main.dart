@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_wblock_plugin/flutter_wblock_plugin.dart';
 import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
 import 'package:flutter_wblock_plugin_example/managers/user_script_manager.dart';
 import 'package:flutter_wblock_plugin_example/views/content_view.dart';
 import 'package:flutter_wblock_plugin_example/views/onboarding_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 void main() {
@@ -22,9 +23,7 @@ class WBlockApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AppFilterManager()),
         ChangeNotifierProvider(create: (_) => UserScriptManager()),
       ],
-      child: Platform.isMacOS
-          ? const MacOSApp()
-          : const IOSApp(),
+      child: Platform.isMacOS ? const MacOSApp() : const IOSApp(),
     );
   }
 }
@@ -34,18 +33,10 @@ class MacOSApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MacosApp(
       title: 'wBlock',
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
+      theme: MacosThemeData.light(),
+      darkTheme: MacosThemeData.dark(),
       themeMode: ThemeMode.system,
       home: const AppWrapper(),
       debugShowCheckedModeBanner: false,
@@ -76,61 +67,124 @@ class AppWrapper extends StatefulWidget {
   State<AppWrapper> createState() => _AppWrapperState();
 }
 
-class _AppWrapperState extends State<AppWrapper> {
+class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
   bool? _hasCompletedOnboarding;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _checkOnboardingStatus();
   }
 
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    
+    // Handle background state for iOS notifications
+    if (Platform.isIOS && state == AppLifecycleState.paused) {
+      _scheduleNotificationIfNeeded();
+    }
+  }
+
   Future<void> _checkOnboardingStatus() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _hasCompletedOnboarding = prefs.getBool('hasCompletedOnboarding') ?? false;
-    });
+    try {
+      final hasCompleted = await FlutterWblockPlugin.hasCompletedOnboarding();
+      setState(() {
+        _hasCompletedOnboarding = hasCompleted;
+      });
+    } catch (e) {
+      print('Error checking onboarding status: $e');
+      setState(() {
+        _hasCompletedOnboarding = false;
+      });
+    }
+  }
+
+  Future<void> _scheduleNotificationIfNeeded() async {
+    try {
+      final hasUnappliedChanges = await FlutterWblockPlugin.hasUnappliedChanges();
+      if (hasUnappliedChanges) {
+        // Schedule a notification after 1 second of being in background
+        await Future.delayed(const Duration(seconds: 1));
+        _scheduleUnappliedChangesNotification();
+      }
+    } catch (e) {
+      print('Error checking unapplied changes: $e');
+    }
+  }
+
+  void _scheduleUnappliedChangesNotification() {
+    // This would trigger a local notification on iOS
+    // The actual notification scheduling would be handled by the native side
+    print('Would schedule notification for unapplied changes');
   }
 
   @override
   Widget build(BuildContext context) {
     if (_hasCompletedOnboarding == null) {
       // Loading state
-      if (Platform.isIOS) {
-        return const CupertinoPageScaffold(
-          child: Center(
-            child: CupertinoActivityIndicator(),
-          ),
-        );
-      } else {
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      }
+      return _buildLoadingView();
     }
 
-    final filterManager = context.watch<AppFilterManager>();
-    final userScriptManager = context.watch<UserScriptManager>();
+    return Consumer2<AppFilterManager, UserScriptManager>(
+      builder: (context, filterManager, userScriptManager, child) {
+        return Stack(
+          children: [
+            ContentView(
+              filterManager: filterManager,
+              userScriptManager: userScriptManager,
+            ),
+            if (!_hasCompletedOnboarding!)
+              _buildOnboardingOverlay(filterManager, userScriptManager),
+          ],
+        );
+      },
+    );
+  }
 
-    if (!_hasCompletedOnboarding!) {
-      return OnboardingView(
-        filterManager: filterManager,
-        userScriptManager: userScriptManager,
-        onComplete: () async {
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setBool('hasCompletedOnboarding', true);
-          setState(() {
-            _hasCompletedOnboarding = true;
-          });
-        },
+  Widget _buildLoadingView() {
+    if (Platform.isIOS) {
+      return const CupertinoPageScaffold(
+        child: Center(
+          child: CupertinoActivityIndicator(),
+        ),
+      );
+    } else {
+      return MacosScaffold(
+        children: [
+          ContentArea(
+            builder: (context, scrollController) => const Center(
+              child: ProgressCircle(value: null),
+            ),
+          ),
+        ],
       );
     }
+  }
 
-    return ContentView(
-      filterManager: filterManager,
-      userScriptManager: userScriptManager,
+  Widget _buildOnboardingOverlay(AppFilterManager filterManager, UserScriptManager userScriptManager) {
+    return Container(
+      color: Platform.isMacOS 
+        ? MacosColors.windowBackgroundColor 
+        : CupertinoColors.systemBackground,
+      child: Center(
+        child: OnboardingView(
+          filterManager: filterManager,
+          userScriptManager: userScriptManager,
+          onComplete: () {
+            setState(() {
+              _hasCompletedOnboarding = true;
+            });
+          },
+        ),
+      ),
     );
   }
 }

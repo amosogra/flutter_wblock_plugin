@@ -1,16 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:macos_ui/macos_ui.dart';
+import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
+import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
 import 'dart:io';
-import '../managers/app_filter_manager.dart';
 
 class ApplyChangesProgressView extends StatefulWidget {
   final AppFilterManager filterManager;
-  final ValueChanged<bool> isPresented;
+  final VoidCallback onDismiss;
 
   const ApplyChangesProgressView({
     super.key,
     required this.filterManager,
-    required this.isPresented,
+    required this.onDismiss,
   });
 
   @override
@@ -18,83 +20,12 @@ class ApplyChangesProgressView extends StatefulWidget {
 }
 
 class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
-  @override
-  void initState() {
-    super.initState();
-    // Listen to filter manager changes
-    widget.filterManager.addListener(_onFilterManagerChanged);
-  }
+  List<FilterList> get selectedFilters => 
+      widget.filterManager.filterLists.where((f) => f.isSelected).toList();
 
-  @override
-  void dispose() {
-    widget.filterManager.removeListener(_onFilterManagerChanged);
-    super.dispose();
-  }
+  int get progressPercentage => (widget.filterManager.progress * 100).round();
 
-  void _onFilterManagerChanged() {
-    if (!mounted) return;
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (Platform.isIOS) {
-      return _buildIOSView(context);
-    } else {
-      return _buildMacOSView(context);
-    }
-  }
-
-  Widget _buildIOSView(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.7,
-      decoration: BoxDecoration(
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        children: [
-          if (widget.filterManager.isLoading || (widget.filterManager.progress >= 1.0 && _hasStatistics)) _buildHeader(context),
-          Expanded(
-            child: widget.filterManager.isLoading ? _buildProgress(context) : (_hasStatistics ? _buildStatistics(context) : const SizedBox.shrink()),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMacOSView(BuildContext context) {
-    return Dialog(
-      child: Container(
-        constraints: const BoxConstraints(
-          minWidth: 420,
-          maxWidth: 480,
-          minHeight: 350,
-          maxHeight: 500,
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).dialogBackgroundColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            if (widget.filterManager.isLoading || (widget.filterManager.progress >= 1.0 && _hasStatistics)) _buildHeader(context),
-            const SizedBox(height: 20),
-            Expanded(
-              child: widget.filterManager.isLoading ? _buildProgress(context) : (_hasStatistics ? _buildStatistics(context) : const SizedBox.shrink()),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  bool get _hasStatistics {
-    return widget.filterManager.lastRuleCount > 0 || widget.filterManager.ruleCountsByCategory.isNotEmpty;
-  }
-
-  String get _titleText {
+  String get titleText {
     if (widget.filterManager.progress >= 1.0 && !widget.filterManager.isLoading) {
       return 'Filter Lists Applied';
     } else {
@@ -102,165 +33,188 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
     }
   }
 
-  int get _progressPercentage {
-    final progress = widget.filterManager.progress.clamp(0.0, 1.0);
-    return (progress * 100).toInt();
+  bool get hasStatistics => 
+      widget.filterManager.lastRuleCount > 0 || 
+      widget.filterManager.ruleCountsByCategory.isNotEmpty;
+
+  @override
+  Widget build(BuildContext context) {
+    if (Platform.isMacOS) {
+      return _buildMacOSView();
+    } else {
+      return _buildIOSView();
+    }
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          children: [
-            Center(
-              child: Text(
-                _titleText,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            if (!widget.filterManager.isLoading && widget.filterManager.progress >= 1.0)
-              Positioned(
-                right: 0,
-                child: IconButton(
-                  icon: Icon(
-                    Platform.isIOS ? CupertinoIcons.xmark_circle_fill : Icons.close,
-                    color: Colors.grey,
-                    size: 28,
-                  ),
-                  onPressed: () => widget.isPresented(false),
-                ),
-              ),
-          ],
-        ),
-        if (widget.filterManager.isLoading &&
-            widget.filterManager.conversionStageDescription.isNotEmpty &&
-            widget.filterManager.conversionStageDescription != _titleText) ...[
-          const SizedBox(height: 8),
-          Text(
-            widget.filterManager.conversionStageDescription,
-            style: TextStyle(
-              fontSize: 14,
-              color: Platform.isIOS ? CupertinoColors.secondaryLabel.resolveFrom(context) : Theme.of(context).textTheme.bodySmall?.color,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-          ),
-        ],
-        if (widget.filterManager.isLoading) ...[
-          const SizedBox(height: 16),
-          LinearProgressIndicator(
-            value: widget.filterManager.progress,
-            minHeight: Platform.isIOS ? 4 : 6,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '$_progressPercentage%',
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              fontFeatures: [FontFeature.tabularFigures()],
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-
-  Widget _buildProgress(BuildContext context) {
-    final phaseData = _getPhaseData();
-
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        Container(
+  Widget _buildMacOSView() {
+    return Container(
+      color: Colors.black.withOpacity(0.5),
+      child: Center(
+        child: Container(
+          width: 450,
+          height: 400,
           decoration: BoxDecoration(
-            color: Platform.isIOS ? CupertinoColors.systemGrey6.resolveFrom(context).withOpacity(0.5) : Theme.of(context).cardColor.withOpacity(0.5),
+            color: MacosColors.windowBackgroundColor,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Column(
+          child: _buildContent(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIOSView() {
+    return Container(
+      color: CupertinoColors.black.withOpacity(0.5),
+      child: Center(
+        child: Container(
+          margin: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: CupertinoColors.systemBackground,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: _buildContent(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent() {
+    return Column(
+      children: [
+        if (widget.filterManager.isLoading || hasStatistics)
+          _buildHeader(),
+        Expanded(
+          child: widget.filterManager.isLoading
+              ? _buildPhaseIndicators()
+              : hasStatistics
+                  ? _buildStatistics()
+                  : const SizedBox(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+      child: Column(
+        children: [
+          Row(
             children: [
-              for (int i = 0; i < phaseData.length; i++) ...[
-                _buildPhaseRow(
-                  context: context,
-                  icon: phaseData[i]['icon'] as IconData,
-                  title: phaseData[i]['title'] as String,
-                  detail: phaseData[i]['detail'] as String?,
-                  isActive: phaseData[i]['isActive'] as bool,
-                  isCompleted: phaseData[i]['isCompleted'] as bool,
-                ),
-                if (i < phaseData.length - 1)
-                  Divider(
-                    indent: 32,
-                    height: 1,
-                    color: Platform.isIOS ? CupertinoColors.separator.resolveFrom(context) : Theme.of(context).dividerColor,
+              Expanded(
+                child: Center(
+                  child: Text(
+                    titleText,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Platform.isMacOS 
+                        ? MacosColors.labelColor 
+                        : CupertinoColors.label,
+                    ),
                   ),
-              ],
+                ),
+              ),
+              if (!widget.filterManager.isLoading && widget.filterManager.progress >= 1.0)
+                Platform.isMacOS
+                  ? MacosIconButton(
+                      icon: const MacosIcon(CupertinoIcons.xmark_circle_fill),
+                      onPressed: widget.onDismiss,
+                    )
+                  : CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: widget.onDismiss,
+                      child: const Icon(CupertinoIcons.xmark_circle_fill),
+                    ),
             ],
+          ),
+          if (widget.filterManager.isLoading && 
+              widget.filterManager.conversionStageDescription.isNotEmpty &&
+              widget.filterManager.conversionStageDescription != titleText) ...[
+            const SizedBox(height: 8),
+            Text(
+              widget.filterManager.conversionStageDescription,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                color: Platform.isMacOS 
+                  ? MacosColors.secondaryLabelColor 
+                  : CupertinoColors.secondaryLabel,
+              ),
+              maxLines: 2,
+            ),
+          ],
+          if (widget.filterManager.isLoading) ...[
+            const SizedBox(height: 16),
+            _buildProgressBar(),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProgressBar() {
+    return Column(
+      children: [
+        LinearProgressIndicator(
+          value: widget.filterManager.progress,
+          backgroundColor: Platform.isMacOS 
+            ? MacosColors.quaternaryLabelColor 
+            : CupertinoColors.systemGrey4,
+          valueColor: AlwaysStoppedAnimation<Color>(
+            Platform.isMacOS 
+              ? MacosColors.systemBlueColor 
+              : CupertinoColors.systemBlue,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          '$progressPercentage%',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: Platform.isMacOS 
+              ? MacosColors.secondaryLabelColor 
+              : CupertinoColors.secondaryLabel,
+            fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
       ],
     );
   }
 
-  List<Map<String, dynamic>> _getPhaseData() {
-    final fm = widget.filterManager;
-    return [
-      {
-        'icon': CupertinoIcons.folder_badge_plus,
-        'title': 'Reading Files',
-        'detail': fm.totalFiltersCount > 0 ? '${fm.processedFiltersCount}/${fm.totalFiltersCount} extensions' : null,
-        'isActive': fm.processedFiltersCount < fm.totalFiltersCount && !fm.isInConversionPhase,
-        'isCompleted': fm.processedFiltersCount >= fm.totalFiltersCount || fm.progress > 0.6,
-      },
-      {
-        'icon': CupertinoIcons.gear_alt_fill,
-        'title': 'Converting Rules',
-        'detail': fm.currentFilterName.isNotEmpty ? 'Processing ${fm.currentFilterName}' : null,
-        'isActive': fm.isInConversionPhase,
-        'isCompleted': fm.progress > 0.75,
-      },
-      {
-        'icon': CupertinoIcons.square_arrow_down,
-        'title': 'Saving & Building',
-        'detail': (fm.isInSavingPhase || fm.isInEnginePhase || (fm.progress > 0.7 && fm.progress < 0.95)) ? 'Writing files and building engines' : null,
-        'isActive': fm.isInSavingPhase || fm.isInEnginePhase || (fm.progress > 0.7 && fm.progress < 0.95),
-        'isCompleted': fm.progress > 0.9,
-      },
-      {
-        'icon': CupertinoIcons.arrow_clockwise,
-        'title': 'Reloading Extensions',
-        'detail': fm.isInReloadPhase && fm.currentFilterName.isNotEmpty ? 'Reloading ${fm.currentFilterName}' : null,
-        'isActive': fm.isInReloadPhase,
-        'isCompleted': fm.progress >= 1.0,
-      },
-    ];
+  Widget _buildPhaseIndicators() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      child: SingleChildScrollView(
+        child: Column(
+          children: _phaseData.map((phase) => _buildPhaseRow(phase)).toList(),
+        ),
+      ),
+    );
   }
 
-  Widget _buildPhaseRow({
-    required BuildContext context,
-    required IconData icon,
-    required String title,
-    String? detail,
-    required bool isActive,
-    required bool isCompleted,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+  Widget _buildPhaseRow(PhaseData phase) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      margin: const EdgeInsets.only(bottom: 1),
+      decoration: BoxDecoration(
+        color: Platform.isMacOS 
+          ? MacosColors.controlBackgroundColor 
+          : CupertinoColors.secondarySystemBackground,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Row(
         children: [
           Icon(
-            icon,
+            _getPhaseIcon(phase.icon),
+            color: phase.isCompleted 
+              ? Colors.green 
+              : phase.isActive 
+                ? (Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue)
+                : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
             size: 20,
-            color: isCompleted
-                ? Colors.green
-                : isActive
-                    ? Platform.isIOS
-                        ? CupertinoColors.activeBlue
-                        : Theme.of(context).primaryColor
-                    : Colors.grey,
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -268,278 +222,172 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  phase.title,
                   style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: isActive ? FontWeight.w500 : FontWeight.normal,
-                    color: isCompleted
-                        ? Colors.green
-                        : isActive
-                            ? null
-                            : Colors.grey,
+                    fontSize: 13,
+                    fontWeight: phase.isActive ? FontWeight.w500 : FontWeight.normal,
+                    color: phase.isCompleted 
+                      ? Colors.green 
+                      : phase.isActive 
+                        ? (Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label)
+                        : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
                   ),
                 ),
                 SizedBox(
                   height: 16,
-                  child: detail != null && detail.isNotEmpty
-                      ? Text(
-                          detail,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Platform.isIOS ? CupertinoColors.secondaryLabel.resolveFrom(context) : Theme.of(context).textTheme.bodySmall?.color,
-                          ),
-                        )
-                      : null,
+                  child: phase.detail != null && phase.detail!.isNotEmpty
+                    ? Text(
+                        phase.detail!,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Platform.isMacOS 
+                            ? MacosColors.secondaryLabelColor 
+                            : CupertinoColors.secondaryLabel,
+                        ),
+                      )
+                    : const SizedBox(),
                 ),
               ],
             ),
           ),
-          if (isCompleted)
-            const Icon(
-              CupertinoIcons.checkmark_circle_fill,
-              color: Colors.green,
-              size: 16,
-            )
-          else if (isActive)
-            Platform.isIOS
-                ? const CupertinoActivityIndicator(radius: 8)
-                : const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-          else
-            const SizedBox(width: 16, height: 16),
+          const SizedBox(width: 12),
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: phase.isCompleted
+              ? const Icon(
+                  CupertinoIcons.checkmark_circle_fill,
+                  color: Colors.green,
+                  size: 16,
+                )
+              : phase.isActive
+                ? (Platform.isMacOS 
+                    ? const ProgressCircle(value: null) 
+                    : const CupertinoActivityIndicator(radius: 8))
+                : const SizedBox(),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildStatistics(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        // Overall statistics
-        _buildStatisticsSection(
-          context: context,
-          icon: CupertinoIcons.doc_chart,
-          title: 'Overall Statistics',
-          color: Platform.isIOS ? CupertinoColors.activeBlue : Colors.blue,
-          statistics: _buildOverallStatistics(),
-        ),
-
-        // Per-category statistics (if available)
-        if (widget.filterManager.ruleCountsByCategory.isNotEmpty) ...[
-          const SizedBox(height: 20),
-          _buildStatisticsSection(
-            context: context,
-            icon: CupertinoIcons.square_grid_2x2,
-            title: 'Category Statistics',
-            color: Colors.orange,
-            statistics: _buildCategoryStatistics(),
-          ),
+  Widget _buildStatistics() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildOverallStatistics(),
+          if (widget.filterManager.ruleCountsByCategory.isNotEmpty) ...[
+            const SizedBox(height: 20),
+            _buildCategoryStatistics(),
+          ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildOverallStatistics() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(
+              CupertinoIcons.chart_bar,
+              color: Platform.isMacOS 
+                ? MacosColors.systemBlueColor 
+                : CupertinoColors.systemBlue,
+              size: 16,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Overall Statistics',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Platform.isMacOS 
+                  ? MacosColors.labelColor 
+                  : CupertinoColors.label,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        _buildStatisticsGrid(_buildOverallStatisticsData()),
       ],
     );
   }
 
-  List<Map<String, dynamic>> _buildOverallStatistics() {
-    final fm = widget.filterManager;
-    final stats = <Map<String, dynamic>>[];
-
-    if (fm.sourceRulesCount > 0) {
-      stats.add({
-        'title': 'Source Rules',
-        'value': fm.sourceRulesCount.toString(),
-        'icon': CupertinoIcons.doc_text,
-        'color': Colors.orange,
-      });
-    }
-
-    if (fm.lastRuleCount > 0) {
-      stats.add({
-        'title': 'Safari Rules',
-        'value': fm.lastRuleCount.toString(),
-        'icon': CupertinoIcons.shield_lefthalf_fill,
-        'color': Colors.blue,
-      });
-    }
-
-    if (fm.lastConversionTime != 'N/A') {
-      stats.add({
-        'title': 'Conversion',
-        'value': fm.lastConversionTime,
-        'icon': CupertinoIcons.clock,
-        'color': Colors.green,
-      });
-    }
-
-    if (fm.lastReloadTime != 'N/A') {
-      stats.add({
-        'title': 'Reload',
-        'value': fm.lastReloadTime,
-        'icon': CupertinoIcons.arrow_clockwise,
-        'color': Colors.purple,
-      });
-    }
-
-    return stats;
-  }
-
-  List<Map<String, dynamic>> _buildCategoryStatistics() {
-    final fm = widget.filterManager;
-    final stats = <Map<String, dynamic>>[];
-
-    // Sort categories alphabetically
-    final sortedCategories = fm.ruleCountsByCategory.keys.toList()..sort();
-
-    for (final category in sortedCategories) {
-      // Skip "all" category
-      if (category.toLowerCase() == 'all') continue;
-
-      final ruleCount = fm.ruleCountsByCategory[category] ?? 0;
-      final showWarning = fm.categoriesApproachingLimit.contains(category);
-
-      stats.add({
-        'title': category,
-        'value': ruleCount.toString(),
-        'icon': _getCategoryIcon(category),
-        'color': _getCategoryColor(category),
-        'showWarning': showWarning,
-      });
-    }
-
-    return stats;
-  }
-
-  IconData _getCategoryIcon(String category) {
-    switch (category.toLowerCase()) {
-      case 'ads':
-        return CupertinoIcons.projective;
-      case 'privacy':
-      case 'trackers':
-        return CupertinoIcons.eye_slash;
-      case 'security':
-        return CupertinoIcons.shield;
-      case 'multipurpose':
-        return CupertinoIcons.square_grid_2x2;
-      case 'annoyances':
-        return CupertinoIcons.hand_raised;
-      case 'experimental':
-        return Platform.isIOS ? CupertinoIcons.lab_flask : Icons.science;
-      case 'foreign':
-      case 'regional':
-        return CupertinoIcons.globe;
-      case 'custom':
-        return CupertinoIcons.gear;
-      default:
-        return CupertinoIcons.list_bullet;
-    }
-  }
-
-  Color _getCategoryColor(String category) {
-    switch (category.toLowerCase()) {
-      case 'ads':
-        return Colors.red;
-      case 'privacy':
-        return Colors.indigo;
-      case 'trackers':
-        return Colors.blue;
-      case 'security':
-        return Colors.green;
-      case 'multipurpose':
-        return Colors.orange;
-      case 'annoyances':
-        return Colors.purple;
-      case 'experimental':
-        return Colors.yellow;
-      case 'foreign':
-      case 'regional':
-        return Colors.teal;
-      case 'custom':
-        return Colors.grey;
-      default:
-        return Platform.isIOS ? CupertinoColors.label : Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
-    }
-  }
-
-  Widget _buildStatisticsSection({
-    required BuildContext context,
-    required IconData icon,
-    required String title,
-    required Color color,
-    required List<Map<String, dynamic>> statistics,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Platform.isIOS ? CupertinoColors.systemGrey6.resolveFrom(context).withOpacity(0.5) : Theme.of(context).cardColor.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: color, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+  Widget _buildCategoryStatistics() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const Icon(
+              CupertinoIcons.square_grid_2x2,
+              color: Colors.orange,
+              size: 16,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Category Statistics',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Platform.isMacOS 
+                  ? MacosColors.labelColor 
+                  : CupertinoColors.label,
               ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 1.5,
-            children: statistics
-                .map((stat) => _buildStatCard(
-                      context: context,
-                      title: stat['title'] as String,
-                      value: stat['value'] as String,
-                      icon: stat['icon'] as IconData,
-                      color: stat['color'] as Color,
-                      showWarning: stat['showWarning'] as bool? ?? false,
-                    ))
-                .toList(),
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        _buildStatisticsGrid(_buildCategoryStatisticsData()),
+      ],
     );
   }
 
-  Widget _buildStatCard({
-    required BuildContext context,
-    required String title,
-    required String value,
-    required IconData icon,
-    required Color color,
-    bool showWarning = false,
-  }) {
+  Widget _buildStatisticsGrid(List<StatisticData> stats) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 2.5,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+      ),
+      itemCount: stats.length,
+      itemBuilder: (context, index) => _buildStatisticCard(stats[index]),
+    );
+  }
+
+  Widget _buildStatisticCard(StatisticData stat) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        color: Platform.isIOS ? CupertinoColors.systemBackground.resolveFrom(context) : Theme.of(context).cardColor,
+        color: Platform.isMacOS 
+          ? MacosColors.controlBackgroundColor 
+          : CupertinoColors.secondarySystemBackground,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Stack(
+            alignment: Alignment.center,
             children: [
-              Icon(icon, color: color, size: 24),
-              if (showWarning)
+              Icon(
+                _getStatIcon(stat.icon),
+                color: stat.color,
+                size: 20,
+              ),
+              if (stat.showWarning)
                 const Positioned(
-                  right: -8,
-                  top: -8,
+                  top: -4,
+                  right: -4,
                   child: Icon(
                     CupertinoIcons.exclamationmark_triangle_fill,
                     color: Colors.yellow,
@@ -550,24 +398,259 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
           ),
           const SizedBox(height: 6),
           Text(
-            value,
-            style: const TextStyle(
-              fontSize: 18,
+            stat.value,
+            style: TextStyle(
+              fontSize: 14,
               fontWeight: FontWeight.w600,
+              color: Platform.isMacOS 
+                ? MacosColors.labelColor 
+                : CupertinoColors.label,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 2),
           Text(
-            title,
+            stat.title,
             style: TextStyle(
-              fontSize: 11,
-              color: Platform.isIOS ? CupertinoColors.secondaryLabel.resolveFrom(context) : Theme.of(context).textTheme.bodySmall?.color,
+              fontSize: 12,
+              color: Platform.isMacOS 
+                ? MacosColors.secondaryLabelColor 
+                : CupertinoColors.secondaryLabel,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
     );
   }
+
+  List<PhaseData> get _phaseData {
+    return [
+      PhaseData(
+        icon: 'folder.badge.questionmark',
+        title: 'Reading Files',
+        detail: widget.filterManager.totalFiltersCount > 0 
+          ? '${widget.filterManager.processedFiltersCount}/${widget.filterManager.totalFiltersCount} extensions'
+          : null,
+        isActive: widget.filterManager.processedFiltersCount < widget.filterManager.totalFiltersCount && 
+                 !widget.filterManager.isInConversionPhase,
+        isCompleted: widget.filterManager.processedFiltersCount >= widget.filterManager.totalFiltersCount || 
+                    widget.filterManager.progress > 0.6,
+      ),
+      PhaseData(
+        icon: 'gearshape.2',
+        title: 'Converting Rules',
+        detail: widget.filterManager.currentFilterName.isEmpty 
+          ? null 
+          : 'Processing ${widget.filterManager.currentFilterName}',
+        isActive: widget.filterManager.isInConversionPhase,
+        isCompleted: widget.filterManager.progress > 0.75,
+      ),
+      PhaseData(
+        icon: 'square.and.arrow.down',
+        title: 'Saving & Building',
+        detail: (widget.filterManager.isInSavingPhase || widget.filterManager.isInEnginePhase || 
+                (widget.filterManager.progress > 0.7 && widget.filterManager.progress < 0.95))
+          ? 'Writing files and building engines'
+          : null,
+        isActive: widget.filterManager.isInSavingPhase || widget.filterManager.isInEnginePhase || 
+                 (widget.filterManager.progress > 0.7 && widget.filterManager.progress < 0.95),
+        isCompleted: widget.filterManager.progress > 0.9,
+      ),
+      PhaseData(
+        icon: 'arrow.clockwise',
+        title: 'Reloading Extensions',
+        detail: widget.filterManager.isInReloadPhase && widget.filterManager.currentFilterName.isNotEmpty
+          ? 'Reloading ${widget.filterManager.currentFilterName}'
+          : null,
+        isActive: widget.filterManager.isInReloadPhase,
+        isCompleted: widget.filterManager.progress >= 1.0,
+      ),
+    ];
+  }
+
+  List<StatisticData> _buildOverallStatisticsData() {
+    final stats = <StatisticData>[];
+    
+    if (widget.filterManager.sourceRulesCount > 0) {
+      stats.add(StatisticData(
+        title: 'Source Rules',
+        value: _formatNumber(widget.filterManager.sourceRulesCount),
+        icon: 'doc.text',
+        color: Colors.orange,
+      ));
+    }
+    
+    if (widget.filterManager.lastRuleCount > 0) {
+      stats.add(StatisticData(
+        title: 'Safari Rules',
+        value: _formatNumber(widget.filterManager.lastRuleCount),
+        icon: 'shield.lefthalf.filled',
+        color: Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue,
+      ));
+    }
+    
+    if (widget.filterManager.lastConversionTime != 'N/A') {
+      stats.add(StatisticData(
+        title: 'Conversion',
+        value: widget.filterManager.lastConversionTime,
+        icon: 'clock',
+        color: Colors.green,
+      ));
+    }
+    
+    if (widget.filterManager.lastReloadTime != 'N/A') {
+      stats.add(StatisticData(
+        title: 'Reload',
+        value: widget.filterManager.lastReloadTime,
+        icon: 'arrow.clockwise',
+        color: Colors.purple,
+      ));
+    }
+    
+    return stats;
+  }
+
+  List<StatisticData> _buildCategoryStatisticsData() {
+    final stats = <StatisticData>[];
+    
+    final sortedCategories = widget.filterManager.ruleCountsByCategory.keys
+        .where((category) => category != FilterListCategory.all)
+        .toList()
+      ..sort((a, b) => a.rawValue.compareTo(b.rawValue));
+    
+    for (final category in sortedCategories) {
+      final ruleCount = widget.filterManager.ruleCountsByCategory[category];
+      if (ruleCount != null) {
+        final showWarning = widget.filterManager.categoriesApproachingLimit.contains(category);
+        stats.add(StatisticData(
+          title: category.rawValue,
+          value: _formatNumber(ruleCount),
+          icon: _getCategoryIcon(category),
+          color: _getCategoryColor(category),
+          showWarning: showWarning,
+        ));
+      }
+    }
+    
+    return stats;
+  }
+
+  IconData _getPhaseIcon(String systemName) {
+    switch (systemName) {
+      case 'folder.badge.questionmark':
+        return CupertinoIcons.folder_badge_plus;
+      case 'gearshape.2':
+        return CupertinoIcons.gear_alt;
+      case 'square.and.arrow.down':
+        return CupertinoIcons.square_arrow_down;
+      case 'arrow.clockwise':
+        return CupertinoIcons.refresh;
+      default:
+        return CupertinoIcons.info;
+    }
+  }
+
+  IconData _getStatIcon(String systemName) {
+    switch (systemName) {
+      case 'doc.text':
+        return CupertinoIcons.doc_text;
+      case 'shield.lefthalf.filled':
+        return CupertinoIcons.shield_lefthalf_fill;
+      case 'clock':
+        return CupertinoIcons.clock;
+      case 'arrow.clockwise':
+        return CupertinoIcons.refresh;
+      default:
+        return CupertinoIcons.info;
+    }
+  }
+
+  String _getCategoryIcon(FilterListCategory category) {
+    switch (category) {
+      case FilterListCategory.ads:
+        return 'rectangle.slash';
+      case FilterListCategory.privacy:
+        return 'eye.slash';
+      case FilterListCategory.security:
+        return 'shield';
+      case FilterListCategory.multipurpose:
+        return 'square.grid.2x2';
+      case FilterListCategory.annoyances:
+        return 'hand.raised';
+      case FilterListCategory.experimental:
+        return 'flask';
+      case FilterListCategory.foreign:
+        return 'globe';
+      case FilterListCategory.custom:
+        return 'gearshape';
+      default:
+        return 'list.bullet';
+    }
+  }
+
+  Color _getCategoryColor(FilterListCategory category) {
+    switch (category) {
+      case FilterListCategory.ads:
+        return Colors.red;
+      case FilterListCategory.privacy:
+        return Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue;
+      case FilterListCategory.security:
+        return Colors.green;
+      case FilterListCategory.multipurpose:
+        return Colors.orange;
+      case FilterListCategory.annoyances:
+        return Colors.purple;
+      case FilterListCategory.experimental:
+        return Colors.yellow;
+      case FilterListCategory.foreign:
+        return Platform.isMacOS ? MacosColors.systemTealColor : CupertinoColors.systemTeal;
+      case FilterListCategory.custom:
+        return Platform.isMacOS ? MacosColors.systemGrayColor : CupertinoColors.systemGrey;
+      default:
+        return Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label;
+    }
+  }
+
+  String _formatNumber(int number) {
+    if (number >= 1000000) {
+      return '${(number / 1000000).toStringAsFixed(1)}M';
+    } else if (number >= 1000) {
+      return '${(number / 1000).toStringAsFixed(1)}K';
+    } else {
+      return number.toString();
+    }
+  }
+}
+
+class PhaseData {
+  final String icon;
+  final String title;
+  final String? detail;
+  final bool isActive;
+  final bool isCompleted;
+
+  PhaseData({
+    required this.icon,
+    required this.title,
+    this.detail,
+    required this.isActive,
+    required this.isCompleted,
+  });
+}
+
+class StatisticData {
+  final String title;
+  final String value;
+  final String icon;
+  final Color color;
+  final bool showWarning;
+
+  StatisticData({
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.color,
+    this.showWarning = false,
+  });
 }

@@ -34,6 +34,7 @@
 		B082699C2E3C514B002A26B8 /* wBlock Scripts.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08269842E3C514B002A26B8 /* wBlock Scripts.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B08269B32E3C5361002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08269B22E3C5361002A26B8 /* wBlockCoreService.framework */; };
 		B81D2533B003A80AC19F3B5C /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3025EC8BAE633B3FBB4A29B /* Pods_RunnerTests.framework */; };
+		DD4F701FA693A0774251446E /* Pods_Runner_wBlock_Scripts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC8D7656A6EA16B3ED2E57F0 /* Pods_Runner_wBlock_Scripts.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,12 +134,14 @@
 
 /* Begin PBXFileReference section */
 		02A3DDEC66E17328182F9A4B /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		0FDC558D91CB5F23759970C7 /* Pods-Runner-wBlock Scripts.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner-wBlock Scripts.debug.xcconfig"; path = "Target Support Files/Pods-Runner-wBlock Scripts/Pods-Runner-wBlock Scripts.debug.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		7271488F59E93DFB3990AD99 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		740B09F3AA4DE120F932887D /* Pods-Runner-wBlock Scripts.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner-wBlock Scripts.profile.xcconfig"; path = "Target Support Files/Pods-Runner-wBlock Scripts/Pods-Runner-wBlock Scripts.profile.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		759C774CA3A6A553235C76E5 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
@@ -171,8 +174,11 @@
 		B082697B2E3C4C3E002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B08269842E3C514B002A26B8 /* wBlock Scripts.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Scripts.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B08269B22E3C5361002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B08275782E3D1212002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2B44B54A0432857B0BDCF8D /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		BEACA058793D9208E4562CBC /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		CC8D7656A6EA16B3ED2E57F0 /* Pods_Runner_wBlock_Scripts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner_wBlock_Scripts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE8270BB67C94D69969FF4F2 /* Pods-Runner-wBlock Scripts.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner-wBlock Scripts.release.xcconfig"; path = "Target Support Files/Pods-Runner-wBlock Scripts/Pods-Runner-wBlock Scripts.release.xcconfig"; sourceTree = "<group>"; };
 		F3025EC8BAE633B3FBB4A29B /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFFA09180DAFB0769BC5ABE7 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -409,6 +415,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B08269B32E3C5361002A26B8 /* wBlockCoreService.framework in Frameworks */,
+				DD4F701FA693A0774251446E /* Pods_Runner_wBlock_Scripts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +431,9 @@
 				BEACA058793D9208E4562CBC /* Pods-RunnerTests.debug.xcconfig */,
 				B2B44B54A0432857B0BDCF8D /* Pods-RunnerTests.release.xcconfig */,
 				759C774CA3A6A553235C76E5 /* Pods-RunnerTests.profile.xcconfig */,
+				0FDC558D91CB5F23759970C7 /* Pods-Runner-wBlock Scripts.debug.xcconfig */,
+				EE8270BB67C94D69969FF4F2 /* Pods-Runner-wBlock Scripts.release.xcconfig */,
+				740B09F3AA4DE120F932887D /* Pods-Runner-wBlock Scripts.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -505,6 +515,7 @@
 		CF6E672101AF92C6C29AADA1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B08275782E3D1212002A26B8 /* wBlockCoreService.framework */,
 				B08269B22E3C5361002A26B8 /* wBlockCoreService.framework */,
 				B082697B2E3C4C3E002A26B8 /* wBlockCoreService.framework */,
 				B08269632E3C4B51002A26B8 /* wBlockCoreService.framework */,
@@ -517,6 +528,7 @@
 				B08268762E3C402F002A26B8 /* wBlockCoreService.framework */,
 				7271488F59E93DFB3990AD99 /* Pods_Runner.framework */,
 				F3025EC8BAE633B3FBB4A29B /* Pods_RunnerTests.framework */,
+				CC8D7656A6EA16B3ED2E57F0 /* Pods_Runner_wBlock_Scripts.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -590,8 +602,6 @@
 				B08268672E3C4014002A26B8 /* wBlock Ads */,
 			);
 			name = "wBlock Ads";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Ads";
 			productReference = B08268662E3C4014002A26B8 /* wBlock Ads.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -612,8 +622,6 @@
 				B08268862E3C4220002A26B8 /* wBlock Privacy */,
 			);
 			name = "wBlock Privacy";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Privacy";
 			productReference = B08268852E3C4220002A26B8 /* wBlock Privacy.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -634,8 +642,6 @@
 				B082689E2E3C438B002A26B8 /* wBlock Security */,
 			);
 			name = "wBlock Security";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Security";
 			productReference = B082689D2E3C438B002A26B8 /* wBlock Security.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -656,8 +662,6 @@
 				B082690D2E3C473C002A26B8 /* wBlock Annoyances */,
 			);
 			name = "wBlock Annoyances";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Annoyances";
 			productReference = B082690C2E3C473C002A26B8 /* wBlock Annoyances.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -678,8 +682,6 @@
 				B08269252E3C4A2A002A26B8 /* wBlock Multipurpose */,
 			);
 			name = "wBlock Multipurpose";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Multipurpose";
 			productReference = B08269242E3C4A2A002A26B8 /* wBlock Multipurpose.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -700,8 +702,6 @@
 				B082693D2E3C4AA4002A26B8 /* wBlock Foreign */,
 			);
 			name = "wBlock Foreign";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Foreign";
 			productReference = B082693C2E3C4AA4002A26B8 /* wBlock Foreign.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -722,8 +722,6 @@
 				B08269552E3C4B42002A26B8 /* wBlock Experimental */,
 			);
 			name = "wBlock Experimental";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Experimental";
 			productReference = B08269542E3C4B42002A26B8 /* wBlock Experimental.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -744,8 +742,6 @@
 				B082696D2E3C4C30002A26B8 /* wBlock Custom */,
 			);
 			name = "wBlock Custom";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Custom";
 			productReference = B082696C2E3C4C2F002A26B8 /* wBlock Custom.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -754,6 +750,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B082699E2E3C514B002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Scripts" */;
 			buildPhases = (
+				54974F389E8C9579790752B9 /* [CP] Check Pods Manifest.lock */,
 				B08269802E3C514B002A26B8 /* Sources */,
 				B08269812E3C514B002A26B8 /* Frameworks */,
 				B08269822E3C514B002A26B8 /* Resources */,
@@ -766,8 +763,6 @@
 				B08269852E3C514B002A26B8 /* wBlock Scripts */,
 			);
 			name = "wBlock Scripts";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Scripts";
 			productReference = B08269842E3C514B002A26B8 /* wBlock Scripts.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -965,6 +960,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+		};
+		54974F389E8C9579790752B9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Runner-wBlock Scripts-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 		96717ADF98FDF161D7CF8F11 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2416,12 +2433,13 @@
 		};
 		B082699F2E3C514B002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0FDC558D91CB5F23759970C7 /* Pods-Runner-wBlock Scripts.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "wBlock Scripts/wBlock Scripts.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -2444,10 +2462,7 @@
 				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Scripts";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -2461,12 +2476,13 @@
 		};
 		B08269A02E3C514B002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE8270BB67C94D69969FF4F2 /* Pods-Runner-wBlock Scripts.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "wBlock Scripts/wBlock Scripts.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -2488,10 +2504,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0.0;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Scripts";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -2503,12 +2516,13 @@
 		};
 		B08269A12E3C514B002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 740B09F3AA4DE120F932887D /* Pods-Runner-wBlock Scripts.profile.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "wBlock Scripts/wBlock Scripts.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -2530,10 +2544,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0.0;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Scripts";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

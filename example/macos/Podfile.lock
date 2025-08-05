@@ -1,4 +1,6 @@
 PODS:
+  - appkit_ui_element_colors (1.0.0):
+    - FlutterMacOS
   - ContentBlockerConverter (2.0.48):
     - Punycode (= 3.0.0)
   - FilterEngine (2.0.48):
@@ -8,11 +10,12 @@ PODS:
     - FlutterMacOS
     - wBlockCoreService (= 3.0.0)
   - FlutterMacOS (1.0.0)
+  - macos_ui (0.1.0):
+    - FlutterMacOS
+  - macos_window_utils (1.0.0):
+    - FlutterMacOS
   - PublicSuffixList (2.0.0)
   - Punycode (3.0.0)
-  - shared_preferences_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - url_launcher_macos (0.0.1):
     - FlutterMacOS
   - wBlockCoreService (3.0.0):
@@ -22,18 +25,22 @@ PODS:
   - ZIPFoundation (0.9.19)
 
 DEPENDENCIES:
+  - appkit_ui_element_colors (from `Flutter/ephemeral/.symlinks/plugins/appkit_ui_element_colors/macos`)
   - ContentBlockerConverter (from `../../macos/Podspecs`)
   - FilterEngine (from `../../macos/Podspecs`)
   - flutter_wblock_plugin (from `Flutter/ephemeral/.symlinks/plugins/flutter_wblock_plugin/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - macos_ui (from `Flutter/ephemeral/.symlinks/plugins/macos_ui/macos`)
+  - macos_window_utils (from `Flutter/ephemeral/.symlinks/plugins/macos_window_utils/macos`)
   - PublicSuffixList (from `../../macos/Podspecs`)
   - Punycode (from `../../macos/Podspecs`)
-  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
   - wBlockCoreService (from `../../macos/Podspecs`)
   - ZIPFoundation (from `../../macos/Podspecs/ZipFoundation.podspec`)
 
 EXTERNAL SOURCES:
+  appkit_ui_element_colors:
+    :path: Flutter/ephemeral/.symlinks/plugins/appkit_ui_element_colors/macos
   ContentBlockerConverter:
     :podspec: "../../macos/Podspecs"
   FilterEngine:
@@ -42,12 +49,14 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_wblock_plugin/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
+  macos_ui:
+    :path: Flutter/ephemeral/.symlinks/plugins/macos_ui/macos
+  macos_window_utils:
+    :path: Flutter/ephemeral/.symlinks/plugins/macos_window_utils/macos
   PublicSuffixList:
     :podspec: "../../macos/Podspecs"
   Punycode:
     :podspec: "../../macos/Podspecs"
-  shared_preferences_foundation:
-    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
   url_launcher_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
   wBlockCoreService:
@@ -56,13 +65,15 @@ EXTERNAL SOURCES:
     :podspec: "../../macos/Podspecs/ZipFoundation.podspec"
 
 SPEC CHECKSUMS:
+  appkit_ui_element_colors: bb247a2d02b8313cc47e1b83be48d996034c4001
   ContentBlockerConverter: 92635e566a6986a09538c107b3b605b590ea47bc
   FilterEngine: 887554152db46d3ca40e61648dc820272137bafb
   flutter_wblock_plugin: 8fac12f8895b43d97643dfb9c8252266fd37a584
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  macos_ui: 50a2048b7ef82bde42570e2775f50907537a0eeb
+  macos_window_utils: 721df4da91cb4bde7b2b7b6ae93cdead4851118f
   PublicSuffixList: a721f52d168f67a8787bb867f25ddda90a9b4ffa
   Punycode: 177e2ef2a9b3678cbdae851be6df1ee4d27f036b
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   url_launcher_macos: c82c93949963e55b228a30115bd219499a6fe404
   wBlockCoreService: 95aacd481097c18ca0b00e8fcbbbb50038512259
   ZIPFoundation: bcece1699f80b5d63488c3886daa80a14ebe0a60

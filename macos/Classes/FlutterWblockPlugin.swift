@@ -225,6 +225,17 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
         case "setUserScriptManager":
             setUserScriptManager(result: result)
             
+        case "doesFilterFileExist":
+            guard let args = call.arguments as? [String: Any],
+                  let filterId = args["filterId"] as? String else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing filterId", details: nil))
+                return
+            }
+            doesFilterFileExist(filterId: filterId, result: result)
+            
+        case "getMissingFilters":
+            getMissingFilters(result: result)
+            
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -410,15 +421,7 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
         }
     }
     
-    private func addUserScript(name: String, content: String, result: @escaping FlutterResult) {
-        // UserScriptManager expects a URL for adding scripts
-        // For local content, we'll need to create a temporary file or use a different approach
-        Task { @MainActor in
-            result(FlutterError(code: "NOT_IMPLEMENTED", 
-                               message: "Adding user scripts from content not implemented. Use URL instead.", 
-                               details: nil))
-        }
-    }
+ 
     
     private func getWhitelistedDomains(result: @escaping FlutterResult) {
         Task { @MainActor in
@@ -643,5 +646,73 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
         // UserScriptManager is already set during setupManagers
         // This method exists for API compatibility
         result(nil)
+    }
+    
+    private func addUserScript(name: String, content: String, result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let userScriptManager = userScriptManager else {
+                result(FlutterError(code: "NO_MANAGER", message: "UserScript manager not initialized", details: nil))
+                return
+            }
+            
+            // Check if content is a URL
+            if let url = URL(string: content.trimmingCharacters(in: .whitespacesAndNewlines)),
+               url.scheme != nil, url.host != nil {
+                // It's a URL, download the script
+                await userScriptManager.addUserScript(from: url)
+                result(nil)
+            } else {
+                // It's raw script content, create a local script
+                var newUserScript = UserScript(name: name, content: content)
+                newUserScript.parseMetadata()
+                newUserScript.isEnabled = true
+                newUserScript.isLocal = true
+                
+                // Add to manager's array
+                userScriptManager.userScripts.append(newUserScript)
+                // Save would be handled by the manager's internal methods
+                result(nil)
+            }
+        }
+    }
+    
+    private func doesFilterFileExist(filterId: String, result: @escaping FlutterResult) {
+        guard let uuid = UUID(uuidString: filterId) else {
+            result(false)
+            return
+        }
+        
+        Task { @MainActor in
+            guard let filter = filterManager?.filterLists.first(where: { $0.id == uuid }) else {
+                result(false)
+                return
+            }
+            
+            let exists = filterManager?.doesFilterFileExist(filter) ?? false
+            result(exists)
+        }
+    }
+    
+    private func getMissingFilters(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result([])
+                return
+            }
+            
+            let missingFilters = filterManager.missingFilters.map { filter in
+                return [
+                    "id": filter.id.uuidString,
+                    "name": filter.name,
+                    "description": filter.description,
+                    "category": filter.category.rawValue,
+                    "url": filter.url.absoluteString,
+                    "version": filter.version,
+                    "isSelected": filter.isSelected,
+                    "sourceRuleCount": filter.sourceRuleCount as Any
+                ]
+            }
+            result(missingFilters)
+        }
     }
 }

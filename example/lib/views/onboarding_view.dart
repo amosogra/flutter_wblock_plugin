@@ -1,30 +1,41 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:macos_ui/macos_ui.dart';
+import 'package:flutter_wblock_plugin/flutter_wblock_plugin.dart';
+import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
+import 'package:flutter_wblock_plugin_example/managers/user_script_manager.dart';
+import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
+import 'package:flutter_wblock_plugin_example/models/user_script.dart';
 import 'dart:io';
 import 'package:url_launcher/url_launcher.dart';
-import '../managers/app_filter_manager.dart';
-import '../managers/user_script_manager.dart';
-import '../models/filter_list.dart';
 
 enum BlockingLevel {
-  minimal('Minimal'),
-  recommended('Recommended'),
-  complete('Complete');
+  minimal,
+  recommended,
+  complete;
 
-  final String value;
-  const BlockingLevel(this.value);
+  String get rawValue {
+    switch (this) {
+      case BlockingLevel.minimal:
+        return 'Minimal';
+      case BlockingLevel.recommended:
+        return 'Recommended';
+      case BlockingLevel.complete:
+        return 'Complete';
+    }
+  }
 }
 
 class OnboardingView extends StatefulWidget {
   final AppFilterManager filterManager;
   final UserScriptManager userScriptManager;
-  final VoidCallback onComplete;
+  final VoidCallback? onComplete;
 
   const OnboardingView({
     super.key,
     required this.filterManager,
     required this.userScriptManager,
-    required this.onComplete,
+    this.onComplete,
   });
 
   @override
@@ -32,142 +43,64 @@ class OnboardingView extends StatefulWidget {
 }
 
 class _OnboardingViewState extends State<OnboardingView> {
-  BlockingLevel selectedBlockingLevel = BlockingLevel.recommended;
-  Set<String> selectedUserScripts = {};
-  int step = 0;
-  bool isApplying = false;
-  double applyProgress = 0.0;
+  BlockingLevel _selectedBlockingLevel = BlockingLevel.recommended;
+  final Set<String> _selectedUserscripts = <String>{};
+  int _step = 0;
+  bool _isApplying = false;
+  double _applyProgress = 0.0;
 
-  List<Map<String, String>> get defaultUserScripts {
-    return widget.userScriptManager.userScripts.map((script) {
-      return {
-        'id': script.id,
-        'name': script.name,
-        'description': script.content.length > 100 
-            ? '${script.content.substring(0, 100)}...' 
-            : script.content,
-      };
-    }).toList();
-  }
+  List<UserScript> get defaultUserScripts => widget.userScriptManager.userScripts;
 
-  Map<String, String>? get bypassPaywallsScript {
+  UserScript? get bypassPaywallsScript {
     try {
-      final script = widget.userScriptManager.userScripts.firstWhere(
-        (s) => s.name.toLowerCase().contains('bypass paywalls'),
-      );
-      return {
-        'id': script.id,
-        'name': script.name,
-      };
+      return widget.userScriptManager.userScripts.where((script) => script.name.toLowerCase().contains('bypass paywalls')).first;
     } catch (e) {
       return null;
     }
   }
 
   String? get bypassPaywallsFilterName {
-    final candidates = [
-      'Bypass Paywalls Filter',
-      'Bypass Paywalls',
-      'Bypass Paywalls (Custom)',
-    ];
-    
-    for (var filter in widget.filterManager.filterLists) {
-      for (var candidate in candidates) {
-        if (filter.name.toLowerCase().contains(candidate.toLowerCase())) {
-          return filter.name;
-        }
-      }
+    final candidates = ['Bypass Paywalls Filter', 'Bypass Paywalls', 'Bypass Paywalls (Custom)'];
+
+    try {
+      return widget.filterManager.filterLists
+          .where((filter) => candidates.any((candidate) => filter.name.toLowerCase().contains(candidate.toLowerCase())))
+          .first
+          .name;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS) {
-      return _buildIOSView();
-    } else {
-      return _buildMacOSView();
-    }
-  }
-
-  Widget _buildIOSView() {
-    return CupertinoPageScaffold(
-      backgroundColor: CupertinoColors.systemBackground,
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: isApplying ? _buildDownloadView() : _buildStepView(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMacOSView() {
-    return Scaffold(
-      body: Center(
+    return Container(
+      color: Platform.isMacOS ? MacosColors.windowBackgroundColor : CupertinoColors.systemBackground,
+      child: Center(
         child: Container(
-          constraints: const BoxConstraints(
-            minWidth: 350,
-            maxWidth: 500,
-            minHeight: 350,
-            maxHeight: 600,
-          ),
-          padding: const EdgeInsets.all(20),
-          child: isApplying ? _buildDownloadView() : _buildStepView(),
+          width: Platform.isMacOS ? 500 : double.infinity,
+          height: Platform.isMacOS ? 600 : double.infinity,
+          padding: const EdgeInsets.all(30),
+          child: _isApplying ? _buildDownloadView() : _buildStepView(),
         ),
       ),
     );
   }
 
   Widget _buildDownloadView() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 300,
-          child: LinearProgressIndicator(
-            value: applyProgress,
-            minHeight: 4,
-          ),
-        ),
-        const SizedBox(height: 24),
-        const Text(
-          'Downloading and installing filter lists...',
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 8),
-        const Text(
-          'Applying filters...',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'This may take awhile',
-          style: TextStyle(
-            fontSize: 12,
-            color: Platform.isIOS
-                ? CupertinoColors.secondaryLabel
-                : Colors.grey,
-          ),
-        ),
-      ],
-    );
+    return OnboardingDownloadView(progress: _applyProgress);
   }
 
   Widget _buildStepView() {
-    switch (step) {
+    switch (_step) {
       case 0:
         return _buildBlockingLevelStep();
       case 1:
-        return _buildUserScriptStep();
+        return _buildUserscriptStep();
       case 2:
         return _buildSummaryStep();
       default:
-        return Container();
+        return _buildBlockingLevelStep();
     }
   }
 
@@ -175,34 +108,38 @@ class _OnboardingViewState extends State<OnboardingView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Welcome to wBlock!',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
+            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
           ),
         ),
-        const SizedBox(height: 8),
-        const Text(
+        const SizedBox(height: 16),
+        Text(
           'Choose your preferred blocking level. You can adjust enabled filters later.',
-          style: TextStyle(fontSize: 14),
+          style: TextStyle(
+            fontSize: 16,
+            color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+          ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 32),
         ...BlockingLevel.values.map((level) => _buildBlockingLevelOption(level)),
         const Spacer(),
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            if (Platform.isIOS)
-              CupertinoButton(
-                onPressed: () => setState(() => step++),
-                child: const Text('Next'),
-              )
-            else
-              ElevatedButton(
-                onPressed: () => setState(() => step++),
-                child: const Text('Next'),
-              ),
+            const Spacer(),
+            Platform.isMacOS
+                ? PushButton(
+                    controlSize: ControlSize.large,
+                    onPressed: () => setState(() => _step = 1),
+                    child: const Text('Next'),
+                  )
+                : CupertinoButton.filled(
+                    onPressed: () => setState(() => _step = 1),
+                    child: const Text('Next'),
+                  ),
           ],
         ),
       ],
@@ -210,25 +147,23 @@ class _OnboardingViewState extends State<OnboardingView> {
   }
 
   Widget _buildBlockingLevelOption(BlockingLevel level) {
-    return GestureDetector(
-      onTap: () => setState(() => selectedBlockingLevel = level),
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8),
+    final isSelected = _selectedBlockingLevel == level;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedBlockingLevel = level;
+          });
+        },
         child: Row(
           children: [
             Icon(
-              selectedBlockingLevel == level
-                  ? Platform.isIOS
-                      ? CupertinoIcons.largecircle_fill_circle
-                      : Icons.radio_button_checked
-                  : Platform.isIOS
-                      ? CupertinoIcons.circle
-                      : Icons.radio_button_unchecked,
-              color: selectedBlockingLevel == level
-                  ? Platform.isIOS
-                      ? CupertinoColors.activeBlue
-                      : Theme.of(context).primaryColor
-                  : null,
+              isSelected ? CupertinoIcons.largecircle_fill_circle : CupertinoIcons.circle,
+              color: isSelected
+                  ? (Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue)
+                  : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -236,19 +171,19 @@ class _OnboardingViewState extends State<OnboardingView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    level.value,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    level.rawValue,
+                    style: TextStyle(
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
+                      color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
                     ),
                   ),
+                  const SizedBox(height: 4),
                   Text(
-                    _getBlockingLevelDescription(level),
+                    _blockingLevelDescription(level),
                     style: TextStyle(
                       fontSize: 12,
-                      color: Platform.isIOS
-                          ? CupertinoColors.secondaryLabel
-                          : Colors.grey,
+                      color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
                     ),
                   ),
                 ],
@@ -260,7 +195,7 @@ class _OnboardingViewState extends State<OnboardingView> {
     );
   }
 
-  String _getBlockingLevelDescription(BlockingLevel level) {
+  String _blockingLevelDescription(BlockingLevel level) {
     switch (level) {
       case BlockingLevel.minimal:
         return 'Only AdGuard Base filter. Lightest protection, best compatibility.';
@@ -271,152 +206,169 @@ class _OnboardingViewState extends State<OnboardingView> {
     }
   }
 
-  Widget _buildUserScriptStep() {
+  Widget _buildUserscriptStep() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Userscripts',
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
+            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
           ),
         ),
-        const SizedBox(height: 8),
-        const Text(
+        const SizedBox(height: 16),
+        Text(
           'Select any userscripts you want to enable. These add extra features or fixes. You can always add more in the settings later.',
-          style: TextStyle(fontSize: 14),
+          style: TextStyle(
+            fontSize: 16,
+            color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+          ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 32),
         Expanded(
           child: ListView(
             children: [
-              ...defaultUserScripts.map((script) => _buildUserScriptOption(script)),
-              if (bypassPaywallsScript != null &&
-                  selectedUserScripts.contains(bypassPaywallsScript!['id']) &&
-                  bypassPaywallsFilterName != null)
-                Container(
-                  margin: const EdgeInsets.only(top: 16),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.yellow.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.warning,
-                        color: Colors.orange,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'The ${bypassPaywallsScript!['name']} userscript requires the $bypassPaywallsFilterName',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.orange,
-                              ),
-                            ),
-                            const Text(
-                              'It will be enabled automatically.',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              ...defaultUserScripts.map((script) => _buildUserscriptOption(script)),
+              if (bypassPaywallsScript != null && _selectedUserscripts.contains(bypassPaywallsScript!.id) && bypassPaywallsFilterName != null)
+                _buildBypassPaywallsNote(),
             ],
           ),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (Platform.isIOS) ...[
-              CupertinoButton(
-                onPressed: () => setState(() => step--),
-                child: const Text('Back'),
-              ),
-              CupertinoButton(
-                onPressed: () => setState(() => step++),
-                child: const Text('Next'),
-              ),
-            ] else ...[
-              TextButton(
-                onPressed: () => setState(() => step--),
-                child: const Text('Back'),
-              ),
-              ElevatedButton(
-                onPressed: () => setState(() => step++),
-                child: const Text('Next'),
-              ),
-            ],
+            Platform.isMacOS
+                ? PushButton(
+                    controlSize: ControlSize.large,
+                    onPressed: () => setState(() => _step = 0),
+                    child: const Text('Back'),
+                  )
+                : CupertinoButton(
+                    onPressed: () => setState(() => _step = 0),
+                    child: const Text('Back'),
+                  ),
+            const Spacer(),
+            Platform.isMacOS
+                ? PushButton(
+                    controlSize: ControlSize.large,
+                    onPressed: () => setState(() => _step = 2),
+                    child: const Text('Next'),
+                  )
+                : CupertinoButton.filled(
+                    onPressed: () => setState(() => _step = 2),
+                    child: const Text('Next'),
+                  ),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildUserScriptOption(Map<String, String> script) {
-    final isSelected = selectedUserScripts.contains(script['id']);
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          if (Platform.isIOS)
-            CupertinoSwitch(
-              value: isSelected,
-              onChanged: (value) {
-                setState(() {
-                  if (value) {
-                    selectedUserScripts.add(script['id']!);
-                  } else {
-                    selectedUserScripts.remove(script['id']);
-                  }
-                });
-              },
-            )
-          else
-            Switch(
-              value: isSelected,
-              onChanged: (value) {
-                setState(() {
-                  if (value) {
-                    selectedUserScripts.add(script['id']!);
-                  } else {
-                    selectedUserScripts.remove(script['id']);
-                  }
-                });
-              },
+  Widget _buildUserscriptOption(UserScript script) {
+    final isSelected = _selectedUserscripts.contains(script.id);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            if (isSelected) {
+              _selectedUserscripts.remove(script.id);
+            } else {
+              _selectedUserscripts.add(script.id);
+            }
+          });
+        },
+        child: Row(
+          children: [
+            Platform.isMacOS
+                ? MacosCheckbox(
+                    value: isSelected,
+                    onChanged: (value) {
+                      setState(() {
+                        if (value == true) {
+                          _selectedUserscripts.add(script.id);
+                        } else {
+                          _selectedUserscripts.remove(script.id);
+                        }
+                      });
+                    },
+                  )
+                : Icon(
+                    isSelected ? CupertinoIcons.checkmark_square_fill : CupertinoIcons.square,
+                    color: isSelected
+                        ? (Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue)
+                        : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
+                  ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    script.name,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+                    ),
+                  ),
+                  if (script.description.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      script.description,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-          const SizedBox(width: 12),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBypassPaywallsNote() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.yellow.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.yellow.withOpacity(0.3)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            CupertinoIcons.exclamationmark_triangle_fill,
+            color: Colors.yellow,
+            size: 20,
+          ),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  script['name']!,
-                  style: const TextStyle(fontSize: 14),
-                ),
-                Text(
-                  script['description']!,
-                  style: TextStyle(
+                  'The ${bypassPaywallsScript!.name} userscript requires the $bypassPaywallsFilterName',
+                  style: const TextStyle(
                     fontSize: 12,
-                    color: Platform.isIOS
-                        ? CupertinoColors.secondaryLabel
-                        : Colors.grey,
+                    color: Colors.orange,
+                    fontWeight: FontWeight.w500,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'It will be enabled automatically.',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+                  ),
                 ),
               ],
             ),
@@ -430,249 +382,343 @@ class _OnboardingViewState extends State<OnboardingView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Summary',
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
+            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Review your choices and apply settings.',
+          style: TextStyle(
+            fontSize: 16,
+            color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+          ),
+        ),
+        const SizedBox(height: 32),
+        const Divider(),
+        const SizedBox(height: 16),
+        Text(
+          'Blocking Level: ${_selectedBlockingLevel.rawValue}',
+          style: TextStyle(
+            fontSize: 16,
+            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
           ),
         ),
         const SizedBox(height: 8),
-        const Text(
-          'Review your choices and apply settings.',
-          style: TextStyle(fontSize: 14),
+        Text(
+          'Userscripts: ${_selectedUserscripts.isEmpty ? "None" : _getSelectedUserscriptNames()}',
+          style: TextStyle(
+            fontSize: 16,
+            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+          ),
         ),
         const SizedBox(height: 16),
         const Divider(),
-        const SizedBox(height: 8),
-        Text('Blocking Level: ${selectedBlockingLevel.value}'),
-        const SizedBox(height: 8),
-        Text(
-          'Userscripts: ${selectedUserScripts.isEmpty ? "None" : selectedUserScripts.map((id) => defaultUserScripts.firstWhere((s) => s['id'] == id)['name']).join(", ")}',
-        ),
-        const SizedBox(height: 8),
-        const Divider(),
-        if (selectedBlockingLevel == BlockingLevel.complete) ...[
-          const SizedBox(height: 16),
+        const SizedBox(height: 16),
+        if (_selectedBlockingLevel == BlockingLevel.complete) ...[
           const Text(
             'Warning: Complete mode may break some websites. Proceed with caution.',
             style: TextStyle(
+              fontSize: 14,
               color: Colors.red,
-              fontSize: 12,
+              fontWeight: FontWeight.w500,
             ),
           ),
+          const SizedBox(height: 16),
         ],
-        const SizedBox(height: 16),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.yellow.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Platform.isIOS
-                        ? CupertinoIcons.exclamationmark_shield_fill
-                        : Icons.shield,
-                    color: Colors.orange,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 8),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'After filters are applied, you must enable all wBlock extensions in Safari\'s extension settings.',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          'You can enable them in Safari > Settings > Extensions (on Mac) or Settings > Safari > Extensions (on iPhone/iPad).',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      launchUrl(Uri.parse('https://support.apple.com/guide/iphone/get-extensions-iphab0432bf6/ios'));
-                    },
-                    child: const Text(
-                      'How to enable on iPhone/iPad',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  TextButton(
-                    onPressed: () {
-                      launchUrl(Uri.parse('https://support.apple.com/en-us/102343'));
-                    },
-                    child: const Text(
-                      'How to enable on Mac',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+        _buildSafariExtensionReminder(),
         const Spacer(),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (Platform.isIOS) ...[
-              CupertinoButton(
-                onPressed: () => setState(() => step--),
-                child: const Text('Back'),
-              ),
-              CupertinoButton.filled(
-                onPressed: _applySettings,
-                child: const Text('Apply & Finish'),
-              ),
-            ] else ...[
-              TextButton(
-                onPressed: () => setState(() => step--),
-                child: const Text('Back'),
-              ),
-              ElevatedButton(
-                onPressed: _applySettings,
-                child: const Text('Apply & Finish'),
-              ),
-            ],
+            Platform.isMacOS
+                ? PushButton(
+                    controlSize: ControlSize.large,
+                    onPressed: () => setState(() => _step = 1),
+                    child: const Text('Back'),
+                  )
+                : CupertinoButton(
+                    onPressed: () => setState(() => _step = 1),
+                    child: const Text('Back'),
+                  ),
+            const Spacer(),
+            Platform.isMacOS
+                ? PushButton(
+                    controlSize: ControlSize.large,
+                    onPressed: _applySettings,
+                    child: const Text('Apply & Finish'),
+                  )
+                : CupertinoButton.filled(
+                    onPressed: _applySettings,
+                    child: const Text('Apply & Finish'),
+                  ),
           ],
         ),
       ],
     );
   }
 
+  Widget _buildSafariExtensionReminder() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.yellow.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.yellow.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(
+                CupertinoIcons.exclamationmark_shield_fill,
+                color: Colors.yellow,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'After filters are applied, you must enable all wBlock extensions in Safari\'s extension settings.',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'You can enable them in Safari > Settings > Extensions (on Mac) or Settings > Safari > Extensions (on iPhone/iPad).',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (Platform.isMacOS) ...[
+            Row(
+              children: [
+                _buildHelpLink(
+                  'How to enable on Mac',
+                  'https://support.apple.com/en-us/102343',
+                ),
+                const SizedBox(width: 16),
+                _buildHelpLink(
+                  'How to enable on iPhone/iPad',
+                  'https://support.apple.com/guide/iphone/get-extensions-iphab0432bf6/ios',
+                ),
+              ],
+            ),
+          ] else ...[
+            _buildHelpLink(
+              'How to enable on iPhone/iPad',
+              'https://support.apple.com/guide/iphone/get-extensions-iphab0432bf6/ios',
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHelpLink(String text, String url) {
+    return GestureDetector(
+      onTap: () {
+        // TODO: Open URL
+        launchUrl(Uri.parse(url));
+      },
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 12,
+          color: Colors.blue,
+          decoration: TextDecoration.underline,
+        ),
+      ),
+    );
+  }
+
+  String _getSelectedUserscriptNames() {
+    final names = <String>[];
+    for (final id in _selectedUserscripts) {
+      try {
+        final script = defaultUserScripts.firstWhere((script) => script.id == id);
+        names.add(script.name);
+      } catch (e) {
+        // Script not found, skip
+      }
+    }
+    return names.join(', ');
+  }
+
   Future<void> _applySettings() async {
     setState(() {
-      isApplying = true;
-      applyProgress = 0.0;
+      _isApplying = true;
+      _applyProgress = 0.0;
     });
 
-    // Simulate progress for filter selection
-    await _updateProgress(0.1);
-    
-    // Apply filter selections based on blocking level
-    await _applyFilterSelections();
-    await _updateProgress(0.3);
+    try {
+      // 1. Set filter selection based on chosen blocking level
+      var updatedFilters = List<FilterList>.from(widget.filterManager.filterLists);
 
-    // Apply userscript selections
-    await _applyUserScriptSelections();
-    await _updateProgress(0.5);
-
-    // Download and apply the changes
-    setState(() {
-      applyProgress = 0.6;
-    });
-    
-    // Trigger the actual filter application
-    widget.filterManager.setShowingApplyProgressSheet(true);
-    await widget.filterManager.checkAndEnableFilters(forceReload: true);
-    
-    await _updateProgress(1.0);
-    
-    // Complete onboarding
-    widget.onComplete();
-  }
-
-  Future<void> _updateProgress(double progress) async {
-    setState(() {
-      applyProgress = progress;
-    });
-    await Future.delayed(const Duration(milliseconds: 200));
-  }
-
-  Future<void> _applyFilterSelections() async {
-    // Get all filters and update their selection state
-    final allFilters = widget.filterManager.filterLists;
-    
-    // First, deselect all filters
-    for (var filter in allFilters) {
-      if (filter.isSelected) {
-        await widget.filterManager.toggleFilterListSelection(filter.id);
-      }
-    }
-
-    switch (selectedBlockingLevel) {
-      case BlockingLevel.minimal:
-        // Enable only AdGuard Base Filter
-        for (var filter in allFilters) {
-          if (filter.name == 'AdGuard Base Filter') {
-            await widget.filterManager.toggleFilterListSelection(filter.id);
-            break;
+      switch (_selectedBlockingLevel) {
+        case BlockingLevel.minimal:
+          for (int i = 0; i < updatedFilters.length; i++) {
+            updatedFilters[i] = updatedFilters[i].copyWith(
+              isSelected: updatedFilters[i].name == 'AdGuard Base Filter',
+            );
           }
-        }
-        break;
-
-      case BlockingLevel.recommended:
-        // Enable recommended filters
-        final recommendedFilters = [
-          'AdGuard Base Filter',
-          'AdGuard Tracking Protection Filter',
-          'AdGuard Annoyances Filter',
-          'EasyPrivacy',
-          'Online Malicious URL Blocklist',
-          'd3Host List by d3ward',
-          'Anti-Adblock List',
-        ];
-        
-        for (var filter in allFilters) {
-          if (recommendedFilters.contains(filter.name)) {
-            await widget.filterManager.toggleFilterListSelection(filter.id);
-          }
-        }
-        break;
-
-      case BlockingLevel.complete:
-        // Enable all filters except foreign language ones
-        for (var filter in allFilters) {
-          if (filter.category != FilterListCategory.regional && 
-              filter.category != 'foreign') {
-            await widget.filterManager.toggleFilterListSelection(filter.id);
-          }
-        }
-        break;
-    }
-
-    // If Bypass Paywalls userscript is selected, enable its filter
-    if (bypassPaywallsScript != null &&
-        selectedUserScripts.contains(bypassPaywallsScript!['id']) &&
-        bypassPaywallsFilterName != null) {
-      for (var filter in allFilters) {
-        if (filter.name == bypassPaywallsFilterName && !filter.isSelected) {
-          await widget.filterManager.toggleFilterListSelection(filter.id);
           break;
+        case BlockingLevel.recommended:
+          // Disable all filters first
+          for (int i = 0; i < updatedFilters.length; i++) {
+            updatedFilters[i] = updatedFilters[i].copyWith(isSelected: false);
+          }
+          // Enable only the recommended filters
+          final recommendedFilters = [
+            'AdGuard Base Filter',
+            'AdGuard Tracking Protection Filter',
+            'AdGuard Annoyances Filter',
+            'EasyPrivacy',
+            'Online Malicious URL Blocklist',
+            'd3Host List by d3ward',
+            'Anti-Adblock List'
+          ];
+          for (int i = 0; i < updatedFilters.length; i++) {
+            if (recommendedFilters.contains(updatedFilters[i].name)) {
+              updatedFilters[i] = updatedFilters[i].copyWith(isSelected: true);
+            }
+          }
+          break;
+        case BlockingLevel.complete:
+          for (int i = 0; i < updatedFilters.length; i++) {
+            updatedFilters[i] = updatedFilters[i].copyWith(
+              isSelected: updatedFilters[i].category != FilterListCategory.foreign,
+            );
+          }
+          break;
+      }
+
+      // If Bypass Paywalls userscript is selected, also enable the required filter list
+      if (bypassPaywallsScript != null && _selectedUserscripts.contains(bypassPaywallsScript!.id) && bypassPaywallsFilterName != null) {
+        for (int i = 0; i < updatedFilters.length; i++) {
+          if (updatedFilters[i].name == bypassPaywallsFilterName) {
+            updatedFilters[i] = updatedFilters[i].copyWith(isSelected: true);
+          }
         }
       }
+
+      widget.filterManager.filterLists = updatedFilters;
+      widget.filterManager.saveFilterLists();
+
+      setState(() {
+        _applyProgress = 0.3;
+      });
+
+      // 2. Enable/disable userscripts based on onboarding selection
+      for (final script in widget.userScriptManager.userScripts) {
+        final shouldEnable = _selectedUserscripts.contains(script.id);
+        if (script.isEnabled != shouldEnable) {
+          await widget.userScriptManager.toggleUserScript(script);
+        }
+      }
+
+      setState(() {
+        _applyProgress = 0.6;
+      });
+
+      // 3. Download and apply enabled filter lists
+      final enabledFilters = widget.filterManager.filterLists.where((f) => f.isSelected).toList();
+      await widget.filterManager.downloadAndApplyFilters(
+        enabledFilters,
+        progress: (progress) {
+          setState(() {
+            _applyProgress = 0.6 + (progress * 0.4); // 60% to 100%
+          });
+        },
+      );
+
+      // Mark onboarding as completed
+      await FlutterWblockPlugin.setOnboardingCompleted(true);
+
+      // Call the completion callback
+      widget.onComplete?.call();
+    } catch (e) {
+      print('Error applying onboarding settings: $e');
     }
   }
+}
 
-  Future<void> _applyUserScriptSelections() async {
-    for (var script in widget.userScriptManager.userScripts) {
-      final shouldBeEnabled = selectedUserScripts.contains(script.id);
-      if (script.isEnabled != shouldBeEnabled) {
-        await widget.userScriptManager.toggleScript(script.id);
-      }
-    }
+class OnboardingDownloadView extends StatelessWidget {
+  final double progress;
+
+  const OnboardingDownloadView({
+    super.key,
+    required this.progress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 300,
+          child: Platform.isMacOS
+              ? LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: MacosColors.quaternaryLabelColor,
+                  valueColor: const AlwaysStoppedAnimation<Color>(MacosColors.systemBlueColor),
+                )
+              : LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: CupertinoColors.systemGrey4,
+                  valueColor: const AlwaysStoppedAnimation<Color>(CupertinoColors.systemBlue),
+                ),
+        ),
+        const SizedBox(height: 24),
+        Column(
+          children: [
+            Text(
+              'Downloading and installing filter lists...',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Applying filters...',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'This may take awhile',
+              style: TextStyle(
+                fontSize: 12,
+                color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }

@@ -10,11 +10,6 @@ PODS:
     - wBlockCoreService (= 3.0.0)
   - PublicSuffixList (2.0.0)
   - Punycode (3.0.0)
-  - shared_preferences_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
-  - url_launcher_ios (0.0.1):
-    - Flutter
   - wBlockCoreService (3.0.0):
     - ContentBlockerConverter (= 2.0.48)
     - FilterEngine (= 2.0.48)
@@ -28,8 +23,6 @@ DEPENDENCIES:
   - flutter_wblock_plugin (from `.symlinks/plugins/flutter_wblock_plugin/ios`)
   - PublicSuffixList (from `../../ios/Podspecs`)
   - Punycode (from `../../ios/Podspecs`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
-  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - wBlockCoreService (from `../../ios/Podspecs`)
   - ZIPFoundation (from `../../ios/Podspecs/ZipFoundation.podspec`)
 
@@ -46,10 +39,6 @@ EXTERNAL SOURCES:
     :podspec: "../../ios/Podspecs"
   Punycode:
     :podspec: "../../ios/Podspecs"
-  shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
-  url_launcher_ios:
-    :path: ".symlinks/plugins/url_launcher_ios/ios"
   wBlockCoreService:
     :podspec: "../../ios/Podspecs"
   ZIPFoundation:
@@ -62,11 +51,9 @@ SPEC CHECKSUMS:
   flutter_wblock_plugin: cf19c4368ee277211c5de7fc948f1df45958ae4b
   PublicSuffixList: a721f52d168f67a8787bb867f25ddda90a9b4ffa
   Punycode: 177e2ef2a9b3678cbdae851be6df1ee4d27f036b
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   wBlockCoreService: 95aacd481097c18ca0b00e8fcbbbb50038512259
   ZIPFoundation: bcece1699f80b5d63488c3886daa80a14ebe0a60
 
-PODFILE CHECKSUM: 5653dfb287506d73d5f3ad80adc72b27eee47816
+PODFILE CHECKSUM: 0675d8673e6bc07413ddb37fcb20cad020b56e18
 
 COCOAPODS: 1.16.2

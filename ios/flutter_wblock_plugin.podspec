@@ -21,6 +21,6 @@ A Flutter plugin that provides content blocking functionality for Safari with su
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.9'
 
-  # Add dependency to wBlockCoreService package
+  # Add dependency to wBlockCoreService Swift Package from GitHub
   s.dependency 'wBlockCoreService', '3.0.0'
 end

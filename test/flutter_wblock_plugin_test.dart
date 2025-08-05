@@ -216,6 +216,18 @@ class MockFlutterWblockPluginPlatform
     // TODO: implement getLogs
     throw UnimplementedError();
   }
+  
+  @override
+  Future<bool> doesFilterFileExist(String filterId) {
+    // TODO: implement doesFilterFileExist
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<Map<String, dynamic>>> getMissingFilters() {
+    // TODO: implement getMissingFilters
+    throw UnimplementedError();
+  }
 }
 
 void main() {

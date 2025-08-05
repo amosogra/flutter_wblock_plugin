@@ -62,6 +62,8 @@ abstract class FlutterWblockPluginPlatform extends PlatformInterface {
   Future<void> downloadSelectedFilters(List<String> filterIds);
   Future<void> resetToDefaultLists();
   Future<void> setUserScriptManager();
+  Future<bool> doesFilterFileExist(String filterId);
+  Future<List<Map<String, dynamic>>> getMissingFilters();
 }
 
 /// An implementation of [FlutterWblockPluginPlatform] that uses method channels.
@@ -304,6 +306,20 @@ class MethodChannelFlutterWblockPlugin extends FlutterWblockPluginPlatform {
   Future<void> setUserScriptManager() async {
     await methodChannel.invokeMethod('setUserScriptManager');
   }
+
+  @override
+  Future<bool> doesFilterFileExist(String filterId) async {
+    final result = await methodChannel.invokeMethod<bool>('doesFilterFileExist', {
+      'filterId': filterId,
+    });
+    return result ?? false;
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getMissingFilters() async {
+    final result = await methodChannel.invokeMethod<List>('getMissingFilters');
+    return (result ?? []).map((e) => Map<String, dynamic>.from(e)).toList();
+  }
 }
 
 /// The main plugin class
@@ -498,5 +514,15 @@ class FlutterWblockPlugin {
   /// Set user script manager
   static Future<void> setUserScriptManager() {
     return _platform.setUserScriptManager();
+  }
+
+  /// Check if filter file exists
+  static Future<bool> doesFilterFileExist(String filterId) {
+    return _platform.doesFilterFileExist(filterId);
+  }
+
+  /// Get missing filters
+  static Future<List<Map<String, dynamic>>> getMissingFilters() {
+    return _platform.getMissingFilters();
   }
 }

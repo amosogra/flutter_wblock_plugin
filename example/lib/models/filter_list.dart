@@ -1,35 +1,122 @@
+enum FilterListCategory {
+  all,
+  ads,
+  privacy,
+  security,
+  multipurpose,
+  annoyances,
+  experimental,
+  foreign,
+  custom,
+  scripts; // Added for userscripts in update popups
+
+  String get rawValue {
+    switch (this) {
+      case FilterListCategory.all:
+        return 'All';
+      case FilterListCategory.ads:
+        return 'Ads';
+      case FilterListCategory.privacy:
+        return 'Privacy';
+      case FilterListCategory.security:
+        return 'Security';
+      case FilterListCategory.multipurpose:
+        return 'Multipurpose';
+      case FilterListCategory.annoyances:
+        return 'Annoyances';
+      case FilterListCategory.experimental:
+        return 'Experimental';
+      case FilterListCategory.foreign:
+        return 'Foreign';
+      case FilterListCategory.custom:
+        return 'Custom';
+      case FilterListCategory.scripts:
+        return 'Scripts';
+    }
+  }
+
+  String get displayName => rawValue;
+}
+
 class FilterList {
   final String id;
   final String name;
   final String description;
-  final String category;
-  final String url;
-  final String version;
+  final Uri url;
+  final FilterListCategory category;
   final bool isSelected;
+  final String version;
   final int? sourceRuleCount;
 
-  FilterList({
+  const FilterList({
     required this.id,
     required this.name,
     required this.description,
-    required this.category,
     required this.url,
-    required this.version,
+    required this.category,
     required this.isSelected,
+    required this.version,
     this.sourceRuleCount,
   });
 
+  FilterList copyWith({
+    String? id,
+    String? name,
+    String? description,
+    Uri? url,
+    FilterListCategory? category,
+    bool? isSelected,
+    String? version,
+    int? sourceRuleCount,
+  }) {
+    return FilterList(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      url: url ?? this.url,
+      category: category ?? this.category,
+      isSelected: isSelected ?? this.isSelected,
+      version: version ?? this.version,
+      sourceRuleCount: sourceRuleCount ?? this.sourceRuleCount,
+    );
+  }
+
   factory FilterList.fromMap(Map<String, dynamic> map) {
     return FilterList(
-      id: map['id'] as String,
-      name: map['name'] as String? ?? '',
-      description: map['description'] as String? ?? '',
-      category: map['category'] as String? ?? FilterListCategory.other,
-      url: map['url'] as String? ?? '',
-      version: map['version'] as String? ?? '',
-      isSelected: map['isSelected'] as bool? ?? false,
-      sourceRuleCount: map['sourceRuleCount'] as int?,
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      description: map['description'] ?? '',
+      url: Uri.parse(map['url'] ?? ''),
+      category: _categoryFromString(map['category'] ?? ''),
+      isSelected: map['isSelected'] ?? false,
+      version: map['version'] ?? '',
+      sourceRuleCount: map['sourceRuleCount'],
     );
+  }
+
+  static FilterListCategory _categoryFromString(String categoryString) {
+    switch (categoryString.toLowerCase()) {
+      case 'ads':
+        return FilterListCategory.ads;
+      case 'privacy':
+        return FilterListCategory.privacy;
+      case 'security':
+        return FilterListCategory.security;
+      case 'multipurpose':
+        return FilterListCategory.multipurpose;
+      case 'annoyances':
+        return FilterListCategory.annoyances;
+      case 'experimental':
+        return FilterListCategory.experimental;
+      case 'foreign':
+        return FilterListCategory.foreign;
+      case 'custom':
+        return FilterListCategory.custom;
+      case 'scripts':
+        return FilterListCategory.scripts;
+      default:
+        return FilterListCategory.all;
+    }
   }
 
   Map<String, dynamic> toMap() {
@@ -37,69 +124,11 @@ class FilterList {
       'id': id,
       'name': name,
       'description': description,
-      'category': category,
-      'url': url,
-      'version': version,
+      'url': url.toString(),
+      'category': category.rawValue,
       'isSelected': isSelected,
+      'version': version,
       'sourceRuleCount': sourceRuleCount,
     };
   }
-
-  FilterList copyWith({
-    String? id,
-    String? name,
-    String? description,
-    String? category,
-    String? url,
-    String? version,
-    bool? isSelected,
-    int? sourceRuleCount,
-  }) {
-    return FilterList(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      category: category ?? this.category,
-      url: url ?? this.url,
-      version: version ?? this.version,
-      isSelected: isSelected ?? this.isSelected,
-      sourceRuleCount: sourceRuleCount ?? this.sourceRuleCount,
-    );
-  }
-}
-
-// Enum for filter categories to match the Swift implementation
-class FilterListCategory {
-  static const String all = "All";
-  static const String ads = "Ads";
-  static const String trackers = "Trackers";
-  static const String privacy = "Privacy";
-  static const String security = "Security";
-  static const String multipurpose = "Multipurpose";
-  static const String annoyances = "Annoyances";
-  static const String social = "Social";
-  static const String regional = "Regional";
-  static const String experimental = "Experimental";
-  static const String foreign = "Foreign";
-  static const String other = "Other";
-  static const String custom = "Custom";
-
-  static List<String> get allCases => [
-    all,
-    ads,
-    trackers,
-    privacy,
-    security,
-    multipurpose,
-    annoyances,
-    social,
-    regional,
-    experimental,
-    foreign,
-    other,
-    custom,
-  ];
-
-  static List<String> get displayableCategories => 
-    allCases.where((c) => c != all && c != custom).toList();
 }

@@ -5,12 +5,16 @@
 import FlutterMacOS
 import Foundation
 
+import appkit_ui_element_colors
 import flutter_wblock_plugin
-import shared_preferences_foundation
+import macos_ui
+import macos_window_utils
 import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+  AppkitUiElementColorsPlugin.register(with: registry.registrar(forPlugin: "AppkitUiElementColorsPlugin"))
   FlutterWblockPlugin.register(with: registry.registrar(forPlugin: "FlutterWblockPlugin"))
-  SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
+  MacOSUiPlugin.register(with: registry.registrar(forPlugin: "MacOSUiPlugin"))
+  MacOSWindowUtilsPlugin.register(with: registry.registrar(forPlugin: "MacOSWindowUtilsPlugin"))
   UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))
 }

@@ -13,6 +13,7 @@ import 'package:flutter_wblock_plugin_example/views/whitelist_manager_view.dart'
 import 'package:flutter_wblock_plugin_example/views/apply_changes_progress_view.dart';
 import 'package:flutter_wblock_plugin_example/views/update_popup_view.dart';
 import 'package:flutter_wblock_plugin_example/views/missing_filters_view.dart';
+import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
 import 'dart:io';
 
 class ContentView extends StatefulWidget {
@@ -70,26 +71,26 @@ class _ContentViewState extends State<ContentView> {
 
   Widget _buildMacOSContent(AppFilterManager filterManager) {
     return MacosScaffold(
+      backgroundColor: WBlockTheme.macOSBackgroundColor,
       toolBar: ToolBar(
         title: const Text('wBlock'),
         titleWidth: 150.0,
-        leading: MacosTooltip(
-          message: 'Check for filter list updates',
-          child: ToolBarIconButton(
+        actions: [
+          ToolBarIconButton(
             label: 'Check for Updates',
-            showLabel: true,
+            showLabel: false,
+            tooltipMessage: 'Check for Updates',
             icon: const MacosIcon(CupertinoIcons.refresh),
             onPressed: filterManager.isLoading
                 ? null
                 : () async {
                     await filterManager.checkForUpdates();
                   },
-          ) as Widget,
-        ),
-        actions: [
+          ),
           ToolBarIconButton(
-            showLabel: true,
+            showLabel: false,
             label: 'Apply Changes',
+            tooltipMessage: 'Apply Changes',
             icon: const MacosIcon(CupertinoIcons.refresh_circled),
             onPressed: (filterManager.isLoading || enabledListsCount == 0)
                 ? null
@@ -99,8 +100,9 @@ class _ContentViewState extends State<ContentView> {
           ),
           ToolBarIconButton(
             label: 'Show Logs',
+            tooltipMessage: 'Show Logs',
             icon: const MacosIcon(CupertinoIcons.doc_text_search),
-            showLabel: true,
+            showLabel: false,
             onPressed: () {
               setState(() {
                 _showingLogsView = true;
@@ -109,8 +111,9 @@ class _ContentViewState extends State<ContentView> {
           ),
           ToolBarIconButton(
             label: 'User Scripts',
+            tooltipMessage: 'User Scripts',
             icon: const MacosIcon(CupertinoIcons.doc_text_fill),
-            showLabel: true,
+            showLabel: false,
             onPressed: () {
               setState(() {
                 _showingUserScriptsView = true;
@@ -119,8 +122,9 @@ class _ContentViewState extends State<ContentView> {
           ),
           ToolBarIconButton(
             label: 'Whitelisted Domains',
+            tooltipMessage: 'Whitelisted Domains',
             icon: const MacosIcon(CupertinoIcons.list_bullet_indent),
-            showLabel: true,
+            showLabel: false,
             onPressed: () {
               setState(() {
                 _showingWhitelistSheet = true;
@@ -129,8 +133,9 @@ class _ContentViewState extends State<ContentView> {
           ),
           ToolBarIconButton(
             label: 'Add Filter',
+            tooltipMessage: 'Add Filter',
             icon: const MacosIcon(CupertinoIcons.plus),
-            showLabel: true,
+            showLabel: false,
             onPressed: () {
               setState(() {
                 _showingAddFilterSheet = true;
@@ -139,13 +144,14 @@ class _ContentViewState extends State<ContentView> {
           ),
           ToolBarIconButton(
             label: 'Show Enabled Only',
+            tooltipMessage: 'Show Enabled Only',
             icon: MacosIcon(_showOnlyEnabledLists ? CupertinoIcons.line_horizontal_3_decrease_circle_fill : CupertinoIcons.line_horizontal_3_decrease_circle),
             onPressed: () {
               setState(() {
                 _showOnlyEnabledLists = !_showOnlyEnabledLists;
               });
             },
-            showLabel: true,
+            showLabel: false,
           ),
         ],
       ),
@@ -159,7 +165,9 @@ class _ContentViewState extends State<ContentView> {
 
   Widget _buildIOSContent(AppFilterManager filterManager) {
     return CupertinoPageScaffold(
+      backgroundColor: WBlockTheme.iOSBackgroundColor,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: WBlockTheme.iOSNavigationBarColorTranslucent,
         middle: const Text('wBlock'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -219,9 +227,11 @@ class _ContentViewState extends State<ContentView> {
   Widget _buildContent(AppFilterManager filterManager, ScrollController? scrollController) {
     return Stack(
       children: [
-        SingleChildScrollView(
-          controller: scrollController,
-          padding: Platform.isMacOS ? const EdgeInsets.all(20) : const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        Container(
+          color: Colors.transparent,
+          child: SingleChildScrollView(
+            controller: scrollController,
+            padding: Platform.isMacOS ? const EdgeInsets.all(20) : const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           child: Column(
             children: [
               _buildStatsCardsView(filterManager),
@@ -229,6 +239,7 @@ class _ContentViewState extends State<ContentView> {
               ..._buildFilterSections(filterManager),
               const SizedBox(height: 20),
             ],
+          ),
           ),
         ),
         _buildOverlay(filterManager),
@@ -246,8 +257,8 @@ class _ContentViewState extends State<ContentView> {
             title: 'Enabled Lists',
             value: '$enabledListsCount',
             icon: 'list.bullet.rectangle',
-            pillColor: Colors.transparent,
-            valueColor: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+            pillColor: WBlockTheme.statCardBackground,
+            valueColor: WBlockTheme.primaryTextColor
           ),
         ),
         const SizedBox(width: 12),
@@ -256,8 +267,8 @@ class _ContentViewState extends State<ContentView> {
             title: 'Safari Rules',
             value: _formatNumber(filterManager.lastRuleCount),
             icon: 'shield.lefthalf.filled',
-            pillColor: Colors.transparent,
-            valueColor: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+            pillColor: WBlockTheme.statCardBackground,
+            valueColor: WBlockTheme.primaryTextColor
           ),
         ),
       ],
@@ -294,11 +305,7 @@ class _ContentViewState extends State<ContentView> {
             children: [
               Text(
                 category.rawValue,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-                ),
+                style: WBlockTheme.headlineStyle,
               ),
               if (filterManager.isCategoryApproachingLimit(category)) ...[
                 const SizedBox(width: 8),
@@ -320,7 +327,7 @@ class _ContentViewState extends State<ContentView> {
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
-            color: Platform.isMacOS ? MacosColors.controlBackgroundColor : CupertinoColors.secondarySystemBackground,
+            color: WBlockTheme.cardBackgroundColorTranslucent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -328,10 +335,11 @@ class _ContentViewState extends State<ContentView> {
               for (int i = 0; i < filters.length; i++) ...[
                 _buildFilterRowView(filters[i], filterManager),
                 if (i < filters.length - 1)
-                  const Divider(
+                  Divider(
                     height: 1,
                     indent: 16,
-                    endIndent: 16,
+                    endIndent: 0,
+                    color: WBlockTheme.subtleDividerColor,
                   ),
               ],
             ],
@@ -356,11 +364,7 @@ class _ContentViewState extends State<ContentView> {
                   children: [
                     Text(
                       filter.name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-                      ),
+                      style: WBlockTheme.bodyStyle,
                     ),
                     const SizedBox(height: 4),
                     _buildRuleCountText(filter, filterManager),
@@ -368,20 +372,14 @@ class _ContentViewState extends State<ContentView> {
                       const SizedBox(height: 4),
                       Text(
                         filter.description,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-                        ),
+                        style: WBlockTheme.captionStyle,
                       ),
                     ],
                     if (filter.version.isNotEmpty) ...[
                       const SizedBox(height: 4),
                       Text(
                         'Version: ${filter.version}',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Platform.isMacOS ? MacosColors.tertiaryLabelColor : CupertinoColors.tertiaryLabel,
-                        ),
+                        style: WBlockTheme.smallCaptionStyle,
                       ),
                     ],
                   ],
@@ -414,8 +412,8 @@ class _ContentViewState extends State<ContentView> {
 
     if (filter.sourceRuleCount != null && filter.sourceRuleCount! > 0) {
       text = '(${_formatNumber(filter.sourceRuleCount!)} rules)';
-      color = Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel;
-    } else if (filter.sourceRuleCount == null && filter.isSelected && !filterManager.doesFilterFileExist(filter)) {
+      color = WBlockTheme.secondaryTextColor;
+    } else if (filter.sourceRuleCount == null && filter.isSelected /* && !filterManager.doesFilterFileExist(filter) */) {
       text = '(Counting...)';
       color = Colors.orange;
     } else {
@@ -443,7 +441,7 @@ class _ContentViewState extends State<ContentView> {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Platform.isMacOS ? MacosColors.controlBackgroundColor : CupertinoColors.secondarySystemBackground,
+            color: WBlockTheme.modalBackgroundColor,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -461,7 +459,7 @@ class _ContentViewState extends State<ContentView> {
                 filterManager.statusDescription,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+                  color: WBlockTheme.secondaryTextColor
                 ),
               ),
             ],
@@ -699,7 +697,7 @@ class _AddFilterListViewState extends State<AddFilterListView> {
           margin: Platform.isMacOS ? null : const EdgeInsets.all(20),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Platform.isMacOS ? MacosColors.controlBackgroundColor : CupertinoColors.systemBackground,
+            color: WBlockTheme.cardBackgroundColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -708,10 +706,10 @@ class _AddFilterListViewState extends State<AddFilterListView> {
             children: [
               Text(
                 'Add Custom Filter List',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                  color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+                  color: WBlockTheme.primaryTextColor,
                 ),
               ),
               const SizedBox(height: 16),
@@ -720,10 +718,7 @@ class _AddFilterListViewState extends State<AddFilterListView> {
                 children: [
                   Text(
                     'Filter Name (Optional):',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-                    ),
+                    style: WBlockTheme.captionStyle,
                   ),
                   const SizedBox(height: 4),
                   Platform.isMacOS
@@ -743,10 +738,7 @@ class _AddFilterListViewState extends State<AddFilterListView> {
                 children: [
                   Text(
                     'Filter URL:',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-                    ),
+                    style: WBlockTheme.captionStyle,
                   ),
                   const SizedBox(height: 4),
                   Platform.isMacOS

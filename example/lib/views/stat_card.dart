@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
 import 'dart:io';
 
 import 'package:macos_ui/macos_ui.dart';
@@ -35,14 +36,10 @@ class StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
       decoration: BoxDecoration(
-        color: pillColor.withOpacity(0.85),
-        borderRadius: BorderRadius.circular(20),
+        color: pillColor.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(100), // Capsule shape
         boxShadow: [
-          BoxShadow(
-            color: pillColor.withOpacity(0.08),
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
+          WBlockTheme.getCardShadow(),
         ],
       ),
       child: Row(
@@ -60,19 +57,14 @@ class StatCard extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey[600],
-                ),
+                style: WBlockTheme.statLabelStyle,
               ),
               const SizedBox(height: 4),
               SizedBox(
                 width: valueWidth,
                 child: Text(
                   value,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                  style: WBlockTheme.statValueStyle.copyWith(
                     color: valueColor,
                     fontFeatures: const [FontFeature.tabularFigures()],
                   ),
@@ -89,14 +81,10 @@ class StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
       decoration: BoxDecoration(
-        color: pillColor.withOpacity(0.85),
-        borderRadius: BorderRadius.circular(22),
+        color: pillColor.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(22), // Continuous curve
         boxShadow: [
-          BoxShadow(
-            color: pillColor.withOpacity(0.08),
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
+          WBlockTheme.getCardShadow(),
         ],
       ),
       child: Row(
@@ -114,19 +102,14 @@ class StatCard extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: CupertinoColors.secondaryLabel,
-                ),
+                style: WBlockTheme.statLabelStyle,
               ),
               const SizedBox(height: 4),
               SizedBox(
                 width: valueWidth,
                 child: Text(
                   value,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                  style: WBlockTheme.statValueStyle.copyWith(
                     color: valueColor,
                     fontFeatures: const [FontFeature.tabularFigures()],
                   ),

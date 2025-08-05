@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:flutter_wblock_plugin/flutter_wblock_plugin.dart';
+import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
 import 'dart:io';
 
 class LogsView extends StatefulWidget {
@@ -73,7 +74,7 @@ class _LogsViewState extends State<LogsView> {
           width: 600,
           height: 650,
           decoration: BoxDecoration(
-            color: MacosColors.windowBackgroundColor,
+            color: WBlockTheme.cardBackgroundColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
@@ -92,7 +93,9 @@ class _LogsViewState extends State<LogsView> {
 
   Widget _buildIOSView() {
     return CupertinoPageScaffold(
+      backgroundColor: WBlockTheme.iOSBackgroundColor,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: WBlockTheme.iOSNavigationBarColorTranslucent,
         middle: const Text('wBlock Logs'),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
@@ -121,7 +124,7 @@ class _LogsViewState extends State<LogsView> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: MacosColors.labelColor,
+              color: WBlockTheme.primaryTextColor,
             ),
           ),
           const Spacer(),
@@ -145,10 +148,10 @@ class _LogsViewState extends State<LogsView> {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Platform.isMacOS ? MacosColors.textBackgroundColor : CupertinoColors.systemGrey6,
+        color: const Color(0xFFF2F2F7), // Light background for code
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: Platform.isMacOS ? MacosColors.separatorColor : CupertinoColors.separator,
+          color: WBlockTheme.dividerColor,
         ),
       ),
       child: Platform.isMacOS

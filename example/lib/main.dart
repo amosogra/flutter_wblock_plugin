@@ -7,6 +7,7 @@ import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
 import 'package:flutter_wblock_plugin_example/managers/user_script_manager.dart';
 import 'package:flutter_wblock_plugin_example/views/content_view.dart';
 import 'package:flutter_wblock_plugin_example/views/onboarding_view.dart';
+import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
 import 'dart:io';
 
 void main() {
@@ -35,9 +36,14 @@ class MacOSApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MacosApp(
       title: 'wBlock',
-      theme: MacosThemeData.light(),
-      darkTheme: MacosThemeData.dark(),
-      themeMode: ThemeMode.system,
+      theme: MacosThemeData(
+        brightness: Brightness.light,
+        primaryColor: MacosColors.controlAccentColor,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        canvasColor: WBlockTheme.macOSBackgroundColor,
+      ),
+      darkTheme: null, // Disable dark theme
+      themeMode: ThemeMode.light, // Force light theme
       home: const AppWrapper(),
       debugShowCheckedModeBanner: false,
     );
@@ -53,6 +59,8 @@ class IOSApp extends StatelessWidget {
       title: 'wBlock',
       theme: CupertinoThemeData(
         brightness: Brightness.light,
+        primaryColor: CupertinoColors.activeBlue,
+        scaffoldBackgroundColor: WBlockTheme.iOSBackgroundColor,
       ),
       home: AppWrapper(),
       debugShowCheckedModeBanner: false,
@@ -171,9 +179,7 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
 
   Widget _buildOnboardingOverlay(AppFilterManager filterManager, UserScriptManager userScriptManager) {
     return Container(
-      color: Platform.isMacOS 
-        ? MacosColors.windowBackgroundColor 
-        : CupertinoColors.systemBackground,
+      color: WBlockTheme.windowBackgroundColor,
       child: Center(
         child: OnboardingView(
           filterManager: filterManager,

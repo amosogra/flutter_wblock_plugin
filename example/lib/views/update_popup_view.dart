@@ -5,6 +5,7 @@ import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
 import 'package:flutter_wblock_plugin_example/managers/user_script_manager.dart';
 import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
 import 'package:flutter_wblock_plugin_example/models/user_script.dart';
+import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
 import 'dart:io';
 
 class UpdatePopupView extends StatefulWidget {
@@ -86,7 +87,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
           width: 450,
           height: 350,
           decoration: BoxDecoration(
-            color: MacosColors.windowBackgroundColor,
+            color: WBlockTheme.cardBackgroundColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: _buildContent(),
@@ -102,7 +103,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
         child: Container(
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: CupertinoColors.systemBackground,
+            color: WBlockTheme.cardBackgroundColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: _buildContent(),
@@ -133,7 +134,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+              color: WBlockTheme.primaryTextColor,
             ),
           ),
           const Spacer(),
@@ -166,7 +167,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
-              color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+              color: WBlockTheme.secondaryTextColor,
             ),
           ),
         ],
@@ -181,7 +182,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
           width: 200,
           child: LinearProgressIndicator(
             value: widget.filterManager.progress,
-            backgroundColor: Platform.isMacOS ? MacosColors.quaternaryLabelColor : CupertinoColors.systemGrey4,
+            backgroundColor: WBlockTheme.dividerColor,
             valueColor: AlwaysStoppedAnimation<Color>(
               Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue,
             ),
@@ -193,7 +194,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
-            color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+            color: WBlockTheme.secondaryTextColor,
             fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
@@ -245,7 +246,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+            color: WBlockTheme.primaryTextColor,
           ),
         ),
         const Spacer(),
@@ -285,7 +286,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
                   filter.name,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+                    color: WBlockTheme.primaryTextColor,
                   ),
                 ),
                 if (filter.description.isNotEmpty) ...[
@@ -294,7 +295,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
                     filter.description,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+                      color: WBlockTheme.secondaryTextColor,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -333,7 +334,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
                     script.name,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+                      color: WBlockTheme.primaryTextColor,
                     ),
                   ),
                   if (script.description.isNotEmpty) ...[
@@ -342,7 +343,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
                       script.description,
                       style: TextStyle(
                         fontSize: 12,
-                        color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+                        color: WBlockTheme.secondaryTextColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

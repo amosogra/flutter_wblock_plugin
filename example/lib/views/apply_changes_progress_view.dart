@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
 import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
+import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
 import 'dart:io';
 
 class ApplyChangesProgressView extends StatefulWidget {
@@ -54,7 +55,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
           width: 450,
           height: 400,
           decoration: BoxDecoration(
-            color: MacosColors.windowBackgroundColor,
+            color: WBlockTheme.cardBackgroundColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: _buildContent(),
@@ -70,7 +71,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
         child: Container(
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: CupertinoColors.systemBackground,
+            color: WBlockTheme.cardBackgroundColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: _buildContent(),
@@ -109,9 +110,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Platform.isMacOS 
-                        ? MacosColors.labelColor 
-                        : CupertinoColors.label,
+                      color: WBlockTheme.primaryTextColor,
                     ),
                   ),
                 ),
@@ -138,9 +137,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13,
-                color: Platform.isMacOS 
-                  ? MacosColors.secondaryLabelColor 
-                  : CupertinoColors.secondaryLabel,
+                color: WBlockTheme.secondaryTextColor,
               ),
               maxLines: 2,
             ),
@@ -159,9 +156,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
       children: [
         LinearProgressIndicator(
           value: widget.filterManager.progress,
-          backgroundColor: Platform.isMacOS 
-            ? MacosColors.quaternaryLabelColor 
-            : CupertinoColors.systemGrey4,
+          backgroundColor: WBlockTheme.dividerColor,
           valueColor: AlwaysStoppedAnimation<Color>(
             Platform.isMacOS 
               ? MacosColors.systemBlueColor 
@@ -174,9 +169,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
-            color: Platform.isMacOS 
-              ? MacosColors.secondaryLabelColor 
-              : CupertinoColors.secondaryLabel,
+            color: WBlockTheme.secondaryTextColor,
             fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
@@ -200,9 +193,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       margin: const EdgeInsets.only(bottom: 1),
       decoration: BoxDecoration(
-        color: Platform.isMacOS 
-          ? MacosColors.controlBackgroundColor 
-          : CupertinoColors.secondarySystemBackground,
+        color: const Color(0xFFF8F8F8), // Slightly off-white for contrast
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -229,8 +220,8 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
                     color: phase.isCompleted 
                       ? Colors.green 
                       : phase.isActive 
-                        ? (Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label)
-                        : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
+                        ? WBlockTheme.primaryTextColor
+                        : WBlockTheme.secondaryTextColor,
                   ),
                 ),
                 SizedBox(
@@ -240,9 +231,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
                         phase.detail!,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Platform.isMacOS 
-                            ? MacosColors.secondaryLabelColor 
-                            : CupertinoColors.secondaryLabel,
+                          color: WBlockTheme.secondaryTextColor,
                         ),
                       )
                     : const SizedBox(),
@@ -306,9 +295,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Platform.isMacOS 
-                  ? MacosColors.labelColor 
-                  : CupertinoColors.label,
+                color: WBlockTheme.primaryTextColor,
               ),
             ),
           ],
@@ -336,9 +323,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Platform.isMacOS 
-                  ? MacosColors.labelColor 
-                  : CupertinoColors.label,
+                color: WBlockTheme.primaryTextColor,
               ),
             ),
           ],
@@ -368,9 +353,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        color: Platform.isMacOS 
-          ? MacosColors.controlBackgroundColor 
-          : CupertinoColors.secondarySystemBackground,
+        color: const Color(0xFFF8F8F8), // Slightly off-white for contrast
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -402,9 +385,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: Platform.isMacOS 
-                ? MacosColors.labelColor 
-                : CupertinoColors.label,
+              color: WBlockTheme.primaryTextColor,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -413,9 +394,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
             stat.title,
             style: TextStyle(
               fontSize: 12,
-              color: Platform.isMacOS 
-                ? MacosColors.secondaryLabelColor 
-                : CupertinoColors.secondaryLabel,
+              color: WBlockTheme.secondaryTextColor,
             ),
             textAlign: TextAlign.center,
           ),

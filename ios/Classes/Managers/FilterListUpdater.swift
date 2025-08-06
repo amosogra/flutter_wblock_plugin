@@ -177,7 +177,7 @@ class FilterListUpdater {
                 return true // If local file doesn't exist, consider it as needing an update
             }
         } catch {
-            await ConcurrentLogManager.shared.log("Error checking update for \(filter.name): \(error.localizedDescription)")
+            await ConcurrentLogManager.shared.log("Error checking update for \(filter.name) at URL \(filter.url): \(error.localizedDescription)")
             return false
         }
     }

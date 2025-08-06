@@ -418,7 +418,7 @@ class _ContentViewState extends State<ContentView> {
       color = Colors.orange;
     } else {
       text = '(N/A rules)';
-      color = Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel;
+      color = WBlockTheme.secondaryTextColor;
     }
 
     return Text(

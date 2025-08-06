@@ -17,7 +17,7 @@ class AppFilterManager extends ChangeNotifier {
   String _downloadCompleteMessage = '';
   bool _showingCategoryWarningAlert = false;
   String _categoryWarningMessage = '';
-  
+
   // Progress tracking properties
   double _progress = 0.0;
   String _conversionStageDescription = '';
@@ -34,11 +34,11 @@ class AppFilterManager extends ChangeNotifier {
   bool _hasError = false;
   Map<FilterListCategory, int> _ruleCountsByCategory = {};
   Set<FilterListCategory> _categoriesApproachingLimit = {};
-  
+
   // Update related properties
   List<FilterList> _availableUpdates = [];
   List<FilterList> _missingFilters = [];
-  
+
   // Whitelist
   late final WhitelistViewModel whitelistViewModel;
 
@@ -55,7 +55,7 @@ class AppFilterManager extends ChangeNotifier {
   String get downloadCompleteMessage => _downloadCompleteMessage;
   bool get showingCategoryWarningAlert => _showingCategoryWarningAlert;
   String get categoryWarningMessage => _categoryWarningMessage;
-  
+
   // Progress getters
   double get progress => _progress;
   String get conversionStageDescription => _conversionStageDescription;
@@ -72,7 +72,7 @@ class AppFilterManager extends ChangeNotifier {
   bool get hasError => _hasError;
   Map<FilterListCategory, int> get ruleCountsByCategory => _ruleCountsByCategory;
   Set<FilterListCategory> get categoriesApproachingLimit => _categoriesApproachingLimit;
-  
+
   // Update getters
   List<FilterList> get availableUpdates => _availableUpdates;
   List<FilterList> get missingFilters => _missingFilters;
@@ -118,8 +118,7 @@ class AppFilterManager extends ChangeNotifier {
     _loadFilterLists();
   }
 
-  void setUserScriptManager(UserScriptManager userScriptManager) {
-  }
+  void setUserScriptManager(UserScriptManager userScriptManager) {}
 
   Future<void> _loadFilterLists() async {
     try {
@@ -129,7 +128,7 @@ class AppFilterManager extends ChangeNotifier {
 
       final lists = await FlutterWblockPlugin.getFilterLists();
       _filterLists = lists.map((map) => FilterList.fromMap(map)).toList();
-      
+
       await _updateStatusAndCounts();
     } catch (e) {
       debugPrint('Error loading filter lists: $e');
@@ -152,7 +151,7 @@ class AppFilterManager extends ChangeNotifier {
   Future<void> toggleFilterListSelection(String filterId) async {
     try {
       await FlutterWblockPlugin.toggleFilterListSelection(filterId);
-      
+
       // Update local state
       final index = _filterLists.indexWhere((f) => f.id == filterId);
       if (index != -1) {
@@ -178,7 +177,7 @@ class AppFilterManager extends ChangeNotifier {
 
       await FlutterWblockPlugin.checkAndEnableFilters(forceReload: forceReload);
       await _updateStatusAndCounts();
-      
+
       _showingApplyProgressSheet = false;
     } catch (e) {
       debugPrint('Error checking and enabling filters: $e');
@@ -210,25 +209,17 @@ class AppFilterManager extends ChangeNotifier {
           _hasError = progressData['hasError'] ?? false;
 
           // Update rule counts by category
-          final categoryRules = progressData['ruleCountsByCategory'] as Map<String, dynamic>?;
+          final categoryRules = progressData['ruleCountsByCategory'];
           if (categoryRules != null) {
-            _ruleCountsByCategory = categoryRules.map((key, value) => 
-              MapEntry(FilterListCategory.values.firstWhere(
-                (c) => c.rawValue == key, 
-                orElse: () => FilterListCategory.all
-              ), value as int)
-            );
+            _ruleCountsByCategory =
+                (categoryRules as Map).map((key, value) => MapEntry(ParseFilterListCategory.fromRawValue(key) ?? FilterListCategory.all, value as int));
           }
 
           // Update categories approaching limit
           final approachingCategories = progressData['categoriesApproachingLimit'] as List<dynamic>?;
           if (approachingCategories != null) {
-            _categoriesApproachingLimit = approachingCategories
-              .map((name) => FilterListCategory.values.firstWhere(
-                (c) => c.rawValue == name, 
-                orElse: () => FilterListCategory.all
-              ))
-              .toSet();
+            _categoriesApproachingLimit =
+                approachingCategories.map((name) => FilterListCategory.values.firstWhere((c) => c.rawValue == name, orElse: () => FilterListCategory.all)).toSet();
           }
 
           notifyListeners();
@@ -236,7 +227,7 @@ class AppFilterManager extends ChangeNotifier {
       } catch (e) {
         debugPrint('Error monitoring apply progress: $e');
       }
-      
+
       // Check progress every 100ms
       await Future.delayed(const Duration(milliseconds: 100));
     }
@@ -249,7 +240,7 @@ class AppFilterManager extends ChangeNotifier {
       notifyListeners();
 
       await FlutterWblockPlugin.checkForUpdates();
-      
+
       final updates = await FlutterWblockPlugin.checkForFilterUpdates();
       if (updates == null || updates.isEmpty) {
         _showingNoUpdatesAlert = true;
@@ -271,7 +262,7 @@ class AppFilterManager extends ChangeNotifier {
         name: name.isEmpty ? 'Custom Filter' : name,
         urlString: urlString,
       );
-      
+
       // Reload filter lists
       await _loadFilterLists();
     } catch (e) {
@@ -282,7 +273,7 @@ class AppFilterManager extends ChangeNotifier {
   Future<void> removeFilterList(FilterList filter) async {
     try {
       await FlutterWblockPlugin.removeFilterList(filter.id);
-      
+
       // Remove from local state
       _filterLists.removeWhere((f) => f.id == filter.id);
       notifyListeners();
@@ -321,7 +312,7 @@ class AppFilterManager extends ChangeNotifier {
 
       await FlutterWblockPlugin.applyDownloadedChanges();
       await _updateStatusAndCounts();
-      
+
       _showingApplyProgressSheet = false;
     } catch (e) {
       debugPrint('Error applying downloaded changes: $e');
@@ -364,7 +355,7 @@ class AppFilterManager extends ChangeNotifier {
 
       await FlutterWblockPlugin.downloadMissingFilters();
       await _loadFilterLists();
-      
+
       _showMissingFiltersSheet = false;
     } catch (e) {
       debugPrint('Error downloading missing filters: $e');
@@ -378,7 +369,7 @@ class AppFilterManager extends ChangeNotifier {
     try {
       final missing = await FlutterWblockPlugin.getMissingFilters();
       _missingFilters = missing.map((map) => FilterList.fromMap(map)).toList();
-      
+
       if (_missingFilters.isNotEmpty) {
         _showMissingFiltersSheet = true;
       }
@@ -400,7 +391,7 @@ class AppFilterManager extends ChangeNotifier {
       final filterIds = filters.map((f) => f.id).toList();
       await FlutterWblockPlugin.downloadSelectedFilters(filterIds);
       await _updateStatusAndCounts();
-      
+
       _showingUpdatePopup = false;
       _showingDownloadCompleteAlert = true;
       _downloadCompleteMessage = 'Downloaded ${filters.length} filter list${filters.length == 1 ? '' : 's'}.';
@@ -445,7 +436,7 @@ class AppFilterManager extends ChangeNotifier {
         _progress = progressValue;
         progress?.call(progressValue);
         notifyListeners();
-        
+
         if (i < filters.length) {
           await Future.delayed(const Duration(milliseconds: 500)); // Simulate download time
         }

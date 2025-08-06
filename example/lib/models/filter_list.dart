@@ -9,7 +9,9 @@ enum FilterListCategory {
   foreign,
   custom,
   scripts; // Added for userscripts in update popups
+}
 
+extension ParseFilterListCategory on FilterListCategory {
   String get rawValue {
     switch (this) {
       case FilterListCategory.all:
@@ -36,6 +38,17 @@ enum FilterListCategory {
   }
 
   String get displayName => rawValue;
+
+  static FilterListCategory? fromRawValue(String rawValue) {
+    try {
+      return FilterListCategory.values.firstWhere(
+        (e) => e.name == rawValue,
+        orElse: () => throw ArgumentError('Invalid category: $rawValue'),
+      );
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 class FilterList {

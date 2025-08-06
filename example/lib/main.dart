@@ -34,18 +34,21 @@ class MacOSApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Create a custom light theme
+    final lightTheme = MacosThemeData(
+      brightness: Brightness.light,
+      primaryColor: const Color(0xFF007AFF),
+      canvasColor: const Color(0xFFF5F5F7),
+      dividerColor: const Color(0xFFE5E5EA),
+    );
+
     return MacosApp(
       title: 'wBlock',
-      theme: MacosThemeData(
-        brightness: Brightness.light,
-        primaryColor: MacosColors.controlAccentColor,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        canvasColor: WBlockTheme.macOSBackgroundColor,
-      ),
-      darkTheme: null, // Disable dark theme
-      themeMode: ThemeMode.light, // Force light theme
-      home: const AppWrapper(),
+      theme: lightTheme,
+      darkTheme: lightTheme, // Force light theme even in dark mode
+      themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
+      home: const AppWrapper(),
     );
   }
 }
@@ -55,14 +58,19 @@ class IOSApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CupertinoApp(
+    return CupertinoApp(
       title: 'wBlock',
-      theme: CupertinoThemeData(
+      theme: const CupertinoThemeData(
         brightness: Brightness.light,
-        primaryColor: CupertinoColors.activeBlue,
-        scaffoldBackgroundColor: WBlockTheme.iOSBackgroundColor,
+        primaryColor: Color(0xFF007AFF),
+        primaryContrastingColor: CupertinoColors.white,
+        scaffoldBackgroundColor: Color(0xFFF2F2F7),
+        barBackgroundColor: Color(0xFFF9F9F9),
+        textTheme: CupertinoTextThemeData(
+          primaryColor: Color(0xFF000000),
+        ),
       ),
-      home: AppWrapper(),
+      home: const AppWrapper(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -159,17 +167,22 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
 
   Widget _buildLoadingView() {
     if (Platform.isIOS) {
-      return const CupertinoPageScaffold(
-        child: Center(
+      return CupertinoPageScaffold(
+        backgroundColor: WBlockTheme.iOSBackgroundColor,
+        child: const Center(
           child: CupertinoActivityIndicator(),
         ),
       );
     } else {
       return MacosScaffold(
+        backgroundColor: WBlockTheme.macOSBackgroundColor,
         children: [
           ContentArea(
-            builder: (context, scrollController) => const Center(
-              child: ProgressCircle(value: null),
+            builder: (context, scrollController) => Container(
+              color: WBlockTheme.macOSBackgroundColor,
+              child: const Center(
+                child: ProgressCircle(value: null),
+              ),
             ),
           ),
         ],

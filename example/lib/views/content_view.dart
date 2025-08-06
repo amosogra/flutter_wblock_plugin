@@ -458,7 +458,7 @@ class _ContentViewState extends State<ContentView> {
               Text(
                 filterManager.statusDescription,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: WBlockTheme.secondaryTextColor
                 ),
               ),
@@ -704,9 +704,9 @@ class _AddFilterListViewState extends State<AddFilterListView> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Add Custom Filter List',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: WBlockTheme.primaryTextColor,
@@ -716,7 +716,7 @@ class _AddFilterListViewState extends State<AddFilterListView> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Filter Name (Optional):',
                     style: WBlockTheme.captionStyle,
                   ),
@@ -736,7 +736,7 @@ class _AddFilterListViewState extends State<AddFilterListView> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Filter URL:',
                     style: WBlockTheme.captionStyle,
                   ),

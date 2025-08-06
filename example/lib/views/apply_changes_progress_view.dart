@@ -107,7 +107,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
                 child: Center(
                   child: Text(
                     titleText,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: WBlockTheme.primaryTextColor,
@@ -135,7 +135,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
             Text(
               widget.filterManager.conversionStageDescription,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 13,
                 color: WBlockTheme.secondaryTextColor,
               ),
@@ -166,11 +166,11 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
         const SizedBox(height: 8),
         Text(
           '$progressPercentage%',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: WBlockTheme.secondaryTextColor,
-            fontFeatures: const [FontFeature.tabularFigures()],
+            fontFeatures: [FontFeature.tabularFigures()],
           ),
         ),
       ],
@@ -229,7 +229,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
                   child: phase.detail != null && phase.detail!.isNotEmpty
                     ? Text(
                         phase.detail!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           color: WBlockTheme.secondaryTextColor,
                         ),
@@ -290,7 +290,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
               size: 16,
             ),
             const SizedBox(width: 8),
-            Text(
+            const Text(
               'Overall Statistics',
               style: TextStyle(
                 fontSize: 16,
@@ -310,14 +310,14 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        const Row(
           children: [
-            const Icon(
+            Icon(
               CupertinoIcons.square_grid_2x2,
               color: Colors.orange,
               size: 16,
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Text(
               'Category Statistics',
               style: TextStyle(
@@ -382,7 +382,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
           const SizedBox(height: 6),
           Text(
             stat.value,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: WBlockTheme.primaryTextColor,
@@ -392,7 +392,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
           ),
           Text(
             stat.title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
               color: WBlockTheme.secondaryTextColor,
             ),

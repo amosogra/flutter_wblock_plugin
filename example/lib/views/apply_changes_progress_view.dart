@@ -52,8 +52,11 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
       color: Colors.black.withOpacity(0.5),
       child: Center(
         child: Container(
-          width: 450,
-          height: 400,
+          width: 500,
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.8,
+            minHeight: 400,
+          ),
           decoration: BoxDecoration(
             color: WBlockTheme.cardBackgroundColor,
             borderRadius: BorderRadius.circular(10),
@@ -70,6 +73,10 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
       child: Center(
         child: Container(
           margin: const EdgeInsets.all(20),
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.8,
+            minHeight: 300,
+          ),
           decoration: BoxDecoration(
             color: WBlockTheme.cardBackgroundColor,
             borderRadius: BorderRadius.circular(12),
@@ -277,6 +284,11 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
   }
 
   Widget _buildOverallStatistics() {
+    final overallStats = _buildOverallStatisticsData();
+    if (overallStats.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -301,12 +313,17 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
           ],
         ),
         const SizedBox(height: 12),
-        _buildStatisticsGrid(_buildOverallStatisticsData()),
+        _buildStatisticsGrid(overallStats),
       ],
     );
   }
 
   Widget _buildCategoryStatistics() {
+    final categoryStats = _buildCategoryStatisticsData();
+    if (categoryStats.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -329,18 +346,22 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
           ],
         ),
         const SizedBox(height: 12),
-        _buildStatisticsGrid(_buildCategoryStatisticsData()),
+        _buildStatisticsGrid(categoryStats),
       ],
     );
   }
 
   Widget _buildStatisticsGrid(List<StatisticData> stats) {
+    if (stats.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 2.5,
+        childAspectRatio: 1.8,  // Adjusted to prevent overflow
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
@@ -351,7 +372,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
 
   Widget _buildStatisticCard(StatisticData stat) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: const Color(0xFFF8F8F8), // Slightly off-white for contrast
         borderRadius: BorderRadius.circular(8),
@@ -365,7 +386,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
               Icon(
                 _getStatIcon(stat.icon),
                 color: stat.color,
-                size: 20,
+                size: 18,
               ),
               if (stat.showWarning)
                 const Positioned(
@@ -379,24 +400,31 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
                 ),
             ],
           ),
-          const SizedBox(height: 6),
-          Text(
-            stat.value,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: WBlockTheme.primaryTextColor,
+          const SizedBox(height: 4),
+          Flexible(
+            child: Text(
+              stat.value,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: WBlockTheme.primaryTextColor,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
-          Text(
-            stat.title,
-            style: const TextStyle(
-              fontSize: 12,
-              color: WBlockTheme.secondaryTextColor,
+          const SizedBox(height: 2),
+          Flexible(
+            child: Text(
+              stat.title,
+              style: const TextStyle(
+                fontSize: 11,
+                color: WBlockTheme.secondaryTextColor,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

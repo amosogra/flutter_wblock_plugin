@@ -29,6 +29,7 @@ flutter pub get
 echo "5️⃣  Installing native dependencies..."
 cd macos && pod install && cd ..
 cd ios && pod install && cd ..
+./ClearPreferences.sh
 
 echo "6️⃣  Building macOS app with light theme..."
 flutter run -d macos

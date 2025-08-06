@@ -43,11 +43,11 @@ class MacOSApp extends StatelessWidget {
     );
 
     return MacosApp(
-      title: 'wBlock',
+      title: 'Syferlab',
       theme: lightTheme,
       darkTheme: lightTheme, // Force light theme even in dark mode
       themeMode: ThemeMode.light,
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       home: const AppWrapper(),
     );
   }
@@ -58,9 +58,9 @@ class IOSApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-      title: 'wBlock',
-      theme: const CupertinoThemeData(
+    return const CupertinoApp(
+      title: 'Syferlab',
+      theme: CupertinoThemeData(
         brightness: Brightness.light,
         primaryColor: Color(0xFF007AFF),
         primaryContrastingColor: CupertinoColors.white,
@@ -70,7 +70,7 @@ class IOSApp extends StatelessWidget {
           primaryColor: Color(0xFF000000),
         ),
       ),
-      home: const AppWrapper(),
+      home: AppWrapper(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -102,7 +102,7 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    
+
     // Handle background state for iOS notifications
     if (Platform.isIOS && state == AppLifecycleState.paused) {
       _scheduleNotificationIfNeeded();
@@ -157,8 +157,7 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
               filterManager: filterManager,
               userScriptManager: userScriptManager,
             ),
-            if (!_hasCompletedOnboarding!)
-              _buildOnboardingOverlay(filterManager, userScriptManager),
+            if (!_hasCompletedOnboarding!) _buildOnboardingOverlay(filterManager, userScriptManager),
           ],
         );
       },
@@ -167,9 +166,9 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
 
   Widget _buildLoadingView() {
     if (Platform.isIOS) {
-      return CupertinoPageScaffold(
+      return const CupertinoPageScaffold(
         backgroundColor: WBlockTheme.iOSBackgroundColor,
-        child: const Center(
+        child: Center(
           child: CupertinoActivityIndicator(),
         ),
       );

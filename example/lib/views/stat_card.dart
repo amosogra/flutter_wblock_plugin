@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
+import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'dart:io';
-
+import 'dart:ui';
 import 'package:macos_ui/macos_ui.dart';
 
 class StatCard extends StatelessWidget {
@@ -25,101 +25,63 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: Platform.isIOS 
+            ? BorderRadius.circular(22) // Continuous corner for iOS
+            : BorderRadius.circular(100), // Capsule for macOS
+        boxShadow: pillColor != Colors.transparent 
+            ? [AppTheme.cardShadow]
+            : null,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildIcon(),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: AppTheme.statLabel,
+              ),
+              const SizedBox(height: 4),
+              SizedBox(
+                width: valueWidth,
+                child: Text(
+                  value,
+                  style: AppTheme.statValue.copyWith(
+                    color: valueColor,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIcon() {
+    final iconData = _getIconData(icon);
     if (Platform.isMacOS) {
-      return _buildMacOSCard();
+      return MacosIcon(
+        iconData,
+        size: 24,
+        color: valueColor,
+      );
     } else {
-      return _buildIOSCard();
+      return Icon(
+        iconData,
+        size: 24,
+        color: valueColor,
+      );
     }
-  }
-
-  Widget _buildMacOSCard() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-      decoration: BoxDecoration(
-        color: pillColor.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(100), // Capsule shape
-        boxShadow: [
-          WBlockTheme.getCardShadow(),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MacosIcon(
-            _getIconData(icon),
-            size: 24,
-            color: valueColor,
-          ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: WBlockTheme.statLabelStyle,
-              ),
-              const SizedBox(height: 4),
-              SizedBox(
-                width: valueWidth,
-                child: Text(
-                  value,
-                  style: WBlockTheme.statValueStyle.copyWith(
-                    color: valueColor,
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildIOSCard() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-      decoration: BoxDecoration(
-        color: pillColor.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(22), // Continuous curve
-        boxShadow: [
-          WBlockTheme.getCardShadow(),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            _getIconData(icon),
-            size: 24,
-            color: valueColor,
-          ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: WBlockTheme.statLabelStyle,
-              ),
-              const SizedBox(height: 4),
-              SizedBox(
-                width: valueWidth,
-                child: Text(
-                  value,
-                  style: WBlockTheme.statValueStyle.copyWith(
-                    color: valueColor,
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
   }
 
   IconData _getIconData(String systemName) {

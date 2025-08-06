@@ -1,89 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wblock_plugin/flutter_wblock_plugin.dart';
-import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
-import 'package:flutter_wblock_plugin_example/managers/user_script_manager.dart';
+import 'package:flutter_wblock_plugin_example/providers/providers.dart';
 import 'package:flutter_wblock_plugin_example/views/content_view.dart';
 import 'package:flutter_wblock_plugin_example/views/onboarding_view.dart';
-import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
+import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'dart:io';
 
 void main() {
-  runApp(const WBlockApp());
+  runApp(
+    const ProviderScope(
+      child: WBlockApp(),
+    ),
+  );
 }
 
-class WBlockApp extends StatelessWidget {
+class WBlockApp extends ConsumerWidget {
   const WBlockApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AppFilterManager()),
-        ChangeNotifierProvider(create: (_) => UserScriptManager()),
-      ],
-      child: Platform.isMacOS ? const MacOSApp() : const IOSApp(),
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (Platform.isMacOS) {
+      return MacosApp(
+        title: 'Syferlab',
+        theme: AppTheme.getMacOSTheme(),
+        darkTheme: AppTheme.getMacOSTheme(), // Force light theme
+        themeMode: ThemeMode.light,
+        debugShowCheckedModeBanner: false,
+        home: const AppWrapper(),
+      );
+    } else {
+      return CupertinoApp(
+        title: 'Syferlab',
+        theme: AppTheme.getCupertinoTheme(),
+        home: const AppWrapper(),
+        debugShowCheckedModeBanner: false,
+      );
+    }
   }
 }
 
-class MacOSApp extends StatelessWidget {
-  const MacOSApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // Create a custom light theme
-    final lightTheme = MacosThemeData(
-      brightness: Brightness.light,
-      primaryColor: const Color(0xFF007AFF),
-      canvasColor: const Color(0xFFF5F5F7),
-      dividerColor: const Color(0xFFE5E5EA),
-    );
-
-    return MacosApp(
-      title: 'Syferlab',
-      theme: lightTheme,
-      darkTheme: lightTheme, // Force light theme even in dark mode
-      themeMode: ThemeMode.light,
-      debugShowCheckedModeBanner: true,
-      home: const AppWrapper(),
-    );
-  }
-}
-
-class IOSApp extends StatelessWidget {
-  const IOSApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const CupertinoApp(
-      title: 'Syferlab',
-      theme: CupertinoThemeData(
-        brightness: Brightness.light,
-        primaryColor: Color(0xFF007AFF),
-        primaryContrastingColor: CupertinoColors.white,
-        scaffoldBackgroundColor: Color(0xFFF2F2F7),
-        barBackgroundColor: Color(0xFFF9F9F9),
-        textTheme: CupertinoTextThemeData(
-          primaryColor: Color(0xFF000000),
-        ),
-      ),
-      home: AppWrapper(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class AppWrapper extends StatefulWidget {
+class AppWrapper extends ConsumerStatefulWidget {
   const AppWrapper({super.key});
 
   @override
-  State<AppWrapper> createState() => _AppWrapperState();
+  ConsumerState<AppWrapper> createState() => _AppWrapperState();
 }
 
-class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
+class _AppWrapperState extends ConsumerState<AppWrapper> with WidgetsBindingObserver {
   bool? _hasCompletedOnboarding;
 
   @override
@@ -91,12 +57,20 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _checkOnboardingStatus();
+    _initializeManagers();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  void _initializeManagers() {
+    // Set the UserScriptManager for filter updates
+    final filterManager = ref.read(appFilterManagerProvider);
+    final userScriptManager = ref.read(userScriptManagerProvider);
+    filterManager.setUserScriptManager(userScriptManager);
   }
 
   @override
@@ -149,36 +123,29 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
       return _buildLoadingView();
     }
 
-    return Consumer2<AppFilterManager, UserScriptManager>(
-      builder: (context, filterManager, userScriptManager, child) {
-        return Stack(
-          children: [
-            ContentView(
-              filterManager: filterManager,
-              userScriptManager: userScriptManager,
-            ),
-            if (!_hasCompletedOnboarding!) _buildOnboardingOverlay(filterManager, userScriptManager),
-          ],
-        );
-      },
+    return Stack(
+      children: [
+        const ContentView(),
+        if (!_hasCompletedOnboarding!) _buildOnboardingOverlay(),
+      ],
     );
   }
 
   Widget _buildLoadingView() {
     if (Platform.isIOS) {
-      return const CupertinoPageScaffold(
-        backgroundColor: WBlockTheme.iOSBackgroundColor,
-        child: Center(
-          child: CupertinoActivityIndicator(),
+      return CupertinoPageScaffold(
+        backgroundColor: AppTheme.backgroundColor,
+        child: const Center(
+          child: CupertinoActivityIndicator(radius: 20),
         ),
       );
     } else {
       return MacosScaffold(
-        backgroundColor: WBlockTheme.macOSBackgroundColor,
+        backgroundColor: AppTheme.backgroundColor,
         children: [
           ContentArea(
             builder: (context, scrollController) => Container(
-              color: WBlockTheme.macOSBackgroundColor,
+              color: AppTheme.backgroundColor,
               child: const Center(
                 child: ProgressCircle(value: null),
               ),
@@ -189,19 +156,11 @@ class _AppWrapperState extends State<AppWrapper> with WidgetsBindingObserver {
     }
   }
 
-  Widget _buildOnboardingOverlay(AppFilterManager filterManager, UserScriptManager userScriptManager) {
+  Widget _buildOnboardingOverlay() {
     return Container(
-      color: WBlockTheme.windowBackgroundColor,
-      child: Center(
-        child: OnboardingView(
-          filterManager: filterManager,
-          userScriptManager: userScriptManager,
-          onComplete: () {
-            setState(() {
-              _hasCompletedOnboarding = true;
-            });
-          },
-        ),
+      color: AppTheme.backgroundColor,
+      child: const Center(
+        child: OnboardingView(),
       ),
     );
   }

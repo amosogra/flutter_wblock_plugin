@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
-import 'package:flutter_wblock_plugin_example/managers/user_script_manager.dart';
-import 'package:flutter_wblock_plugin_example/managers/whitelist_view_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wblock_plugin_example/providers/providers.dart';
+import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'package:flutter_wblock_plugin_example/views/logs_view.dart';
 import 'package:flutter_wblock_plugin_example/views/whitelist_view.dart';
 import 'package:flutter_wblock_plugin_example/views/user_script_manager_view.dart';
@@ -13,67 +13,55 @@ import 'package:flutter_wblock_plugin_example/views/missing_filters_view.dart';
 import 'package:flutter_wblock_plugin_example/views/update_popup_view.dart';
 import 'package:flutter_wblock_plugin_example/views/stat_card.dart';
 import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
-import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
 import 'dart:io';
+import 'dart:ui';
 
-class ContentView extends StatefulWidget {
-  final AppFilterManager filterManager;
-  final UserScriptManager userScriptManager;
-
-  const ContentView({
-    super.key,
-    required this.filterManager,
-    required this.userScriptManager,
-  });
+class ContentView extends ConsumerStatefulWidget {
+  const ContentView({super.key});
 
   @override
-  State<ContentView> createState() => _ContentViewState();
+  ConsumerState<ContentView> createState() => _ContentViewState();
 }
 
-class _ContentViewState extends State<ContentView> {
-  bool _showOnlyEnabledLists = false;
-  late WhitelistViewModel _whitelistViewModel;
-
-  int get enabledListsCount => widget.filterManager.filterLists.where((f) => f.isSelected).length;
-
+class _ContentViewState extends ConsumerState<ContentView> {
   List<FilterListCategory> get displayableCategories =>
       FilterListCategory.values.where((c) => c != FilterListCategory.all && c != FilterListCategory.custom).toList();
 
   @override
   void initState() {
     super.initState();
-    _whitelistViewModel = WhitelistViewModel();
-
-    // Set the UserScriptManager for filter updates
-    widget.filterManager.setUserScriptManager(widget.userScriptManager);
 
     // Listen to filter manager changes to show sheets
-    widget.filterManager.addListener(_handleFilterManagerChanges);
+    final filterManager = ref.read(appFilterManagerProvider);
+    filterManager.addListener(_handleFilterManagerChanges);
   }
 
   @override
   void dispose() {
-    widget.filterManager.removeListener(_handleFilterManagerChanges);
+    final filterManager = ref.read(appFilterManagerProvider);
+    filterManager.removeListener(_handleFilterManagerChanges);
     super.dispose();
   }
 
   void _handleFilterManagerChanges() {
-    if (widget.filterManager.showingUpdatePopup) {
+    final filterManager = ref.read(appFilterManagerProvider);
+
+    if (filterManager.showingUpdatePopup) {
       _showUpdatePopup();
     }
-    if (widget.filterManager.showMissingFiltersSheet) {
+    if (filterManager.showMissingFiltersSheet) {
       _showMissingFiltersSheet();
     }
-    if (widget.filterManager.showingApplyProgressSheet) {
+    if (filterManager.showingApplyProgressSheet) {
       _showApplyProgressSheet();
     }
-    if (widget.filterManager.showingNoUpdatesAlert) {
+    if (filterManager.showingNoUpdatesAlert) {
       _showNoUpdatesAlert();
     }
-    if (widget.filterManager.showingDownloadCompleteAlert) {
+    if (filterManager.showingDownloadCompleteAlert) {
       _showDownloadCompleteAlert();
     }
-    if (widget.filterManager.showingCategoryWarningAlert) {
+    if (filterManager.showingCategoryWarningAlert) {
       _showCategoryWarningAlert();
     }
   }
@@ -88,32 +76,33 @@ class _ContentViewState extends State<ContentView> {
   }
 
   Widget _buildMacOSView() {
+    final filterManager = ref.watch(appFilterManagerProvider);
+    final enabledListsCount = ref.watch(enabledListsCountProvider);
+    final showOnlyEnabledLists = ref.watch(showOnlyEnabledListsProvider);
+
     return MacosWindow(
       child: MacosScaffold(
-        backgroundColor: WBlockTheme.macOSBackgroundColor,
+        backgroundColor: AppTheme.backgroundColor,
         toolBar: ToolBar(
-          title: const Text('wBlock'),
+          title: const Text('Syferlab'),
           titleWidth: 150.0,
           leading: MacosIcon(
             CupertinoIcons.shield_lefthalf_fill,
-            color: MacosTheme.brightnessOf(context).resolve(
-              const Color.fromRGBO(0, 0, 0, 0.5),
-              const Color.fromRGBO(255, 255, 255, 0.5),
-            ),
+            color: AppTheme.primaryColor,
             size: 20.0,
           ),
           actions: [
             ToolBarIconButton(
               label: 'Check for Updates',
               icon: const MacosIcon(CupertinoIcons.arrow_clockwise),
-              onPressed: widget.filterManager.isLoading ? null : () => widget.filterManager.checkForUpdates(),
+              onPressed: filterManager.isLoading ? null : () => filterManager.checkForUpdates(),
               tooltipMessage: 'Check for filter list updates',
               showLabel: false,
             ),
             ToolBarIconButton(
               label: 'Apply Changes',
               icon: const MacosIcon(CupertinoIcons.arrow_2_circlepath),
-              onPressed: widget.filterManager.isLoading || enabledListsCount == 0 ? null : () => widget.filterManager.checkAndEnableFilters(forceReload: true),
+              onPressed: filterManager.isLoading || enabledListsCount == 0 ? null : () => filterManager.checkAndEnableFilters(forceReload: true),
               tooltipMessage: 'Apply selected filters and reload Safari',
               showLabel: false,
             ),
@@ -147,8 +136,8 @@ class _ContentViewState extends State<ContentView> {
             ),
             ToolBarIconButton(
               label: 'Show Enabled Only',
-              icon: MacosIcon(_showOnlyEnabledLists ? CupertinoIcons.line_horizontal_3_decrease_circle_fill : CupertinoIcons.line_horizontal_3_decrease_circle),
-              onPressed: () => setState(() => _showOnlyEnabledLists = !_showOnlyEnabledLists),
+              icon: MacosIcon(showOnlyEnabledLists ? CupertinoIcons.line_horizontal_3_decrease_circle_fill : CupertinoIcons.line_horizontal_3_decrease_circle),
+              onPressed: () => ref.read(showOnlyEnabledListsProvider.notifier).state = !showOnlyEnabledLists,
               tooltipMessage: 'Toggle to show only enabled filter lists',
               showLabel: false,
             ),
@@ -170,10 +159,10 @@ class _ContentViewState extends State<ContentView> {
                     ],
                   ),
                 ),
-                if (widget.filterManager.isLoading &&
-                    !widget.filterManager.showingApplyProgressSheet &&
-                    !widget.filterManager.showMissingFiltersSheet &&
-                    !widget.filterManager.showingUpdatePopup)
+                if (filterManager.isLoading &&
+                    !filterManager.showingApplyProgressSheet &&
+                    !filterManager.showMissingFiltersSheet &&
+                    !filterManager.showingUpdatePopup)
                   _buildLoadingOverlay(),
               ],
             ),
@@ -183,181 +172,37 @@ class _ContentViewState extends State<ContentView> {
     );
   }
 
-  void _showAddFilterSheet() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => AddFilterListView(filterManager: widget.filterManager),
-    );
-  }
-
-  void _showLogsView() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => LogsView(onDismiss: () => Navigator.of(context).pop()),
-    );
-  }
-
-  void _showUserScriptsView() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => UserScriptManagerView(
-        userScriptManager: widget.userScriptManager,
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    );
-  }
-
-  void _showWhitelistSheet() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => WhitelistManagerView(
-        filterManager: widget.filterManager,
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    );
-  }
-
-  void _showUpdatePopup() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => UpdatePopupView(
-        filterManager: widget.filterManager,
-        userScriptManager: widget.userScriptManager,
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    ).then((_) {
-      widget.filterManager.showingUpdatePopup = false;
-    });
-  }
-
-  void _showMissingFiltersSheet() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => MissingFiltersView(
-        filterManager: widget.filterManager,
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    ).then((_) {
-      widget.filterManager.showMissingFiltersSheet = false;
-    });
-  }
-
-  void _showApplyProgressSheet() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => ApplyChangesProgressView(
-        filterManager: widget.filterManager,
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    ).then((_) {
-      widget.filterManager.showingApplyProgressSheet = false;
-    });
-  }
-
-  void _showNoUpdatesAlert() {
-    showMacosAlertDialog(
-      context: context,
-      builder: (context) => MacosAlertDialog(
-        appIcon: const MacosIcon(CupertinoIcons.info_circle),
-        title: const Text('No Updates Found'),
-        message: const Text('All your filters and userscripts are up to date.'),
-        primaryButton: PushButton(
-          controlSize: ControlSize.large,
-          child: const Text('OK'),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-    ).then((_) {
-      widget.filterManager.showingNoUpdatesAlert = false;
-    });
-  }
-
-  void _showDownloadCompleteAlert() {
-    showMacosAlertDialog(
-      context: context,
-      builder: (context) => MacosAlertDialog(
-        appIcon: const MacosIcon(CupertinoIcons.checkmark_circle),
-        title: const Text('Download Complete'),
-        message: Text(widget.filterManager.downloadCompleteMessage),
-        primaryButton: PushButton(
-          controlSize: ControlSize.large,
-          color: MacosTheme.of(context).primaryColor,
-          child: const Text('Apply Now'),
-          onPressed: () {
-            Navigator.of(context).pop();
-            widget.filterManager.applyDownloadedChanges();
-          },
-        ),
-        secondaryButton: PushButton(
-          controlSize: ControlSize.large,
-          child: const Text('Later'),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-    ).then((_) {
-      widget.filterManager.showingDownloadCompleteAlert = false;
-    });
-  }
-
-  void _showCategoryWarningAlert() {
-    showMacosAlertDialog(
-      context: context,
-      builder: (context) => MacosAlertDialog(
-        appIcon: const MacosIcon(CupertinoIcons.exclamationmark_triangle),
-        title: const Text('Category Rule Limit Warning'),
-        message: Text(widget.filterManager.categoryWarningMessage),
-        primaryButton: PushButton(
-          controlSize: ControlSize.large,
-          child: const Text('OK'),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-    ).then((_) {
-      widget.filterManager.showingCategoryWarningAlert = false;
-    });
-  }
-
   Widget _buildIOSView() {
+    final filterManager = ref.watch(appFilterManagerProvider);
+    final enabledListsCount = ref.watch(enabledListsCountProvider);
+    final showOnlyEnabledLists = ref.watch(showOnlyEnabledListsProvider);
+
     return CupertinoPageScaffold(
+      backgroundColor: AppTheme.backgroundColor,
       child: Stack(
         children: [
           CustomScrollView(
             slivers: [
               CupertinoSliverNavigationBar(
-                largeTitle: const Text('wBlock'),
+                backgroundColor: AppTheme.cardBackground.withOpacity(0.94),
+                largeTitle: const Text('Syferlab'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CupertinoButton(
                       padding: EdgeInsets.zero,
-                      onPressed: widget.filterManager.isLoading ? null : () => widget.filterManager.checkForUpdates(),
-                      child: const Icon(CupertinoIcons.arrow_clockwise),
+                      onPressed: filterManager.isLoading ? null : () => filterManager.checkForUpdates(),
+                      child: Icon(CupertinoIcons.arrow_clockwise, color: AppTheme.primaryColor),
                     ),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
-                      onPressed:
-                          widget.filterManager.isLoading || enabledListsCount == 0 ? null : () => widget.filterManager.checkAndEnableFilters(forceReload: true),
-                      child: const Icon(CupertinoIcons.arrow_2_circlepath),
-                    ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _showLogsViewIOS,
-                      child: const Icon(CupertinoIcons.doc_text_search),
-                    ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _showUserScriptsViewIOS,
-                      child: const Icon(CupertinoIcons.doc_text_fill),
+                      onPressed: filterManager.isLoading || enabledListsCount == 0 ? null : () => filterManager.checkAndEnableFilters(forceReload: true),
+                      child: Icon(CupertinoIcons.arrow_2_circlepath, color: AppTheme.primaryColor),
                     ),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: _showAddFilterSheetIOS,
-                      child: const Icon(CupertinoIcons.plus),
-                    ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _showWhitelistSheetIOS,
-                      child: const Icon(CupertinoIcons.list_bullet_indent),
+                      child: Icon(CupertinoIcons.plus, color: AppTheme.primaryColor),
                     ),
                   ],
                 ),
@@ -367,26 +212,26 @@ class _ContentViewState extends State<ContentView> {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      _buildStatsCardsViewIOS(),
+                      _buildStatsCardsView(),
                       const SizedBox(height: 20),
-                      ..._buildFilterSectionsIOS(),
+                      ..._buildFilterSections(),
                     ],
                   ),
                 ),
               ),
             ],
           ),
-          if (widget.filterManager.isLoading &&
-              !widget.filterManager.showingApplyProgressSheet &&
-              !widget.filterManager.showMissingFiltersSheet &&
-              !widget.filterManager.showingUpdatePopup)
-            _buildLoadingOverlayIOS(),
+          if (filterManager.isLoading && !filterManager.showingApplyProgressSheet && !filterManager.showMissingFiltersSheet && !filterManager.showingUpdatePopup)
+            _buildLoadingOverlay(),
         ],
       ),
     );
   }
 
   Widget _buildStatsCardsView() {
+    final filterManager = ref.watch(appFilterManagerProvider);
+    final enabledListsCount = ref.watch(enabledListsCountProvider);
+
     return Row(
       children: [
         Expanded(
@@ -394,18 +239,18 @@ class _ContentViewState extends State<ContentView> {
             title: 'Enabled Lists',
             value: '$enabledListsCount',
             icon: 'list.bullet.rectangle',
-            pillColor: WBlockTheme.statCardBackground,
-            valueColor: MacosTheme.of(context).primaryColor,
+            pillColor: Colors.transparent,
+            valueColor: CupertinoColors.label,
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
           child: StatCard(
             title: 'Safari Rules',
-            value: widget.filterManager.lastRuleCount.toString(),
+            value: filterManager.lastRuleCount.toString(),
             icon: 'shield.lefthalf.filled',
-            pillColor: WBlockTheme.statCardBackground,
-            valueColor: MacosTheme.of(context).primaryColor,
+            pillColor: Colors.transparent,
+            valueColor: CupertinoColors.label,
           ),
         ),
       ],
@@ -413,17 +258,19 @@ class _ContentViewState extends State<ContentView> {
   }
 
   List<Widget> _buildFilterSections() {
+    final filterManager = ref.watch(appFilterManagerProvider);
+    final showOnlyEnabledLists = ref.watch(showOnlyEnabledListsProvider);
     final sections = <Widget>[];
 
     for (final category in displayableCategories) {
-      final lists = _listsForCategory(category);
+      final lists = _listsForCategory(category, filterManager, showOnlyEnabledLists);
       if (lists.isNotEmpty) {
         sections.add(_buildFilterSectionView(category, lists));
         sections.add(const SizedBox(height: 16));
       }
     }
 
-    final customLists = _customLists;
+    final customLists = _customLists(filterManager, showOnlyEnabledLists);
     if (customLists.isNotEmpty) {
       sections.add(_buildFilterSectionView(FilterListCategory.custom, customLists));
     }
@@ -431,15 +278,17 @@ class _ContentViewState extends State<ContentView> {
     return sections;
   }
 
-  List<FilterList> _listsForCategory(FilterListCategory category) {
-    return widget.filterManager.filterLists.where((f) => f.category == category && (!_showOnlyEnabledLists || f.isSelected)).toList();
+  List<FilterList> _listsForCategory(FilterListCategory category, filterManager, bool showOnlyEnabledLists) {
+    return filterManager.filterLists.where((f) => f.category == category && (!showOnlyEnabledLists || f.isSelected)).toList();
   }
 
-  List<FilterList> get _customLists {
-    return widget.filterManager.filterLists.where((f) => f.category == FilterListCategory.custom && (!_showOnlyEnabledLists || f.isSelected)).toList();
+  List<FilterList> _customLists(filterManager, bool showOnlyEnabledLists) {
+    return filterManager.filterLists.where((f) => f.category == FilterListCategory.custom && (!showOnlyEnabledLists || f.isSelected)).toList();
   }
 
   Widget _buildFilterSectionView(FilterListCategory category, List<FilterList> filters) {
+    final filterManager = ref.watch(appFilterManagerProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -447,23 +296,33 @@ class _ContentViewState extends State<ContentView> {
           children: [
             Text(
               category.displayName,
-              style: MacosTheme.of(context).typography.headline,
+              style: AppTheme.headline,
             ),
             FutureBuilder<bool>(
-              future: Future.value(widget.filterManager.isCategoryApproachingLimit(category)),
+              future: Future.value(filterManager.isCategoryApproachingLimit(category)),
               builder: (context, snapshot) {
                 if (snapshot.data == true) {
                   return Row(
                     children: [
                       const SizedBox(width: 8),
-                      MacosIconButton(
-                        icon: const MacosIcon(
-                          CupertinoIcons.exclamationmark_triangle,
-                          color: CupertinoColors.systemOrange,
-                          size: 16,
-                        ),
-                        onPressed: () => widget.filterManager.showCategoryWarning(category),
-                      ),
+                      Platform.isMacOS
+                          ? MacosIconButton(
+                              icon: const MacosIcon(
+                                CupertinoIcons.exclamationmark_triangle,
+                                color: CupertinoColors.systemOrange,
+                                size: 16,
+                              ),
+                              onPressed: () => filterManager.showCategoryWarning(category),
+                            )
+                          : CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () => filterManager.showCategoryWarning(category),
+                              child: const Icon(
+                                CupertinoIcons.exclamationmark_triangle,
+                                color: CupertinoColors.systemOrange,
+                                size: 16,
+                              ),
+                            ),
                     ],
                   );
                 }
@@ -473,15 +332,7 @@ class _ContentViewState extends State<ContentView> {
           ],
         ),
         const SizedBox(height: 12),
-        Container(
-          decoration: BoxDecoration(
-            color: WBlockTheme.cardBackgroundColor,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: WBlockTheme.dividerColor,
-              width: 0.5,
-            ),
-          ),
+        AppTheme.regularMaterial(
           child: Column(
             children: filters.asMap().entries.map((entry) {
               final index = entry.key;
@@ -491,8 +342,8 @@ class _ContentViewState extends State<ContentView> {
                   _buildFilterRowView(filter),
                   if (index < filters.length - 1)
                     Divider(
-                      height: 1,
-                      color: WBlockTheme.dividerColor,
+                      height: 0.5,
+                      color: AppTheme.dividerColor,
                       indent: 16,
                       endIndent: 16,
                     ),
@@ -506,6 +357,8 @@ class _ContentViewState extends State<ContentView> {
   }
 
   Widget _buildFilterRowView(FilterList filter) {
+    final filterManager = ref.watch(appFilterManagerProvider);
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -517,319 +370,229 @@ class _ContentViewState extends State<ContentView> {
               children: [
                 Text(
                   filter.name,
-                  style: MacosTheme.of(context).typography.body.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
+                  style: AppTheme.body.copyWith(fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 4),
                 FilterRuleCountText(
                   filter: filter,
-                  filterManager: widget.filterManager,
+                  filterManager: filterManager,
                 ),
                 if (filter.description.isNotEmpty) ...[
                   const SizedBox(height: 4),
                   Text(
                     filter.description,
-                    style: MacosTheme.of(context).typography.caption1.copyWith(
-                          color: MacosTheme.of(context).typography.caption1.color?.withOpacity(0.6),
-                        ),
+                    style: AppTheme.caption,
                   ),
                 ],
                 if (filter.version.isNotEmpty) ...[
                   const SizedBox(height: 4),
                   Text(
                     'Version: ${filter.version}',
-                    style: MacosTheme.of(context).typography.caption2.copyWith(
-                          color: MacosTheme.of(context).typography.caption2.color?.withOpacity(0.5),
-                        ),
+                    style: AppTheme.caption2,
                   ),
                 ],
               ],
             ),
           ),
           const SizedBox(width: 12),
-          MacosSwitch(
-            value: filter.isSelected,
-            onChanged: (value) => widget.filterManager.toggleFilterListSelection(filter.id),
-          ),
+          Platform.isMacOS
+              ? MacosSwitch(
+                  value: filter.isSelected,
+                  onChanged: (value) => filterManager.toggleFilterListSelection(filter.id),
+                )
+              : CupertinoSwitch(
+                  value: filter.isSelected,
+                  onChanged: (value) => filterManager.toggleFilterListSelection(filter.id),
+                ),
         ],
       ),
     );
   }
 
   Widget _buildLoadingOverlay() {
+    final filterManager = ref.watch(appFilterManagerProvider);
+
     return Container(
-      color: WBlockTheme.overlayColor,
+      color: Colors.black.withOpacity(0.1),
       child: Center(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: WBlockTheme.cardBackgroundColor,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              WBlockTheme.getCardShadow(),
-              BoxShadow(
-                color: WBlockTheme.shadowColor,
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: AppTheme.cardBackground,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [AppTheme.cardShadow],
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const ProgressCircle(
-                value: null,
-                radius: 24,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Platform.isMacOS ? const ProgressCircle(value: null, radius: 24) : const CupertinoActivityIndicator(radius: 20),
+                  const SizedBox(height: 10),
+                  Text(
+                    filterManager.statusDescription,
+                    style: AppTheme.caption,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              Text(
-                widget.filterManager.statusDescription,
-                style: MacosTheme.of(context).typography.body.copyWith(
-                      color: MacosTheme.of(context).typography.body.color?.withOpacity(0.6),
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  // Sheet methods
+  void _showAddFilterSheet() {
+    final filterManager = ref.read(appFilterManagerProvider);
+    showMacosSheet(
+      context: context,
+      builder: (context) => AddFilterListView(filterManager: filterManager),
+    );
+  }
+
+  void _showLogsView() {
+    showMacosSheet(
+      context: context,
+      builder: (context) => LogsView(onDismiss: () => Navigator.of(context).pop()),
+    );
+  }
+
+  void _showUserScriptsView() {
+    final userScriptManager = ref.read(userScriptManagerProvider);
+    showMacosSheet(
+      context: context,
+      builder: (context) => UserScriptManagerView(userScriptManager: userScriptManager, onDismiss: () => Navigator.of(context).pop()),
+    );
+  }
+
+  void _showWhitelistSheet() {
+    final filterManager = ref.read(appFilterManagerProvider);
+    showMacosSheet(
+      context: context,
+      builder: (context) => WhitelistManagerView(
+        filterManager: filterManager,
+        onDismiss: () => Navigator.of(context).pop(),
+      ),
+    );
+  }
+
+  void _showUpdatePopup() {
+    final filterManager = ref.read(appFilterManagerProvider);
+    final userScriptManager = ref.read(userScriptManagerProvider);
+    showMacosSheet(
+      context: context,
+      builder: (context) => UpdatePopupView(
+        filterManager: filterManager,
+        userScriptManager: userScriptManager,
+        onDismiss: () => Navigator.of(context).pop(),
+      ),
+    ).then((_) {
+      filterManager.showingUpdatePopup = false;
+    });
+  }
+
+  void _showMissingFiltersSheet() {
+    final filterManager = ref.read(appFilterManagerProvider);
+    showMacosSheet(
+      context: context,
+      builder: (context) => MissingFiltersView(
+        filterManager: filterManager,
+        onDismiss: () => Navigator.of(context).pop(),
+      ),
+    ).then((_) {
+      filterManager.showMissingFiltersSheet = false;
+    });
+  }
+
+  void _showApplyProgressSheet() {
+    final filterManager = ref.read(appFilterManagerProvider);
+    showMacosSheet(
+      context: context,
+      builder: (context) => ApplyChangesProgressView(
+        filterManager: filterManager,
+        onDismiss: () => Navigator.of(context).pop(),
+      ),
+    ).then((_) {
+      filterManager.showingApplyProgressSheet = false;
+    });
+  }
+
+  void _showNoUpdatesAlert() {
+    final filterManager = ref.read(appFilterManagerProvider);
+    showMacosAlertDialog(
+      context: context,
+      builder: (context) => MacosAlertDialog(
+        appIcon: const MacosIcon(CupertinoIcons.info_circle),
+        title: const Text('No Updates Found'),
+        message: const Text('All your filters and userscripts are up to date.'),
+        primaryButton: PushButton(
+          controlSize: ControlSize.large,
+          child: const Text('OK'),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+    ).then((_) {
+      filterManager.showingNoUpdatesAlert = false;
+    });
+  }
+
+  void _showDownloadCompleteAlert() {
+    final filterManager = ref.read(appFilterManagerProvider);
+    showMacosAlertDialog(
+      context: context,
+      builder: (context) => MacosAlertDialog(
+        appIcon: const MacosIcon(CupertinoIcons.checkmark_circle),
+        title: const Text('Download Complete'),
+        message: Text(filterManager.downloadCompleteMessage),
+        primaryButton: PushButton(
+          controlSize: ControlSize.large,
+          color: AppTheme.primaryColor,
+          child: const Text('Apply Now'),
+          onPressed: () {
+            Navigator.of(context).pop();
+            filterManager.applyDownloadedChanges();
+          },
+        ),
+        secondaryButton: PushButton(
+          controlSize: ControlSize.large,
+          child: const Text('Later'),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+    ).then((_) {
+      filterManager.showingDownloadCompleteAlert = false;
+    });
+  }
+
+  void _showCategoryWarningAlert() {
+    final filterManager = ref.read(appFilterManagerProvider);
+    showMacosAlertDialog(
+      context: context,
+      builder: (context) => MacosAlertDialog(
+        appIcon: const MacosIcon(CupertinoIcons.exclamationmark_triangle),
+        title: const Text('Category Rule Limit Warning'),
+        message: Text(filterManager.categoryWarningMessage),
+        primaryButton: PushButton(
+          controlSize: ControlSize.large,
+          child: const Text('OK'),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+    ).then((_) {
+      filterManager.showingCategoryWarningAlert = false;
+    });
   }
 
   // iOS-specific methods
   void _showAddFilterSheetIOS() {
+    final filterManager = ref.read(appFilterManagerProvider);
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => AddFilterListViewIOS(filterManager: widget.filterManager),
-    );
-  }
-
-  void _showLogsViewIOS() {
-    Navigator.of(context).push(
-      CupertinoPageRoute(
-        builder: (context) => LogsView(onDismiss: () => Navigator.of(context).pop()),
-      ),
-    );
-  }
-
-  void _showUserScriptsViewIOS() {
-    Navigator.of(context).push(
-      CupertinoPageRoute(
-        builder: (context) => UserScriptManagerView(
-          userScriptManager: widget.userScriptManager,
-          onDismiss: () => Navigator.of(context).pop(),
-        ),
-      ),
-    );
-  }
-
-  void _showWhitelistSheetIOS() {
-    Navigator.of(context).push(
-      CupertinoPageRoute(
-        fullscreenDialog: true,
-        builder: (context) => WhitelistView(
-          viewModel: _whitelistViewModel,
-          onDismiss: () => Navigator.of(context).pop(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatsCardsViewIOS() {
-    return Row(
-      children: [
-        Expanded(
-          child: StatCard(
-            title: 'Enabled Lists',
-            value: '$enabledListsCount',
-            icon: 'list.bullet.rectangle',
-            pillColor: WBlockTheme.statCardBackground,
-            valueColor: CupertinoTheme.of(context).primaryColor ?? CupertinoColors.activeBlue,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: StatCard(
-            title: 'Safari Rules',
-            value: widget.filterManager.lastRuleCount.toString(),
-            icon: 'shield.lefthalf.filled',
-            pillColor: WBlockTheme.statCardBackground,
-            valueColor: CupertinoTheme.of(context).primaryColor ?? CupertinoColors.activeBlue,
-          ),
-        ),
-      ],
-    );
-  }
-
-  List<Widget> _buildFilterSectionsIOS() {
-    final sections = <Widget>[];
-
-    for (final category in displayableCategories) {
-      final lists = _listsForCategory(category);
-      if (lists.isNotEmpty) {
-        sections.add(_buildFilterSectionViewIOS(category, lists));
-        sections.add(const SizedBox(height: 16));
-      }
-    }
-
-    final customLists = _customLists;
-    if (customLists.isNotEmpty) {
-      sections.add(_buildFilterSectionViewIOS(FilterListCategory.custom, customLists));
-    }
-
-    return sections;
-  }
-
-  Widget _buildFilterSectionViewIOS(FilterListCategory category, List<FilterList> filters) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              category.displayName,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            FutureBuilder<bool>(
-              future: Future.value(widget.filterManager.isCategoryApproachingLimit(category)),
-              builder: (context, snapshot) {
-                if (snapshot.data == true) {
-                  return Row(
-                    children: [
-                      const SizedBox(width: 8),
-                      CupertinoButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () => widget.filterManager.showCategoryWarning(category),
-                        child: const Icon(
-                          CupertinoIcons.exclamationmark_triangle,
-                          color: CupertinoColors.systemOrange,
-                          size: 16,
-                        ),
-                      ),
-                    ],
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Container(
-          decoration: BoxDecoration(
-            color: CupertinoTheme.of(context).barBackgroundColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            children: filters.asMap().entries.map((entry) {
-              final index = entry.key;
-              final filter = entry.value;
-              return Column(
-                children: [
-                  _buildFilterRowViewIOS(filter),
-                  if (index < filters.length - 1)
-                    Container(
-                      height: 0.5,
-                      color: CupertinoColors.separator,
-                      margin: const EdgeInsets.only(left: 16),
-                    ),
-                ],
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFilterRowViewIOS(FilterList filter) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  filter.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                FilterRuleCountText(
-                  filter: filter,
-                  filterManager: widget.filterManager,
-                  isIOS: true,
-                ),
-                if (filter.description.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    filter.description,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: CupertinoColors.secondaryLabel.resolveFrom(context),
-                    ),
-                  ),
-                ],
-                if (filter.version.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    'Version: ${filter.version}',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: CupertinoColors.tertiaryLabel.resolveFrom(context),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          CupertinoSwitch(
-            value: filter.isSelected,
-            onChanged: (value) => widget.filterManager.toggleFilterListSelection(filter.id),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLoadingOverlayIOS() {
-    return Container(
-      color: CupertinoColors.black.withOpacity(0.1),
-      child: Center(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: CupertinoTheme.of(context).barBackgroundColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CupertinoActivityIndicator(
-                radius: 20,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                widget.filterManager.statusDescription,
-                style: TextStyle(
-                  color: CupertinoColors.secondaryLabel.resolveFrom(context),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
+      builder: (context) => AddFilterListViewIOS(filterManager: filterManager),
     );
   }
 }
@@ -837,14 +600,12 @@ class _ContentViewState extends State<ContentView> {
 // Separate widget to handle async filter file exists check
 class FilterRuleCountText extends StatefulWidget {
   final FilterList filter;
-  final AppFilterManager filterManager;
-  final bool isIOS;
+  final filterManager;
 
   const FilterRuleCountText({
     super.key,
     required this.filter,
     required this.filterManager,
-    this.isIOS = false,
   });
 
   @override
@@ -884,33 +645,24 @@ class _FilterRuleCountTextState extends State<FilterRuleCountText> {
     if (widget.filter.sourceRuleCount != null && widget.filter.sourceRuleCount! > 0) {
       return Text(
         '(${widget.filter.sourceRuleCount} rules)',
-        style: TextStyle(
-          fontSize: widget.isIOS ? 13 : 12,
-          color: widget.isIOS ? CupertinoColors.secondaryLabel.resolveFrom(context) : MacosTheme.of(context).typography.caption1.color?.withOpacity(0.6),
-        ),
+        style: AppTheme.caption,
       );
     } else if (widget.filter.sourceRuleCount == null && widget.filter.isSelected && _filterFileExists == false) {
       return Text(
         '(Counting...)',
-        style: TextStyle(
-          fontSize: widget.isIOS ? 13 : 12,
-          color: CupertinoColors.systemOrange,
-        ),
+        style: AppTheme.caption.copyWith(color: CupertinoColors.systemOrange),
       );
     } else {
       return Text(
         '(N/A rules)',
-        style: TextStyle(
-          fontSize: widget.isIOS ? 13 : 12,
-          color: widget.isIOS ? CupertinoColors.secondaryLabel.resolveFrom(context) : MacosTheme.of(context).typography.caption1.color?.withOpacity(0.6),
-        ),
+        style: AppTheme.caption,
       );
     }
   }
 }
 
 class AddFilterListView extends StatefulWidget {
-  final AppFilterManager filterManager;
+  final filterManager;
 
   const AddFilterListView({
     super.key,
@@ -924,7 +676,6 @@ class AddFilterListView extends StatefulWidget {
 class _AddFilterListViewState extends State<AddFilterListView> {
   final _nameController = TextEditingController();
   final _urlController = TextEditingController();
-  bool _showErrorAlert = false;
   String _errorMessage = '';
 
   @override
@@ -936,25 +687,16 @@ class _AddFilterListViewState extends State<AddFilterListView> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Add Custom Filter List',
-              style: MacosTheme.of(context).typography.title3,
-            ),
+            Text('Add Custom Filter List', style: AppTheme.headline),
             const SizedBox(height: 20),
-            Text(
-              'Filter Name (Optional):',
-              style: MacosTheme.of(context).typography.caption1,
-            ),
+            Text('Filter Name (Optional):', style: AppTheme.caption),
             const SizedBox(height: 4),
             MacosTextField(
               controller: _nameController,
               placeholder: 'e.g., My Ad Block List',
             ),
             const SizedBox(height: 16),
-            Text(
-              'Filter URL:',
-              style: MacosTheme.of(context).typography.caption1,
-            ),
+            Text('Filter URL:', style: AppTheme.caption),
             const SizedBox(height: 4),
             MacosTextField(
               controller: _urlController,
@@ -972,7 +714,7 @@ class _AddFilterListViewState extends State<AddFilterListView> {
                 const SizedBox(width: 8),
                 PushButton(
                   controlSize: ControlSize.large,
-                  color: MacosTheme.of(context).primaryColor,
+                  color: AppTheme.primaryColor,
                   onPressed: _urlController.text.trim().isEmpty ? null : _validateAndAdd,
                   child: const Text('Add'),
                 ),
@@ -993,18 +735,12 @@ class _AddFilterListViewState extends State<AddFilterListView> {
 
     final uri = Uri.tryParse(trimmedURL);
     if (uri == null || !uri.hasScheme || !uri.hasAuthority) {
-      setState(() {
-        _errorMessage = 'The URL entered is not valid. Please enter a complete and correct URL (e.g., http:// or https://).';
-        _showErrorAlert = true;
-      });
+      _showError('The URL entered is not valid. Please enter a complete and correct URL (e.g., http:// or https://).');
       return;
     }
 
     if (widget.filterManager.filterLists.any((f) => f.url.toString() == trimmedURL)) {
-      setState(() {
-        _errorMessage = 'A filter list with this URL already exists.';
-        _showErrorAlert = true;
-      });
+      _showError('A filter list with this URL already exists.');
       return;
     }
 
@@ -1013,6 +749,22 @@ class _AddFilterListViewState extends State<AddFilterListView> {
       urlString: trimmedURL,
     );
     Navigator.of(context).pop();
+  }
+
+  void _showError(String message) {
+    showMacosAlertDialog(
+      context: context,
+      builder: (context) => MacosAlertDialog(
+        appIcon: const MacosIcon(CupertinoIcons.exclamationmark_triangle),
+        title: const Text('Invalid Input'),
+        message: Text(message),
+        primaryButton: PushButton(
+          controlSize: ControlSize.large,
+          child: const Text('OK'),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+    );
   }
 
   @override
@@ -1024,7 +776,7 @@ class _AddFilterListViewState extends State<AddFilterListView> {
 }
 
 class AddFilterListViewIOS extends StatefulWidget {
-  final AppFilterManager filterManager;
+  final filterManager;
 
   const AddFilterListViewIOS({
     super.key,
@@ -1092,7 +844,7 @@ class _AddFilterListViewIOSState extends State<AddFilterListViewIOS> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.5,
       decoration: BoxDecoration(
-        color: CupertinoTheme.of(context).scaffoldBackgroundColor,
+        color: AppTheme.cardBackground,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
       ),
       child: Column(
@@ -1102,7 +854,7 @@ class _AddFilterListViewIOSState extends State<AddFilterListViewIOS> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: CupertinoColors.separator.resolveFrom(context),
+                  color: AppTheme.dividerColor,
                   width: 0.5,
                 ),
               ),
@@ -1115,19 +867,16 @@ class _AddFilterListViewIOSState extends State<AddFilterListViewIOS> {
                   onPressed: () => Navigator.of(context).pop(),
                   child: const Text('Cancel'),
                 ),
-                const Text(
-                  'Add Custom Filter List',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text('Add Custom Filter List', style: AppTheme.headline),
                 CupertinoButton(
                   padding: EdgeInsets.zero,
                   onPressed: _urlController.text.trim().isEmpty ? null : _validateAndAdd,
-                  child: const Text(
+                  child: Text(
                     'Add',
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.primaryColor,
+                    ),
                   ),
                 ),
               ],
@@ -1139,10 +888,7 @@ class _AddFilterListViewIOSState extends State<AddFilterListViewIOS> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Filter Name (Optional):',
-                    style: TextStyle(fontSize: 13),
-                  ),
+                  Text('Filter Name (Optional):', style: AppTheme.caption),
                   const SizedBox(height: 8),
                   CupertinoTextField(
                     controller: _nameController,
@@ -1150,10 +896,7 @@ class _AddFilterListViewIOSState extends State<AddFilterListViewIOS> {
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Filter URL:',
-                    style: TextStyle(fontSize: 13),
-                  ),
+                  Text('Filter URL:', style: AppTheme.caption),
                   const SizedBox(height: 8),
                   CupertinoTextField(
                     controller: _urlController,

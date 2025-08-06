@@ -119,7 +119,7 @@ class _LogsViewState extends State<LogsView> {
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          Text(
+          const Text(
             'wBlock Logs',
             style: TextStyle(
               fontSize: 18,

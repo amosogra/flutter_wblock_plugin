@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
 import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
-import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
+import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'dart:io';
 
-class ApplyChangesProgressView extends StatefulWidget {
+class ApplyChangesProgressView extends ConsumerStatefulWidget {
   final AppFilterManager filterManager;
   final VoidCallback onDismiss;
 
@@ -17,14 +18,14 @@ class ApplyChangesProgressView extends StatefulWidget {
   });
 
   @override
-  State<ApplyChangesProgressView> createState() => _ApplyChangesProgressViewState();
+  ConsumerState<ApplyChangesProgressView> createState() => _ApplyChangesProgressViewState();
 }
 
-class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
+class _ApplyChangesProgressViewState extends ConsumerState<ApplyChangesProgressView> {
   List<FilterList> get selectedFilters => 
       widget.filterManager.filterLists.where((f) => f.isSelected).toList();
 
-  int get progressPercentage => (widget.filterManager.progress * 100).round();
+  int get progressPercentage => (widget.filterManager.progress * 100).round().clamp(0, 100);
 
   String get titleText {
     if (widget.filterManager.progress >= 1.0 && !widget.filterManager.isLoading) {
@@ -57,11 +58,9 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
             maxHeight: MediaQuery.of(context).size.height * 0.8,
             minHeight: 400,
           ),
-          decoration: BoxDecoration(
-            color: WBlockTheme.cardBackgroundColor,
-            borderRadius: BorderRadius.circular(10),
+          child: AppTheme.ultraThinMaterial(
+            child: _buildContent(),
           ),
-          child: _buildContent(),
         ),
       ),
     );
@@ -78,7 +77,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
             minHeight: 300,
           ),
           decoration: BoxDecoration(
-            color: WBlockTheme.cardBackgroundColor,
+            color: AppTheme.cardBackground,
             borderRadius: BorderRadius.circular(12),
           ),
           child: _buildContent(),
@@ -114,24 +113,27 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
                 child: Center(
                   child: Text(
                     titleText,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: WBlockTheme.primaryTextColor,
-                    ),
+                    style: AppTheme.headline.copyWith(fontSize: 18),
                   ),
                 ),
               ),
               if (!widget.filterManager.isLoading && widget.filterManager.progress >= 1.0)
                 Platform.isMacOS
                   ? MacosIconButton(
-                      icon: const MacosIcon(CupertinoIcons.xmark_circle_fill),
+                      icon: const MacosIcon(
+                        CupertinoIcons.xmark_circle_fill,
+                        size: 24,
+                      ),
                       onPressed: widget.onDismiss,
                     )
                   : CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: widget.onDismiss,
-                      child: const Icon(CupertinoIcons.xmark_circle_fill),
+                      child: Icon(
+                        CupertinoIcons.xmark_circle_fill,
+                        color: AppTheme.secondaryLabel,
+                        size: 24,
+                      ),
                     ),
             ],
           ),
@@ -142,10 +144,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
             Text(
               widget.filterManager.conversionStageDescription,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 13,
-                color: WBlockTheme.secondaryTextColor,
-              ),
+              style: AppTheme.caption,
               maxLines: 2,
             ),
           ],
@@ -163,21 +162,16 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
       children: [
         LinearProgressIndicator(
           value: widget.filterManager.progress,
-          backgroundColor: WBlockTheme.dividerColor,
-          valueColor: AlwaysStoppedAnimation<Color>(
-            Platform.isMacOS 
-              ? MacosColors.systemBlueColor 
-              : CupertinoColors.systemBlue,
-          ),
+          backgroundColor: AppTheme.dividerColor,
+          valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+          minHeight: 3,
         ),
         const SizedBox(height: 8),
         Text(
           '$progressPercentage%',
-          style: const TextStyle(
-            fontSize: 12,
+          style: AppTheme.caption.copyWith(
             fontWeight: FontWeight.w500,
-            color: WBlockTheme.secondaryTextColor,
-            fontFeatures: [FontFeature.tabularFigures()],
+            fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
       ],
@@ -199,19 +193,15 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       margin: const EdgeInsets.only(bottom: 1),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F8F8), // Slightly off-white for contrast
-        borderRadius: BorderRadius.circular(8),
-      ),
       child: Row(
         children: [
           Icon(
             _getPhaseIcon(phase.icon),
             color: phase.isCompleted 
-              ? Colors.green 
+              ? CupertinoColors.systemGreen 
               : phase.isActive 
-                ? (Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue)
-                : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
+                ? AppTheme.primaryColor
+                : AppTheme.secondaryLabel,
             size: 20,
           ),
           const SizedBox(width: 12),
@@ -221,28 +211,20 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
               children: [
                 Text(
                   phase.title,
-                  style: TextStyle(
-                    fontSize: 13,
+                  style: AppTheme.body.copyWith(
                     fontWeight: phase.isActive ? FontWeight.w500 : FontWeight.normal,
                     color: phase.isCompleted 
-                      ? Colors.green 
+                      ? CupertinoColors.systemGreen 
                       : phase.isActive 
-                        ? WBlockTheme.primaryTextColor
-                        : WBlockTheme.secondaryTextColor,
+                        ? CupertinoColors.label
+                        : AppTheme.secondaryLabel,
                   ),
                 ),
-                SizedBox(
-                  height: 16,
-                  child: phase.detail != null && phase.detail!.isNotEmpty
-                    ? Text(
-                        phase.detail!,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: WBlockTheme.secondaryTextColor,
-                        ),
-                      )
-                    : const SizedBox(),
-                ),
+                if (phase.detail != null && phase.detail!.isNotEmpty)
+                  Text(
+                    phase.detail!,
+                    style: AppTheme.caption,
+                  ),
               ],
             ),
           ),
@@ -253,12 +235,12 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
             child: phase.isCompleted
               ? const Icon(
                   CupertinoIcons.checkmark_circle_fill,
-                  color: Colors.green,
+                  color: CupertinoColors.systemGreen,
                   size: 16,
                 )
               : phase.isActive
                 ? (Platform.isMacOS 
-                    ? const ProgressCircle(value: null) 
+                    ? const ProgressCircle(value: null, radius: 8) 
                     : const CupertinoActivityIndicator(radius: 8))
                 : const SizedBox(),
           ),
@@ -296,19 +278,13 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
           children: [
             Icon(
               CupertinoIcons.chart_bar,
-              color: Platform.isMacOS 
-                ? MacosColors.systemBlueColor 
-                : CupertinoColors.systemBlue,
+              color: AppTheme.primaryColor,
               size: 16,
             ),
             const SizedBox(width: 8),
-            const Text(
+            Text(
               'Overall Statistics',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: WBlockTheme.primaryTextColor,
-              ),
+              style: AppTheme.headline,
             ),
           ],
         ),
@@ -327,21 +303,17 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Row(
+        Row(
           children: [
-            Icon(
+            const Icon(
               CupertinoIcons.square_grid_2x2,
-              color: Colors.orange,
+              color: CupertinoColors.systemOrange,
               size: 16,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
               'Category Statistics',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: WBlockTheme.primaryTextColor,
-              ),
+              style: AppTheme.headline,
             ),
           ],
         ),
@@ -361,7 +333,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 1.8,  // Adjusted to prevent overflow
+        childAspectRatio: 1.8,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
@@ -371,62 +343,55 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
   }
 
   Widget _buildStatisticCard(StatisticData stat) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F8F8), // Slightly off-white for contrast
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Icon(
-                _getStatIcon(stat.icon),
-                color: stat.color,
-                size: 18,
-              ),
-              if (stat.showWarning)
-                const Positioned(
-                  top: -4,
-                  right: -4,
-                  child: Icon(
-                    CupertinoIcons.exclamationmark_triangle_fill,
-                    color: Colors.yellow,
-                    size: 10,
-                  ),
+    return AppTheme.regularMaterial(
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Icon(
+                  _getStatIcon(stat.icon),
+                  color: stat.color,
+                  size: 20,
                 ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Flexible(
-            child: Text(
-              stat.value,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: WBlockTheme.primaryTextColor,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+                if (stat.showWarning)
+                  const Positioned(
+                    top: -4,
+                    right: -4,
+                    child: Icon(
+                      CupertinoIcons.exclamationmark_triangle_fill,
+                      color: CupertinoColors.systemYellow,
+                      size: 10,
+                    ),
+                  ),
+              ],
             ),
-          ),
-          const SizedBox(height: 2),
-          Flexible(
-            child: Text(
-              stat.title,
-              style: const TextStyle(
-                fontSize: 11,
-                color: WBlockTheme.secondaryTextColor,
+            const SizedBox(height: 6),
+            Flexible(
+              child: Text(
+                stat.value,
+                style: AppTheme.body.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
-          ),
-        ],
+            const SizedBox(height: 2),
+            Flexible(
+              child: Text(
+                stat.title,
+                style: AppTheme.caption,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -484,7 +449,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
         title: 'Source Rules',
         value: _formatNumber(widget.filterManager.sourceRulesCount),
         icon: 'doc.text',
-        color: Colors.orange,
+        color: CupertinoColors.systemOrange,
       ));
     }
     
@@ -493,7 +458,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
         title: 'Safari Rules',
         value: _formatNumber(widget.filterManager.lastRuleCount),
         icon: 'shield.lefthalf.filled',
-        color: Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue,
+        color: AppTheme.primaryColor,
       ));
     }
     
@@ -502,7 +467,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
         title: 'Conversion',
         value: widget.filterManager.lastConversionTime,
         icon: 'clock',
-        color: Colors.green,
+        color: CupertinoColors.systemGreen,
       ));
     }
     
@@ -511,7 +476,7 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
         title: 'Reload',
         value: widget.filterManager.lastReloadTime,
         icon: 'arrow.clockwise',
-        color: Colors.purple,
+        color: CupertinoColors.systemPurple,
       ));
     }
     
@@ -599,23 +564,23 @@ class _ApplyChangesProgressViewState extends State<ApplyChangesProgressView> {
   Color _getCategoryColor(FilterListCategory category) {
     switch (category) {
       case FilterListCategory.ads:
-        return Colors.red;
+        return CupertinoColors.systemRed;
       case FilterListCategory.privacy:
-        return Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue;
+        return AppTheme.primaryColor;
       case FilterListCategory.security:
-        return Colors.green;
+        return CupertinoColors.systemGreen;
       case FilterListCategory.multipurpose:
-        return Colors.orange;
+        return CupertinoColors.systemOrange;
       case FilterListCategory.annoyances:
-        return Colors.purple;
+        return CupertinoColors.systemPurple;
       case FilterListCategory.experimental:
-        return Colors.yellow;
+        return CupertinoColors.systemYellow;
       case FilterListCategory.foreign:
-        return Platform.isMacOS ? MacosColors.systemTealColor : CupertinoColors.systemTeal;
+        return CupertinoColors.systemTeal;
       case FilterListCategory.custom:
-        return Platform.isMacOS ? MacosColors.systemGrayColor : CupertinoColors.systemGrey;
+        return CupertinoColors.systemGrey;
       default:
-        return Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label;
+        return CupertinoColors.label;
     }
   }
 

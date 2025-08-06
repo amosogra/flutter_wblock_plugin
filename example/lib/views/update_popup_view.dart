@@ -131,7 +131,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
         children: [
           Text(
             widget.filterManager.isLoading ? 'Downloading Updates' : 'Available Updates',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: WBlockTheme.primaryTextColor,
@@ -162,7 +162,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
         children: [
           _buildProgressIndicator(),
           const SizedBox(height: 16),
-          Text(
+          const Text(
             'After downloading, filter lists will be applied automatically.',
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -191,11 +191,11 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
         const SizedBox(height: 8),
         Text(
           '$progressPercentage%',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
             color: WBlockTheme.secondaryTextColor,
-            fontFeatures: const [FontFeature.tabularFigures()],
+            fontFeatures: [FontFeature.tabularFigures()],
           ),
         ),
       ],
@@ -243,7 +243,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
       children: [
         Text(
           category.rawValue,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: WBlockTheme.primaryTextColor,
@@ -266,47 +266,49 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
   Widget _buildFilterRow(FilterList filter) {
     final isSelected = _selectedFilters.contains(filter.id);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Icon(
-            isSelected ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
-            color: isSelected
-                ? (Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue)
-                : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
-            size: 20,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  filter.name,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: WBlockTheme.primaryTextColor,
-                  ),
-                ),
-                if (filter.description.isNotEmpty) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    filter.description,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: WBlockTheme.secondaryTextColor,
+    return GestureDetector(
+        onTap: () => _toggleFilter(filter.id),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              Icon(
+                isSelected ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
+                color: isSelected
+                    ? (Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue)
+                    : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      filter.name,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: WBlockTheme.primaryTextColor,
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ],
-            ),
+                    if (filter.description.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        filter.description,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: WBlockTheme.secondaryTextColor,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 
   Widget _buildScriptRow(UserScript script) {
@@ -332,7 +334,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
                 children: [
                   Text(
                     script.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: WBlockTheme.primaryTextColor,
                     ),
@@ -341,7 +343,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
                     const SizedBox(height: 2),
                     Text(
                       script.description,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         color: WBlockTheme.secondaryTextColor,
                       ),

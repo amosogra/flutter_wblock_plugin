@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wblock_plugin_example/providers/providers.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_wblock_plugin_example/managers/user_script_manager.dart';
 import 'package:flutter_wblock_plugin_example/models/user_script.dart';
 import 'package:flutter_wblock_plugin_example/views/stat_card.dart';
@@ -37,8 +38,9 @@ class _UserScriptManagerViewState extends State<UserScriptManagerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserScriptManager>(
-      builder: (context, userScriptManager, child) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final userScriptManager = ref.watch(userScriptManagerProvider);
         if (Platform.isMacOS) {
           return _buildMacOSView(userScriptManager);
         } else {

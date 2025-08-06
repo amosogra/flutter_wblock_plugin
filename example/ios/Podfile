@@ -33,6 +33,7 @@ flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks!
+  use_modular_headers!
 
   # 1) CocoaPods will now load your all podspecs from ios/Podspecs
   # TEMPORARY: Using local podspecs for development
@@ -47,15 +48,22 @@ target 'Runner' do
   # 2) Now bring in everything else (including your plugin):
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
-  target 'wBlock Scripts' do  # Your Safari extension target
-    use_frameworks!
-    
-    # The extension also needs access to the module
-    pod 'wBlockCoreService', :podspec => '../../ios/Podspecs'
-  end
-
-  target 'RunnerTests' do
-    inherit! :search_paths
+  # All wBlock Safari Content Blocker Extensions
+  %w[
+    wBlock\ Ads
+    wBlock\ Scripts
+    wBlock\ Privacy
+    wBlock\ Security
+    wBlock\ Annoyances
+    wBlock\ Multipurpose
+    wBlock\ Experimental
+    wBlock\ Foreign
+    wBlock\ Custom
+  ].each do |extension_name|
+    target extension_name do
+      inherit! :search_paths
+      pod 'wBlockCoreService', :podspec => '../../ios/Podspecs'
+    end
   end
 end
 

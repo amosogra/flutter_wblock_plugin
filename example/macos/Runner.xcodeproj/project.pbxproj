@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		00899F4279C5B8C16B7A6882 /* Pods_wBlock_Annoyances.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF574ACECD95B384FE54480 /* Pods_wBlock_Annoyances.framework */; };
+		00E28B08AF0DB01C53933AB6 /* Pods_wBlock_Ads___Privacy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F99D8362022FC5C93A8674D /* Pods_wBlock_Ads___Privacy.framework */; };
 		05A2FE7EC78910276FDBBE30 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0F97C7F358A7D530FE1F519 /* Pods_Runner.framework */; };
 		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
@@ -29,6 +31,8 @@
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
 		79215CA48B0042B2623193FD /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36EBA0EF8B9CB7B3CB65DC1B /* Pods_RunnerTests.framework */; };
+		7CAC032CB3C2C00894EEB3BB /* Pods_wBlock_Foreign___Experimental.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A70BED2C3B8181B4201F0A18 /* Pods_wBlock_Foreign___Experimental.framework */; };
+		7D6C26D248D92720ED63B74C /* Pods_wBlock_Custom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E26FF1232D433F9F89DC7EA /* Pods_wBlock_Custom.framework */; };
 		B08266222E3BEFC2002A26B8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08266212E3BEFC2002A26B8 /* Cocoa.framework */; };
 		B082662C2E3BEFC2002A26B8 /* wBlock Ads & Privacy.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08266202E3BEFC2002A26B8 /* wBlock Ads & Privacy.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B08266372E3BF123002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08266362E3BF123002A26B8 /* wBlockCoreService.framework */; };
@@ -48,6 +52,9 @@
 		B08266BD2E3BF96A002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08266BC2E3BF96A002A26B8 /* wBlockCoreService.framework */; };
 		B08269D32E3C55C1002A26B8 /* wBlock Scripts.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08269BA2E3C55C1002A26B8 /* wBlock Scripts.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B08269DA2E3C55DA002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08269D92E3C55DA002A26B8 /* wBlockCoreService.framework */; };
+		D601FB3A7F4E805F3F05D752 /* Pods_wBlock_Security___Multipurpose.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8FC4D28C0260023A42E7351 /* Pods_wBlock_Security___Multipurpose.framework */; };
+		EF2FA2F7EA19C180D8423C28 /* Pods_wBlock_Advanced.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA65E596BBB0C2741A08702F /* Pods_wBlock_Advanced.framework */; };
+		F168C4B7F11758A56B6346AA /* Pods_wBlock_Scripts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CE9541BF7A74304D13DBF0 /* Pods_wBlock_Scripts.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,8 +145,15 @@
 
 /* Begin PBXFileReference section */
 		0803CCF78DD2E96FBC456A01 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		09A1C4067F7EB959159483BA /* Pods-wBlock Ads & Privacy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Ads & Privacy.release.xcconfig"; path = "Target Support Files/Pods-wBlock Ads & Privacy/Pods-wBlock Ads & Privacy.release.xcconfig"; sourceTree = "<group>"; };
+		0E243D7DC16C0CF1A37843B9 /* Pods-wBlock Annoyances.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Annoyances.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Annoyances/Pods-wBlock Annoyances.debug.xcconfig"; sourceTree = "<group>"; };
+		12D41F3EC97C83F2F08F8762 /* Pods-wBlock Scripts.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Scripts.release.xcconfig"; path = "Target Support Files/Pods-wBlock Scripts/Pods-wBlock Scripts.release.xcconfig"; sourceTree = "<group>"; };
 		14F7B64B9D69EDCE3F5C1020 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		1C680009522E17A8C910A92C /* Pods-wBlock Advanced.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Advanced.release.xcconfig"; path = "Target Support Files/Pods-wBlock Advanced/Pods-wBlock Advanced.release.xcconfig"; sourceTree = "<group>"; };
 		1C933EA156ECF147C0F540E4 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		2687E56D7869F39A28957622 /* Pods-wBlock Foreign & Experimental.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Foreign & Experimental.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Foreign & Experimental/Pods-wBlock Foreign & Experimental.profile.xcconfig"; sourceTree = "<group>"; };
+		29E1262BA18495CD18E24F0A /* Pods-wBlock Annoyances.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Annoyances.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Annoyances/Pods-wBlock Annoyances.profile.xcconfig"; sourceTree = "<group>"; };
+		2E85582621589D1E0C879FF9 /* Pods-wBlock Ads & Privacy.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Ads & Privacy.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Ads & Privacy/Pods-wBlock Ads & Privacy.profile.xcconfig"; sourceTree = "<group>"; };
 		331C80D5294CF71000263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D7294CF71000263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		333000ED22D3DE5D00554162 /* Warnings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
@@ -156,10 +170,29 @@
 		33E51913231747F40026EE4D /* DebugProfile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DebugProfile.entitlements; sourceTree = "<group>"; };
 		33E51914231749380026EE4D /* Release.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
 		33E5194F232828860026EE4D /* AppInfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppInfo.xcconfig; sourceTree = "<group>"; };
+		34B47FF678AC263F7A2BBBB3 /* Pods-wBlock Custom.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Custom.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Custom/Pods-wBlock Custom.profile.xcconfig"; sourceTree = "<group>"; };
 		36EBA0EF8B9CB7B3CB65DC1B /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E26FF1232D433F9F89DC7EA /* Pods_wBlock_Custom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Custom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F99D8362022FC5C93A8674D /* Pods_wBlock_Ads___Privacy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Ads___Privacy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FC3A8DF5BB85E1A9018B01A /* Pods-wBlock Advanced.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Advanced.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Advanced/Pods-wBlock Advanced.debug.xcconfig"; sourceTree = "<group>"; };
+		47126C9708017E32B874A2ED /* Pods-wBlock Foreign & Experimental.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Foreign & Experimental.release.xcconfig"; path = "Target Support Files/Pods-wBlock Foreign & Experimental/Pods-wBlock Foreign & Experimental.release.xcconfig"; sourceTree = "<group>"; };
+		5D13C0A07C3314241060640D /* Pods-wBlock Custom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Custom.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Custom/Pods-wBlock Custom.debug.xcconfig"; sourceTree = "<group>"; };
+		5D55963459B85FC2650F3DA8 /* Pods-wBlock Ads & Privacy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Ads & Privacy.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Ads & Privacy/Pods-wBlock Ads & Privacy.debug.xcconfig"; sourceTree = "<group>"; };
+		60CE9541BF7A74304D13DBF0 /* Pods_wBlock_Scripts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Scripts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		62BFF3E359CDAC3263F0AE6B /* Pods-wBlock Security & Multipurpose.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Security & Multipurpose.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Security & Multipurpose/Pods-wBlock Security & Multipurpose.profile.xcconfig"; sourceTree = "<group>"; };
 		64549CC14441E2FFC9D9ECD0 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		6BF574ACECD95B384FE54480 /* Pods_wBlock_Annoyances.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Annoyances.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FC8812A4D7F559045437AA4 /* Pods-wBlock Annoyances.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Annoyances.release.xcconfig"; path = "Target Support Files/Pods-wBlock Annoyances/Pods-wBlock Annoyances.release.xcconfig"; sourceTree = "<group>"; };
+		72727005625F15AA19294F72 /* Pods-wBlock Scripts.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Scripts.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Scripts/Pods-wBlock Scripts.debug.xcconfig"; sourceTree = "<group>"; };
+		7596A4F0EC4D5F29B7AE5F5F /* Pods-wBlock Security & Multipurpose.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Security & Multipurpose.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Security & Multipurpose/Pods-wBlock Security & Multipurpose.debug.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		7CB1866E6D85C555D7482FD9 /* Pods-wBlock Custom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Custom.release.xcconfig"; path = "Target Support Files/Pods-wBlock Custom/Pods-wBlock Custom.release.xcconfig"; sourceTree = "<group>"; };
+		81970FD963CED20DE9CF5470 /* Pods-wBlock Scripts.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Scripts.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Scripts/Pods-wBlock Scripts.profile.xcconfig"; sourceTree = "<group>"; };
+		90E19316669A6AE268FDCBAC /* Pods-wBlock Advanced.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Advanced.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Advanced/Pods-wBlock Advanced.profile.xcconfig"; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		A70BED2C3B8181B4201F0A18 /* Pods_wBlock_Foreign___Experimental.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Foreign___Experimental.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7A1CDD7A71CC5B70C9F4252 /* Pods-wBlock Foreign & Experimental.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Foreign & Experimental.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Foreign & Experimental/Pods-wBlock Foreign & Experimental.debug.xcconfig"; sourceTree = "<group>"; };
+		AC15101DB0F8C9F84D8B8824 /* Pods-wBlock Security & Multipurpose.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Security & Multipurpose.release.xcconfig"; path = "Target Support Files/Pods-wBlock Security & Multipurpose/Pods-wBlock Security & Multipurpose.release.xcconfig"; sourceTree = "<group>"; };
 		B08266202E3BEFC2002A26B8 /* wBlock Ads & Privacy.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Ads & Privacy.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B08266212E3BEFC2002A26B8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B08266332E3BF0CD002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -180,6 +213,8 @@
 		C0F97C7F358A7D530FE1F519 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBB27E147ABA8B5F387B4EAB /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
 		D571F4D26F4B367B4A4EE31D /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
+		D8FC4D28C0260023A42E7351 /* Pods_wBlock_Security___Multipurpose.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Security___Multipurpose.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA65E596BBB0C2741A08702F /* Pods_wBlock_Advanced.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Advanced.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -195,31 +230,43 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B08266232E3BEFC2002A26B8 /* wBlock Ads & Privacy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "wBlock Ads & Privacy";
 			sourceTree = "<group>";
 		};
 		B08266412E3BF2C8002A26B8 /* wBlock Annoyances */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "wBlock Annoyances";
 			sourceTree = "<group>";
 		};
 		B082665B2E3BF53D002A26B8 /* wBlock Security & Multipurpose */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "wBlock Security & Multipurpose";
 			sourceTree = "<group>";
 		};
 		B08266742E3BF7EA002A26B8 /* wBlock Foreign & Experimental */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "wBlock Foreign & Experimental";
 			sourceTree = "<group>";
 		};
 		B082668D2E3BF8A8002A26B8 /* wBlock Custom */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "wBlock Custom";
 			sourceTree = "<group>";
 		};
 		B08266A52E3BF956002A26B8 /* wBlock Advanced */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = "wBlock Advanced";
 			sourceTree = "<group>";
 		};
@@ -261,6 +308,7 @@
 			files = (
 				B08266222E3BEFC2002A26B8 /* Cocoa.framework in Frameworks */,
 				B08266372E3BF123002A26B8 /* wBlockCoreService.framework in Frameworks */,
+				00E28B08AF0DB01C53933AB6 /* Pods_wBlock_Ads___Privacy.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +318,7 @@
 			files = (
 				B08266402E3BF2C8002A26B8 /* Cocoa.framework in Frameworks */,
 				B08266512E3BF2E5002A26B8 /* wBlockCoreService.framework in Frameworks */,
+				00899F4279C5B8C16B7A6882 /* Pods_wBlock_Annoyances.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +328,7 @@
 			files = (
 				B082665A2E3BF53D002A26B8 /* Cocoa.framework in Frameworks */,
 				B082666B2E3BF787002A26B8 /* wBlockCoreService.framework in Frameworks */,
+				D601FB3A7F4E805F3F05D752 /* Pods_wBlock_Security___Multipurpose.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +338,7 @@
 			files = (
 				B08266732E3BF7EA002A26B8 /* Cocoa.framework in Frameworks */,
 				B08266842E3BF7FF002A26B8 /* wBlockCoreService.framework in Frameworks */,
+				7CAC032CB3C2C00894EEB3BB /* Pods_wBlock_Foreign___Experimental.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +348,7 @@
 			files = (
 				B082668C2E3BF8A8002A26B8 /* Cocoa.framework in Frameworks */,
 				B082669D2E3BF8DE002A26B8 /* wBlockCoreService.framework in Frameworks */,
+				7D6C26D248D92720ED63B74C /* Pods_wBlock_Custom.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B08266BD2E3BF96A002A26B8 /* wBlockCoreService.framework in Frameworks */,
+				EF2FA2F7EA19C180D8423C28 /* Pods_wBlock_Advanced.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B08269DA2E3C55DA002A26B8 /* wBlockCoreService.framework in Frameworks */,
+				F168C4B7F11758A56B6346AA /* Pods_wBlock_Scripts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +471,27 @@
 				1C933EA156ECF147C0F540E4 /* Pods-RunnerTests.debug.xcconfig */,
 				D571F4D26F4B367B4A4EE31D /* Pods-RunnerTests.release.xcconfig */,
 				CBB27E147ABA8B5F387B4EAB /* Pods-RunnerTests.profile.xcconfig */,
+				5D55963459B85FC2650F3DA8 /* Pods-wBlock Ads & Privacy.debug.xcconfig */,
+				09A1C4067F7EB959159483BA /* Pods-wBlock Ads & Privacy.release.xcconfig */,
+				2E85582621589D1E0C879FF9 /* Pods-wBlock Ads & Privacy.profile.xcconfig */,
+				3FC3A8DF5BB85E1A9018B01A /* Pods-wBlock Advanced.debug.xcconfig */,
+				1C680009522E17A8C910A92C /* Pods-wBlock Advanced.release.xcconfig */,
+				90E19316669A6AE268FDCBAC /* Pods-wBlock Advanced.profile.xcconfig */,
+				0E243D7DC16C0CF1A37843B9 /* Pods-wBlock Annoyances.debug.xcconfig */,
+				6FC8812A4D7F559045437AA4 /* Pods-wBlock Annoyances.release.xcconfig */,
+				29E1262BA18495CD18E24F0A /* Pods-wBlock Annoyances.profile.xcconfig */,
+				5D13C0A07C3314241060640D /* Pods-wBlock Custom.debug.xcconfig */,
+				7CB1866E6D85C555D7482FD9 /* Pods-wBlock Custom.release.xcconfig */,
+				34B47FF678AC263F7A2BBBB3 /* Pods-wBlock Custom.profile.xcconfig */,
+				A7A1CDD7A71CC5B70C9F4252 /* Pods-wBlock Foreign & Experimental.debug.xcconfig */,
+				47126C9708017E32B874A2ED /* Pods-wBlock Foreign & Experimental.release.xcconfig */,
+				2687E56D7869F39A28957622 /* Pods-wBlock Foreign & Experimental.profile.xcconfig */,
+				72727005625F15AA19294F72 /* Pods-wBlock Scripts.debug.xcconfig */,
+				12D41F3EC97C83F2F08F8762 /* Pods-wBlock Scripts.release.xcconfig */,
+				81970FD963CED20DE9CF5470 /* Pods-wBlock Scripts.profile.xcconfig */,
+				7596A4F0EC4D5F29B7AE5F5F /* Pods-wBlock Security & Multipurpose.debug.xcconfig */,
+				AC15101DB0F8C9F84D8B8824 /* Pods-wBlock Security & Multipurpose.release.xcconfig */,
+				62BFF3E359CDAC3263F0AE6B /* Pods-wBlock Security & Multipurpose.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -436,6 +511,13 @@
 				C0F97C7F358A7D530FE1F519 /* Pods_Runner.framework */,
 				36EBA0EF8B9CB7B3CB65DC1B /* Pods_RunnerTests.framework */,
 				B08266212E3BEFC2002A26B8 /* Cocoa.framework */,
+				3F99D8362022FC5C93A8674D /* Pods_wBlock_Ads___Privacy.framework */,
+				EA65E596BBB0C2741A08702F /* Pods_wBlock_Advanced.framework */,
+				6BF574ACECD95B384FE54480 /* Pods_wBlock_Annoyances.framework */,
+				3E26FF1232D433F9F89DC7EA /* Pods_wBlock_Custom.framework */,
+				A70BED2C3B8181B4201F0A18 /* Pods_wBlock_Foreign___Experimental.framework */,
+				60CE9541BF7A74304D13DBF0 /* Pods_wBlock_Scripts.framework */,
+				D8FC4D28C0260023A42E7351 /* Pods_wBlock_Security___Multipurpose.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -495,6 +577,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B082662E2E3BEFC2002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Ads & Privacy" */;
 			buildPhases = (
+				8E91DD50381E73F203657BA4 /* [CP] Check Pods Manifest.lock */,
 				B082661C2E3BEFC2002A26B8 /* Sources */,
 				B082661D2E3BEFC2002A26B8 /* Frameworks */,
 				B082661E2E3BEFC2002A26B8 /* Resources */,
@@ -507,8 +590,6 @@
 				B08266232E3BEFC2002A26B8 /* wBlock Ads & Privacy */,
 			);
 			name = "wBlock Ads & Privacy";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Ads & Privacy";
 			productReference = B08266202E3BEFC2002A26B8 /* wBlock Ads & Privacy.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -517,6 +598,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B082664C2E3BF2C8002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Annoyances" */;
 			buildPhases = (
+				CDA743CB00DF170B08082FB3 /* [CP] Check Pods Manifest.lock */,
 				B082663B2E3BF2C8002A26B8 /* Sources */,
 				B082663C2E3BF2C8002A26B8 /* Frameworks */,
 				B082663D2E3BF2C8002A26B8 /* Resources */,
@@ -529,8 +611,6 @@
 				B08266412E3BF2C8002A26B8 /* wBlock Annoyances */,
 			);
 			name = "wBlock Annoyances";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Annoyances";
 			productReference = B082663F2E3BF2C8002A26B8 /* wBlock Annoyances.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -539,6 +619,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B08266662E3BF53D002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Security & Multipurpose" */;
 			buildPhases = (
+				2D58E8991BF80EAA1C2A204A /* [CP] Check Pods Manifest.lock */,
 				B08266552E3BF53D002A26B8 /* Sources */,
 				B08266562E3BF53D002A26B8 /* Frameworks */,
 				B08266572E3BF53D002A26B8 /* Resources */,
@@ -551,8 +632,6 @@
 				B082665B2E3BF53D002A26B8 /* wBlock Security & Multipurpose */,
 			);
 			name = "wBlock Security & Multipurpose";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Security & Multipurpose";
 			productReference = B08266592E3BF53D002A26B8 /* wBlock Security & Multipurpose.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -561,6 +640,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B082667F2E3BF7EA002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Foreign & Experimental" */;
 			buildPhases = (
+				BAB2F92B20DFA1CB218E9488 /* [CP] Check Pods Manifest.lock */,
 				B082666E2E3BF7EA002A26B8 /* Sources */,
 				B082666F2E3BF7EA002A26B8 /* Frameworks */,
 				B08266702E3BF7EA002A26B8 /* Resources */,
@@ -573,8 +653,6 @@
 				B08266742E3BF7EA002A26B8 /* wBlock Foreign & Experimental */,
 			);
 			name = "wBlock Foreign & Experimental";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Foreign & Experimental";
 			productReference = B08266722E3BF7EA002A26B8 /* wBlock Foreign & Experimental.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -583,6 +661,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B08266982E3BF8A8002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Custom" */;
 			buildPhases = (
+				8EB5F95235B4FFB2CF757976 /* [CP] Check Pods Manifest.lock */,
 				B08266872E3BF8A8002A26B8 /* Sources */,
 				B08266882E3BF8A8002A26B8 /* Frameworks */,
 				B08266892E3BF8A8002A26B8 /* Resources */,
@@ -595,8 +674,6 @@
 				B082668D2E3BF8A8002A26B8 /* wBlock Custom */,
 			);
 			name = "wBlock Custom";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Custom";
 			productReference = B082668B2E3BF8A8002A26B8 /* wBlock Custom.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -605,6 +682,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B08266B82E3BF956002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Advanced" */;
 			buildPhases = (
+				291F6ABF04458A94F03D66AC /* [CP] Check Pods Manifest.lock */,
 				B08266A02E3BF955002A26B8 /* Sources */,
 				B08266A12E3BF955002A26B8 /* Frameworks */,
 				B08266A22E3BF955002A26B8 /* Resources */,
@@ -617,8 +695,6 @@
 				B08266A52E3BF956002A26B8 /* wBlock Advanced */,
 			);
 			name = "wBlock Advanced";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Advanced";
 			productReference = B08266A42E3BF955002A26B8 /* wBlock Advanced.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -627,6 +703,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B08269D82E3C55C1002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Scripts" */;
 			buildPhases = (
+				961617BCEFCD6DE0A3BDC6A5 /* [CP] Check Pods Manifest.lock */,
 				B08269B62E3C55C1002A26B8 /* Sources */,
 				B08269B72E3C55C1002A26B8 /* Frameworks */,
 				B08269B82E3C55C1002A26B8 /* Resources */,
@@ -639,8 +716,6 @@
 				B08269BB2E3C55C1002A26B8 /* wBlock Scripts */,
 			);
 			name = "wBlock Scripts";
-			packageProductDependencies = (
-			);
 			productName = "wBlock Scripts";
 			productReference = B08269BA2E3C55C1002A26B8 /* wBlock Scripts.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -810,6 +885,50 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		291F6ABF04458A94F03D66AC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Advanced-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2D58E8991BF80EAA1C2A204A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Security & Multipurpose-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3399D490228B24CF009A79C7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -870,6 +989,94 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8E91DD50381E73F203657BA4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Ads & Privacy-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8EB5F95235B4FFB2CF757976 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Custom-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		961617BCEFCD6DE0A3BDC6A5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Scripts-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BAB2F92B20DFA1CB218E9488 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Foreign & Experimental-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		BCD93E74B41FE1EE65310D98 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -886,6 +1093,28 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-RunnerTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CDA743CB00DF170B08082FB3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Annoyances-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1347,6 +1576,7 @@
 		};
 		B082662F2E3BEFC2002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D55963459B85FC2650F3DA8 /* Pods-wBlock Ads & Privacy.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1393,6 +1623,7 @@
 		};
 		B08266302E3BEFC2002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 09A1C4067F7EB959159483BA /* Pods-wBlock Ads & Privacy.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1437,6 +1668,7 @@
 		};
 		B08266312E3BEFC2002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2E85582621589D1E0C879FF9 /* Pods-wBlock Ads & Privacy.profile.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1481,6 +1713,7 @@
 		};
 		B082664D2E3BF2C8002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0E243D7DC16C0CF1A37843B9 /* Pods-wBlock Annoyances.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1525,6 +1758,7 @@
 		};
 		B082664E2E3BF2C8002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6FC8812A4D7F559045437AA4 /* Pods-wBlock Annoyances.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1567,6 +1801,7 @@
 		};
 		B082664F2E3BF2C8002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 29E1262BA18495CD18E24F0A /* Pods-wBlock Annoyances.profile.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1609,6 +1844,7 @@
 		};
 		B08266672E3BF53D002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7596A4F0EC4D5F29B7AE5F5F /* Pods-wBlock Security & Multipurpose.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1653,6 +1889,7 @@
 		};
 		B08266682E3BF53D002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AC15101DB0F8C9F84D8B8824 /* Pods-wBlock Security & Multipurpose.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1695,6 +1932,7 @@
 		};
 		B08266692E3BF53D002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 62BFF3E359CDAC3263F0AE6B /* Pods-wBlock Security & Multipurpose.profile.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1737,6 +1975,7 @@
 		};
 		B08266802E3BF7EA002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7A1CDD7A71CC5B70C9F4252 /* Pods-wBlock Foreign & Experimental.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1781,6 +2020,7 @@
 		};
 		B08266812E3BF7EA002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 47126C9708017E32B874A2ED /* Pods-wBlock Foreign & Experimental.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1823,6 +2063,7 @@
 		};
 		B08266822E3BF7EA002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2687E56D7869F39A28957622 /* Pods-wBlock Foreign & Experimental.profile.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1865,6 +2106,7 @@
 		};
 		B08266992E3BF8A8002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5D13C0A07C3314241060640D /* Pods-wBlock Custom.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1909,6 +2151,7 @@
 		};
 		B082669A2E3BF8A8002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7CB1866E6D85C555D7482FD9 /* Pods-wBlock Custom.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1951,6 +2194,7 @@
 		};
 		B082669B2E3BF8A8002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34B47FF678AC263F7A2BBBB3 /* Pods-wBlock Custom.profile.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1993,6 +2237,7 @@
 		};
 		B08266B92E3BF956002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3FC3A8DF5BB85E1A9018B01A /* Pods-wBlock Advanced.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -2041,6 +2286,7 @@
 		};
 		B08266BA2E3BF956002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1C680009522E17A8C910A92C /* Pods-wBlock Advanced.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -2087,6 +2333,7 @@
 		};
 		B08266BB2E3BF956002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 90E19316669A6AE268FDCBAC /* Pods-wBlock Advanced.profile.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -2133,6 +2380,7 @@
 		};
 		B08269D42E3C55C1002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 72727005625F15AA19294F72 /* Pods-wBlock Scripts.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -2181,6 +2429,7 @@
 		};
 		B08269D52E3C55C1002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 12D41F3EC97C83F2F08F8762 /* Pods-wBlock Scripts.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -2227,6 +2476,7 @@
 		};
 		B08269D62E3C55C1002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 81970FD963CED20DE9CF5470 /* Pods-wBlock Scripts.profile.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_OBJC_WEAK = YES;

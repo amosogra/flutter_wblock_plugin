@@ -32,8 +32,8 @@ class AppFilterManager extends ChangeNotifier {
   String _lastConversionTime = 'N/A';
   String _lastReloadTime = 'N/A';
   bool _hasError = false;
-  Map<FilterListCategory, int> _ruleCountsByCategory = {};
-  Set<FilterListCategory> _categoriesApproachingLimit = {};
+  Map<FilterListCategory, int> _ruleCountsByCategory = <FilterListCategory, int>{};
+  Set<FilterListCategory> _categoriesApproachingLimit = <FilterListCategory>{};
 
   // Update related properties
   List<FilterList> _availableUpdates = [];
@@ -70,8 +70,8 @@ class AppFilterManager extends ChangeNotifier {
   String get lastConversionTime => _lastConversionTime;
   String get lastReloadTime => _lastReloadTime;
   bool get hasError => _hasError;
-  Map<FilterListCategory, int> get ruleCountsByCategory => _ruleCountsByCategory;
-  Set<FilterListCategory> get categoriesApproachingLimit => _categoriesApproachingLimit;
+  Map<FilterListCategory, int> get ruleCountsByCategory => Map<FilterListCategory, int>.from(_ruleCountsByCategory);
+  Set<FilterListCategory> get categoriesApproachingLimit => Set<FilterListCategory>.from(_categoriesApproachingLimit);
 
   // Update getters
   List<FilterList> get availableUpdates => _availableUpdates;
@@ -141,7 +141,14 @@ class AppFilterManager extends ChangeNotifier {
   Future<void> _updateStatusAndCounts() async {
     try {
       _statusDescription = await FlutterWblockPlugin.getStatusDescription();
-      _lastRuleCount = await FlutterWblockPlugin.getLastRuleCount();
+      
+      // Get last rule count
+      final ruleCount = await FlutterWblockPlugin.getLastRuleCount();
+      if (ruleCount > 0) {
+        _lastRuleCount = ruleCount;
+        debugPrint('Updated last rule count: $_lastRuleCount');
+      }
+      
       notifyListeners();
     } catch (e) {
       debugPrint('Error updating status and counts: $e');
@@ -169,30 +176,108 @@ class AppFilterManager extends ChangeNotifier {
     try {
       _isLoading = true;
       _statusDescription = 'Applying filters...';
+      _progress = 0.0;
+      // Reset statistics to force fresh data
+      _sourceRulesCount = 0;
+      _lastRuleCount = 0;
+      _lastConversionTime = 'N/A';
+      _lastReloadTime = 'N/A';
+      _ruleCountsByCategory = <FilterListCategory, int>{};
+      _categoriesApproachingLimit = <FilterListCategory>{};
       _showingApplyProgressSheet = true;
       notifyListeners();
 
-      // Start progress monitoring
-      _monitorApplyProgress();
+      // Start progress monitoring in background
+      final progressFuture = _monitorApplyProgress();
 
       await FlutterWblockPlugin.checkAndEnableFilters(forceReload: forceReload);
+      
+      // Make sure to get final statistics
       await _updateStatusAndCounts();
 
-      _showingApplyProgressSheet = false;
+      // Wait for progress monitoring to complete
+      await progressFuture;
+      
+      // Force one more check for progress data
+      try {
+        final progressData = await FlutterWblockPlugin.getApplyProgress();
+        if (progressData != null) {
+          debugPrint('Final progress data check: ${progressData.keys.toList()}');
+          // Apply any final statistics from progress data
+          //_applyProgressData(progressData);
+        }
+      } catch (e) {
+        debugPrint('Could not get final progress data: $e');
+      }
+      
+      // Mark as complete
+      _progress = 1.0;
+      _isLoading = false;
+      notifyListeners();
+      
+      debugPrint('Apply complete. Final statistics:');
+      debugPrint('- Last rule count: $_lastRuleCount');
+      debugPrint('- Source rules: $_sourceRulesCount');
+      debugPrint('- Categories: ${_ruleCountsByCategory.length}');
+      debugPrint('- Conversion time: $_lastConversionTime');
+      debugPrint('- Reload time: $_lastReloadTime');
+      
+      // Keep sheet open to show results
+      // Don't auto-close, let user dismiss it
     } catch (e) {
       debugPrint('Error checking and enabling filters: $e');
-      _showingApplyProgressSheet = false;
-    } finally {
       _isLoading = false;
+      _progress = 1.0;
       notifyListeners();
     }
   }
 
+  void _applyStatistics(Map<String, dynamic> stats) {
+    // Apply statistics from direct fetch
+    if (stats['sourceRulesCount'] != null) {
+      _sourceRulesCount = stats['sourceRulesCount'] as int;
+    }
+    if (stats['lastRuleCount'] != null) {
+      _lastRuleCount = stats['lastRuleCount'] as int;
+    }
+    if (stats['lastConversionTime'] != null) {
+      _lastConversionTime = stats['lastConversionTime'] as String;
+    }
+    if (stats['lastReloadTime'] != null) {
+      _lastReloadTime = stats['lastReloadTime'] as String;
+    }
+    
+    // Apply category rules
+    final categoryRules = stats['ruleCountsByCategory'];
+    if (categoryRules != null && categoryRules is Map && categoryRules.isNotEmpty) {
+      final newCategoryRules = <FilterListCategory, int>{};
+      for (final entry in categoryRules.entries) {
+        final category = ParseFilterListCategory.fromRawValue(entry.key.toString());
+        if (category != null) {
+          newCategoryRules[category] = entry.value as int;
+        }
+      }
+      if (newCategoryRules.isNotEmpty) {
+        _ruleCountsByCategory = newCategoryRules;
+      }
+    }
+    
+    notifyListeners();
+  }
+
   Future<void> _monitorApplyProgress() async {
+    int noUpdateCount = 0;
+    double lastProgress = 0.0;
+    bool hasCompleteData = false;
+    
+    debugPrint('Starting progress monitoring...');
+    
     while (_isLoading && _showingApplyProgressSheet) {
       try {
         final progressData = await FlutterWblockPlugin.getApplyProgress();
         if (progressData != null) {
+          debugPrint('Progress data received: ${progressData.keys.toList()}');
+          
           _progress = (progressData['progress'] as num?)?.toDouble() ?? 0.0;
           _conversionStageDescription = progressData['stageDescription'] ?? '';
           _currentFilterName = progressData['currentFilterName'] ?? '';
@@ -202,27 +287,100 @@ class AppFilterManager extends ChangeNotifier {
           _isInSavingPhase = progressData['isInSavingPhase'] ?? false;
           _isInEnginePhase = progressData['isInEnginePhase'] ?? false;
           _isInReloadPhase = progressData['isInReloadPhase'] ?? false;
-          _sourceRulesCount = progressData['sourceRulesCount'] ?? 0;
-          _lastConversionTime = progressData['lastConversionTime'] ?? 'N/A';
-          _lastReloadTime = progressData['lastReloadTime'] ?? 'N/A';
-          _lastRuleCount = progressData['lastRuleCount'] ?? 0;
+          
+          // Update statistics - don't overwrite with empty values
+          final sourceRules = progressData['sourceRulesCount'] as int?;
+          if (sourceRules != null && sourceRules > 0) {
+            _sourceRulesCount = sourceRules;
+            debugPrint('Source rules count: $_sourceRulesCount');
+          }
+          
+          final lastRule = progressData['lastRuleCount'] as int?;
+          if (lastRule != null && lastRule > 0) {
+            _lastRuleCount = lastRule;
+            debugPrint('Last rule count: $_lastRuleCount');
+          }
+          
+          final convTime = progressData['lastConversionTime'] as String?;
+          if (convTime != null && convTime != 'N/A' && convTime.isNotEmpty) {
+            _lastConversionTime = convTime;
+            debugPrint('Conversion time: $_lastConversionTime');
+          }
+          
+          final reloadTime = progressData['lastReloadTime'] as String?;
+          if (reloadTime != null && reloadTime != 'N/A' && reloadTime.isNotEmpty) {
+            _lastReloadTime = reloadTime;
+            debugPrint('Reload time: $_lastReloadTime');
+          }
+          
           _hasError = progressData['hasError'] ?? false;
 
           // Update rule counts by category
           final categoryRules = progressData['ruleCountsByCategory'];
-          if (categoryRules != null) {
-            _ruleCountsByCategory =
-                (categoryRules as Map).map((key, value) => MapEntry(ParseFilterListCategory.fromRawValue(key) ?? FilterListCategory.all, value as int));
+          if (categoryRules != null && categoryRules is Map && categoryRules.isNotEmpty) {
+            debugPrint('Received category rules: $categoryRules');
+            final newCategoryRules = <FilterListCategory, int>{};
+            for (final entry in categoryRules.entries) {
+              final category = ParseFilterListCategory.fromRawValue(entry.key.toString());
+              if (category != null) {
+                newCategoryRules[category] = entry.value as int;
+                debugPrint('Category ${category.rawValue}: ${entry.value} rules');
+              }
+            }
+            if (newCategoryRules.isNotEmpty) {
+              _ruleCountsByCategory = newCategoryRules;
+              debugPrint('Updated rule counts by category: ${_ruleCountsByCategory.length} categories');
+            }
           }
 
           // Update categories approaching limit
           final approachingCategories = progressData['categoriesApproachingLimit'] as List<dynamic>?;
           if (approachingCategories != null) {
-            _categoriesApproachingLimit =
-                approachingCategories.map((name) => FilterListCategory.values.firstWhere((c) => c.rawValue == name, orElse: () => FilterListCategory.all)).toSet();
+            _categoriesApproachingLimit = <FilterListCategory>{};
+            for (final name in approachingCategories) {
+              final category = ParseFilterListCategory.fromRawValue(name.toString());
+              if (category != null) {
+                _categoriesApproachingLimit.add(category);
+              }
+            }
+            debugPrint('Categories approaching limit: ${_categoriesApproachingLimit.length}');
           }
 
           notifyListeners();
+          
+          // Check if we have complete data
+          hasCompleteData = _progress >= 1.0 && 
+                           (_lastRuleCount > 0 || _sourceRulesCount > 0) &&
+                           (_ruleCountsByCategory.isNotEmpty || _totalFiltersCount > 0);
+          
+          debugPrint('Progress: $_progress, Has complete data: $hasCompleteData');
+          
+          // Check if progress is complete with data
+          if (_progress >= 1.0) {
+            if (hasCompleteData) {
+              debugPrint('Progress complete with full data');
+              break;
+            } else {
+              // Give it more time to get complete data
+              noUpdateCount++;
+              if (noUpdateCount > 50) { // 5 seconds after completion
+                debugPrint('Timeout waiting for complete data');
+                break;
+              }
+            }
+          }
+          
+          // Check if progress is stuck
+          if (_progress == lastProgress && _progress < 1.0) {
+            noUpdateCount++;
+            if (noUpdateCount > 100) { // 10 seconds with no progress
+              debugPrint('Progress stuck at $_progress');
+              break;
+            }
+          } else if (_progress != lastProgress) {
+            noUpdateCount = 0;
+            lastProgress = _progress;
+          }
         }
       } catch (e) {
         debugPrint('Error monitoring apply progress: $e');
@@ -231,6 +389,13 @@ class AppFilterManager extends ChangeNotifier {
       // Check progress every 100ms
       await Future.delayed(const Duration(milliseconds: 100));
     }
+    
+    debugPrint('Progress monitoring completed. Final stats:');
+    debugPrint('- Source rules: $_sourceRulesCount');
+    debugPrint('- Last rule count: $_lastRuleCount');
+    debugPrint('- Categories: ${_ruleCountsByCategory.length}');
+    debugPrint('- Conversion time: $_lastConversionTime');
+    debugPrint('- Reload time: $_lastReloadTime');
   }
 
   Future<void> checkForUpdates() async {
@@ -304,21 +469,30 @@ class AppFilterManager extends ChangeNotifier {
     try {
       _isLoading = true;
       _statusDescription = 'Applying changes...';
+      _progress = 0.0;
       _showingApplyProgressSheet = true;
       notifyListeners();
 
-      // Start progress monitoring
-      _monitorApplyProgress();
+      // Start progress monitoring in background
+      final progressFuture = _monitorApplyProgress();
 
       await FlutterWblockPlugin.applyDownloadedChanges();
       await _updateStatusAndCounts();
 
-      _showingApplyProgressSheet = false;
+      // Wait for progress monitoring to complete
+      await progressFuture;
+      
+      // Mark as complete
+      _progress = 1.0;
+      _isLoading = false;
+      notifyListeners();
+      
+      // Keep sheet open to show results
+      // Don't auto-close, let user dismiss it
     } catch (e) {
       debugPrint('Error applying downloaded changes: $e');
-      _showingApplyProgressSheet = false;
-    } finally {
       _isLoading = false;
+      _progress = 1.0;
       notifyListeners();
     }
   }
@@ -383,22 +557,59 @@ class AppFilterManager extends ChangeNotifier {
     try {
       _isLoading = true;
       _statusDescription = 'Downloading selected filters...';
+      _progress = 0.0;
+      // Reset statistics to force fresh data
+      _sourceRulesCount = 0;
+      _lastRuleCount = 0;
+      _lastConversionTime = 'N/A';
+      _lastReloadTime = 'N/A';
+      _ruleCountsByCategory = <FilterListCategory, int>{};
+      _categoriesApproachingLimit = <FilterListCategory>{};
+      _showingApplyProgressSheet = true;
       notifyListeners();
 
-      // Start progress monitoring
-      _monitorApplyProgress();
+      // Start progress monitoring in background
+      final progressFuture = _monitorApplyProgress();
 
       final filterIds = filters.map((f) => f.id).toList();
       await FlutterWblockPlugin.downloadSelectedFilters(filterIds);
+      
+      // Make sure to get final statistics
       await _updateStatusAndCounts();
+      
+      // Also try to get statistics directly
+      /* try {
+        final stats = await FlutterWblockPlugin.getFilterStatistics();
+        if (stats != null) {
+          debugPrint('Direct statistics fetch after download: $stats');
+          _applyStatistics(stats);
+        }
+      } catch (e) {
+        debugPrint('Could not get direct statistics: $e');
+      } */
 
+      // Wait for progress monitoring to complete
+      await progressFuture;
+      
+      // Mark as complete
+      _progress = 1.0;
+      _isLoading = false;
+      
       _showingUpdatePopup = false;
-      _showingDownloadCompleteAlert = true;
       _downloadCompleteMessage = 'Downloaded ${filters.length} filter list${filters.length == 1 ? '' : 's'}.';
+      notifyListeners();
+      
+      debugPrint('Download complete. Final statistics:');
+      debugPrint('- Last rule count: $_lastRuleCount');
+      debugPrint('- Source rules: $_sourceRulesCount');
+      debugPrint('- Categories: ${_ruleCountsByCategory.length}');
+      
+      // Keep sheet open to show results
+      // Don't auto-close, let user dismiss it
     } catch (e) {
       debugPrint('Error downloading selected filters: $e');
-    } finally {
       _isLoading = false;
+      _progress = 1.0;
       notifyListeners();
     }
   }

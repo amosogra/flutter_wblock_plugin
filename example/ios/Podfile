@@ -35,40 +35,77 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # 1) CocoaPods will now load your all podspecs from ios/Podspecs
+  # ONLY add pods needed by the main app (NOT ContentBlockerConverter)
   # TEMPORARY: Using local podspecs for development
-  # When ready for production, comment out these lines and uncomment the GitHub source above
   pod 'Punycode', :podspec => '../../ios/Podspecs'
   pod 'FilterEngine', :podspec => '../../ios/Podspecs'
   pod 'PublicSuffixList', :podspec => '../../ios/Podspecs'
-  pod 'ContentBlockerConverter', :podspec => '../../ios/Podspecs'
+  # REMOVED: ContentBlockerConverter from Runner target - this was causing the cycle!
   pod 'ZIPFoundation', :podspec => '../../ios/Podspecs/ZipFoundation.podspec'
   pod 'wBlockCoreService', :podspec => '../../ios/Podspecs'
 
-  # 2) Now bring in everything else (including your plugin):
+  # Flutter pods for main app
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+end
 
-  # All wBlock Safari Content Blocker Extensions
-  %w[
-    wBlock\ Ads
-    wBlock\ Scripts
-    wBlock\ Privacy
-    wBlock\ Security
-    wBlock\ Annoyances
-    wBlock\ Multipurpose
-    wBlock\ Experimental
-    wBlock\ Foreign
-    wBlock\ Custom
-  ].each do |extension_name|
-    target extension_name do
-      inherit! :search_paths
-      pod 'wBlockCoreService', :podspec => '../../ios/Podspecs'
-    end
+# All wBlock Safari Content Blocker Extensions
+%w[
+  wBlock\ Ads
+  wBlock\ Scripts
+  wBlock\ Privacy
+  wBlock\ Security
+  wBlock\ Annoyances
+  wBlock\ Multipurpose
+  wBlock\ Experimental
+  wBlock\ Foreign
+  wBlock\ Custom
+].each do |extension_name|
+  target extension_name do
+    use_frameworks!
+    use_modular_headers!
+    
+    # CHANGED: Don't inherit search paths, define explicitly what extensions need
+    # inherit! :search_paths  # REMOVED - this was causing inheritance issues
+    
+    # Extensions only need these specific pods
+    pod 'ContentBlockerConverter', :podspec => '../../ios/Podspecs'
+    pod 'wBlockCoreService', :podspec => '../../ios/Podspecs'
+    # Add other pods that extensions specifically need
+    pod 'Punycode', :podspec => '../../ios/Podspecs'
+    pod 'FilterEngine', :podspec => '../../ios/Podspecs'
+    pod 'PublicSuffixList', :podspec => '../../ios/Podspecs'
   end
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    
+    target.build_configurations.each do |config|
+      # Ensure consistent deployment target
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '17.0'
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+      
+      # Fix simulator architecture issues
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386' 
+      
+      # Prevent framework embedding conflicts
+      if target.name.include?('ContentBlockerConverter')
+        config.build_settings['SKIP_INSTALL'] = 'YES'
+      end
+    end
+  end
+  
+  # Fix extension target build settings to use inherited values
+  installer.generated_projects.each do |project|
+    project.targets.each do |target|
+      if target.name.include?('wBlock')
+        target.build_configurations.each do |config|
+          # Ensure extension targets inherit CocoaPods settings
+          config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = '$(inherited)'
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '17.0'
+        end
+      end
+    end
   end
 end

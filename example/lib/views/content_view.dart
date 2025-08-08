@@ -11,6 +11,7 @@ import 'package:flutter_wblock_plugin_example/views/whitelist_manager_view.dart'
 import 'package:flutter_wblock_plugin_example/views/apply_changes_progress_view.dart';
 import 'package:flutter_wblock_plugin_example/views/missing_filters_view.dart';
 import 'package:flutter_wblock_plugin_example/views/update_popup_view.dart';
+import 'package:flutter_wblock_plugin_example/views/add_filter_list_view.dart';
 import 'package:flutter_wblock_plugin_example/views/stat_card.dart';
 import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
 import 'dart:io';
@@ -30,10 +31,11 @@ class _ContentViewState extends ConsumerState<ContentView> {
   @override
   void initState() {
     super.initState();
-
     // Listen to filter manager changes to show sheets
-    final filterManager = ref.read(appFilterManagerProvider);
-    filterManager.addListener(_handleFilterManagerChanges);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final filterManager = ref.read(appFilterManagerProvider);
+      filterManager.addListener(_handleFilterManagerChanges);
+    });
   }
 
   @override
@@ -44,26 +46,33 @@ class _ContentViewState extends ConsumerState<ContentView> {
   }
 
   void _handleFilterManagerChanges() {
-    final filterManager = ref.read(appFilterManagerProvider);
-
-    if (filterManager.showingUpdatePopup) {
-      _showUpdatePopup();
-    }
-    if (filterManager.showMissingFiltersSheet) {
-      _showMissingFiltersSheet();
-    }
-    if (filterManager.showingApplyProgressSheet) {
-      _showApplyProgressSheet();
-    }
-    if (filterManager.showingNoUpdatesAlert) {
-      _showNoUpdatesAlert();
-    }
-    if (filterManager.showingDownloadCompleteAlert) {
-      _showDownloadCompleteAlert();
-    }
-    if (filterManager.showingCategoryWarningAlert) {
-      _showCategoryWarningAlert();
-    }
+    if (!mounted) return;
+    
+    // Use post frame callback to avoid setState during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      
+      final filterManager = ref.read(appFilterManagerProvider);
+      
+      if (filterManager.showingUpdatePopup) {
+        _showUpdatePopup();
+      }
+      if (filterManager.showMissingFiltersSheet) {
+        _showMissingFiltersSheet();
+      }
+      if (filterManager.showingApplyProgressSheet) {
+        _showApplyProgressSheet();
+      }
+      if (filterManager.showingNoUpdatesAlert) {
+        _showNoUpdatesAlert();
+      }
+      if (filterManager.showingDownloadCompleteAlert) {
+        _showDownloadCompleteAlert();
+      }
+      if (filterManager.showingCategoryWarningAlert) {
+        _showCategoryWarningAlert();
+      }
+    });
   }
 
   @override
@@ -159,10 +168,12 @@ class _ContentViewState extends ConsumerState<ContentView> {
                     ],
                   ),
                 ),
+                // Only show loading overlay when actually loading and no sheet is showing
                 if (filterManager.isLoading &&
                     !filterManager.showingApplyProgressSheet &&
                     !filterManager.showMissingFiltersSheet &&
-                    !filterManager.showingUpdatePopup)
+                    !filterManager.showingUpdatePopup &&
+                    filterManager.statusDescription.isNotEmpty)
                   _buildLoadingOverlay(),
               ],
             ),
@@ -221,7 +232,12 @@ class _ContentViewState extends ConsumerState<ContentView> {
               ),
             ],
           ),
-          if (filterManager.isLoading && !filterManager.showingApplyProgressSheet && !filterManager.showMissingFiltersSheet && !filterManager.showingUpdatePopup)
+          // Only show loading overlay when actually loading and no sheet is showing
+          if (filterManager.isLoading && 
+              !filterManager.showingApplyProgressSheet && 
+              !filterManager.showMissingFiltersSheet && 
+              !filterManager.showingUpdatePopup &&
+              filterManager.statusDescription.isNotEmpty)
             _buildLoadingOverlay(),
         ],
       ),
@@ -413,7 +429,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
     final filterManager = ref.watch(appFilterManagerProvider);
 
     return Container(
-      color: Colors.black.withOpacity(0.1),
+      color: Colors.black.withOpacity(0.3),
       child: Center(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
@@ -447,82 +463,111 @@ class _ContentViewState extends ConsumerState<ContentView> {
 
   // Sheet methods
   void _showAddFilterSheet() {
-    final filterManager = ref.read(appFilterManagerProvider);
+    if (!mounted) return;
+    
     showMacosSheet(
       context: context,
-      builder: (context) => AddFilterListView(filterManager: filterManager),
+      builder: (context) => const AddFilterListView(),
     );
   }
 
   void _showLogsView() {
+    if (!mounted) return;
+    
     showMacosSheet(
       context: context,
-      builder: (context) => LogsView(onDismiss: () => Navigator.of(context).pop()),
+      builder: (context) => LogsView(
+        onDismiss: () => Navigator.of(context).pop(),
+      ),
     );
   }
 
   void _showUserScriptsView() {
-    final userScriptManager = ref.read(userScriptManagerProvider);
+    if (!mounted) return;
+    
     showMacosSheet(
       context: context,
-      builder: (context) => UserScriptManagerView(userScriptManager: userScriptManager, onDismiss: () => Navigator.of(context).pop()),
+      builder: (context) => UserScriptManagerView(
+        onDismiss: () => Navigator.of(context).pop(),
+      ),
     );
   }
 
   void _showWhitelistSheet() {
-    final filterManager = ref.read(appFilterManagerProvider);
+    if (!mounted) return;
+    
     showMacosSheet(
       context: context,
       builder: (context) => WhitelistManagerView(
-        filterManager: filterManager,
         onDismiss: () => Navigator.of(context).pop(),
       ),
     );
   }
 
   void _showUpdatePopup() {
+    if (!mounted) return;
+    
     final filterManager = ref.read(appFilterManagerProvider);
-    final userScriptManager = ref.read(userScriptManagerProvider);
+    if (!filterManager.showingUpdatePopup) return;
+    
     showMacosSheet(
       context: context,
+      barrierDismissible: false,
       builder: (context) => UpdatePopupView(
-        filterManager: filterManager,
-        userScriptManager: userScriptManager,
         onDismiss: () => Navigator.of(context).pop(),
       ),
-    ).then((_) {
+    ).whenComplete(() {
       filterManager.showingUpdatePopup = false;
     });
   }
 
   void _showMissingFiltersSheet() {
+    if (!mounted) return;
+    
     final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showMissingFiltersSheet) return;
+    
     showMacosSheet(
       context: context,
+      barrierDismissible: false,
       builder: (context) => MissingFiltersView(
-        filterManager: filterManager,
         onDismiss: () => Navigator.of(context).pop(),
       ),
-    ).then((_) {
+    ).whenComplete(() {
       filterManager.showMissingFiltersSheet = false;
     });
   }
 
   void _showApplyProgressSheet() {
+    if (!mounted) return;
+    
     final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showingApplyProgressSheet) return;
+    
     showMacosSheet(
       context: context,
+      barrierDismissible: false,
       builder: (context) => ApplyChangesProgressView(
-        filterManager: filterManager,
-        onDismiss: () => Navigator.of(context).pop(),
+        onDismiss: () {
+          Navigator.of(context).pop();
+          final fm = ref.read(appFilterManagerProvider);
+          fm.showingApplyProgressSheet = false;
+        },
       ),
-    ).then((_) {
-      filterManager.showingApplyProgressSheet = false;
+    ).whenComplete(() {
+      if (mounted) {
+        final fm = ref.read(appFilterManagerProvider);
+        fm.showingApplyProgressSheet = false;
+      }
     });
   }
 
   void _showNoUpdatesAlert() {
+    if (!mounted) return;
+    
     final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showingNoUpdatesAlert) return;
+    
     showMacosAlertDialog(
       context: context,
       builder: (context) => MacosAlertDialog(
@@ -535,13 +580,17 @@ class _ContentViewState extends ConsumerState<ContentView> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-    ).then((_) {
+    ).whenComplete(() {
       filterManager.showingNoUpdatesAlert = false;
     });
   }
 
   void _showDownloadCompleteAlert() {
+    if (!mounted) return;
+    
     final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showingDownloadCompleteAlert) return;
+    
     showMacosAlertDialog(
       context: context,
       builder: (context) => MacosAlertDialog(
@@ -563,13 +612,17 @@ class _ContentViewState extends ConsumerState<ContentView> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-    ).then((_) {
+    ).whenComplete(() {
       filterManager.showingDownloadCompleteAlert = false;
     });
   }
 
   void _showCategoryWarningAlert() {
+    if (!mounted) return;
+    
     final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showingCategoryWarningAlert) return;
+    
     showMacosAlertDialog(
       context: context,
       builder: (context) => MacosAlertDialog(
@@ -582,17 +635,18 @@ class _ContentViewState extends ConsumerState<ContentView> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-    ).then((_) {
+    ).whenComplete(() {
       filterManager.showingCategoryWarningAlert = false;
     });
   }
 
   // iOS-specific methods
   void _showAddFilterSheetIOS() {
-    final filterManager = ref.read(appFilterManagerProvider);
+    if (!mounted) return;
+    
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => AddFilterListViewIOS(filterManager: filterManager),
+      builder: (context) => const AddFilterListViewIOS(),
     );
   }
 }
@@ -661,72 +715,26 @@ class _FilterRuleCountTextState extends State<FilterRuleCountText> {
   }
 }
 
-class AddFilterListView extends StatefulWidget {
-  final filterManager;
-
-  const AddFilterListView({
-    super.key,
-    required this.filterManager,
-  });
+class AddFilterListViewIOS extends ConsumerStatefulWidget {
+  const AddFilterListViewIOS({super.key});
 
   @override
-  State<AddFilterListView> createState() => _AddFilterListViewState();
+  ConsumerState<AddFilterListViewIOS> createState() => _AddFilterListViewIOSState();
 }
 
-class _AddFilterListViewState extends State<AddFilterListView> {
+class _AddFilterListViewIOSState extends ConsumerState<AddFilterListViewIOS> {
   final _nameController = TextEditingController();
   final _urlController = TextEditingController();
-  String _errorMessage = '';
 
   @override
-  Widget build(BuildContext context) {
-    return MacosSheet(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Add Custom Filter List', style: AppTheme.headline),
-            const SizedBox(height: 20),
-            Text('Filter Name (Optional):', style: AppTheme.caption),
-            const SizedBox(height: 4),
-            MacosTextField(
-              controller: _nameController,
-              placeholder: 'e.g., My Ad Block List',
-            ),
-            const SizedBox(height: 16),
-            Text('Filter URL:', style: AppTheme.caption),
-            const SizedBox(height: 4),
-            MacosTextField(
-              controller: _urlController,
-              placeholder: 'https://example.com/filter.txt',
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                PushButton(
-                  controlSize: ControlSize.large,
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
-                ),
-                const SizedBox(width: 8),
-                PushButton(
-                  controlSize: ControlSize.large,
-                  color: AppTheme.primaryColor,
-                  onPressed: _urlController.text.trim().isEmpty ? null : _validateAndAdd,
-                  child: const Text('Add'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+  void dispose() {
+    _nameController.dispose();
+    _urlController.dispose();
+    super.dispose();
   }
 
   void _validateAndAdd() {
+    final filterManager = ref.read(appFilterManagerProvider);
     final trimmedURL = _urlController.text.trim();
 
     if (trimmedURL.isEmpty) {
@@ -739,84 +747,12 @@ class _AddFilterListViewState extends State<AddFilterListView> {
       return;
     }
 
-    if (widget.filterManager.filterLists.any((f) => f.url.toString() == trimmedURL)) {
+    if (filterManager.filterLists.any((f) => f.url.toString() == trimmedURL)) {
       _showError('A filter list with this URL already exists.');
       return;
     }
 
-    widget.filterManager.addFilterList(
-      name: _nameController.text.trim(),
-      urlString: trimmedURL,
-    );
-    Navigator.of(context).pop();
-  }
-
-  void _showError(String message) {
-    showMacosAlertDialog(
-      context: context,
-      builder: (context) => MacosAlertDialog(
-        appIcon: const MacosIcon(CupertinoIcons.exclamationmark_triangle),
-        title: const Text('Invalid Input'),
-        message: Text(message),
-        primaryButton: PushButton(
-          controlSize: ControlSize.large,
-          child: const Text('OK'),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _urlController.dispose();
-    super.dispose();
-  }
-}
-
-class AddFilterListViewIOS extends StatefulWidget {
-  final filterManager;
-
-  const AddFilterListViewIOS({
-    super.key,
-    required this.filterManager,
-  });
-
-  @override
-  State<AddFilterListViewIOS> createState() => _AddFilterListViewIOSState();
-}
-
-class _AddFilterListViewIOSState extends State<AddFilterListViewIOS> {
-  final _nameController = TextEditingController();
-  final _urlController = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _urlController.dispose();
-    super.dispose();
-  }
-
-  void _validateAndAdd() {
-    final trimmedURL = _urlController.text.trim();
-
-    if (trimmedURL.isEmpty) {
-      return;
-    }
-
-    final uri = Uri.tryParse(trimmedURL);
-    if (uri == null || !uri.hasScheme || !uri.hasAuthority) {
-      _showError('The URL entered is not valid. Please enter a complete and correct URL (e.g., http:// or https://).');
-      return;
-    }
-
-    if (widget.filterManager.filterLists.any((f) => f.url.toString() == trimmedURL)) {
-      _showError('A filter list with this URL already exists.');
-      return;
-    }
-
-    widget.filterManager.addFilterList(
+    filterManager.addFilterList(
       name: _nameController.text.trim(),
       urlString: trimmedURL,
     );

@@ -1,47 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wblock_plugin_example/providers/providers.dart';
+import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'dart:math' as math;
+import 'dart:io';
 
-class WhitelistManagerView extends StatefulWidget {
-  final AppFilterManager filterManager;
+class WhitelistManagerView extends ConsumerStatefulWidget {
   final VoidCallback onDismiss;
 
   const WhitelistManagerView({
     super.key,
-    required this.filterManager,
     required this.onDismiss,
   });
 
   @override
-  State<WhitelistManagerView> createState() => _WhitelistManagerViewState();
+  ConsumerState<WhitelistManagerView> createState() => _WhitelistManagerViewState();
 }
 
-class _WhitelistManagerViewState extends State<WhitelistManagerView> {
+class _WhitelistManagerViewState extends ConsumerState<WhitelistManagerView> {
   final _newDomainController = TextEditingController();
   Set<String> _selectedDomains = <String>{};
   bool _showError = false;
   String _errorMessage = '';
   bool _isProcessing = false;
 
-  List<String> get whitelistedDomains => widget.filterManager.whitelistViewModel.whitelistedDomains;
-
-  // Create a padded list to ensure minimum 10 rows for better UX
-  List<String> get paddedDomains {
-    final domains = whitelistedDomains.toList();
-    final padding = List.filled(math.max(0, 10 - domains.length), '');
-    return domains + padding;
-  }
-
   @override
   void initState() {
     super.initState();
-    widget.filterManager.whitelistViewModel.loadWhitelistedDomains();
+    final whitelistViewModel = ref.read(whitelistViewModelProvider);
+    whitelistViewModel.loadWhitelistedDomains();
   }
 
   @override
   Widget build(BuildContext context) {
+    final whitelistViewModel = ref.watch(whitelistViewModelProvider);
+    
+    if (Platform.isMacOS) {
+      return _buildMacOSView(whitelistViewModel);
+    } else {
+      return _buildIOSView(whitelistViewModel);
+    }
+  }
+
+  Widget _buildMacOSView(whitelistViewModel) {
     return Container(
       color: Colors.black.withOpacity(0.5),
       child: Center(
@@ -50,19 +53,20 @@ class _WhitelistManagerViewState extends State<WhitelistManagerView> {
           height: 400,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: MacosColors.windowBackgroundColor,
-            borderRadius: BorderRadius.circular(10),
+            color: AppTheme.cardBackground,
+            borderRadius: BorderRadius.circular(AppTheme.defaultRadius),
+            boxShadow: [AppTheme.cardShadow],
           ),
           child: Column(
             children: [
               _buildHeader(),
               Expanded(
-                child: _buildDomainsList(),
+                child: _buildDomainsList(whitelistViewModel),
               ),
-              _buildAddDomainSection(),
+              _buildAddDomainSection(whitelistViewModel),
               if (_showError) _buildErrorMessage(),
               if (_isProcessing) _buildProgressIndicator(),
-              _buildActionButtons(),
+              _buildActionButtons(whitelistViewModel),
             ],
           ),
         ),
@@ -70,16 +74,38 @@ class _WhitelistManagerViewState extends State<WhitelistManagerView> {
     );
   }
 
+  Widget _buildIOSView(whitelistViewModel) {
+    return CupertinoPageScaffold(
+      backgroundColor: AppTheme.backgroundColor,
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: AppTheme.cardBackground.withOpacity(0.94),
+        middle: const Text('Whitelisted Domains'),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: widget.onDismiss,
+          child: const Icon(CupertinoIcons.xmark_circle_fill),
+        ),
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: _buildDomainsList(whitelistViewModel),
+          ),
+          _buildAddDomainSection(whitelistViewModel),
+          if (_showError) _buildErrorMessage(),
+          if (_isProcessing) _buildProgressIndicator(),
+          _buildActionButtons(whitelistViewModel),
+        ],
+      ),
+    );
+  }
+
   Widget _buildHeader() {
     return Row(
       children: [
-        const Text(
+        Text(
           'Whitelisted Domains',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: MacosColors.labelColor,
-          ),
+          style: AppTheme.headline,
         ),
         const Spacer(),
         MacosIconButton(
@@ -90,14 +116,23 @@ class _WhitelistManagerViewState extends State<WhitelistManagerView> {
     );
   }
 
-  Widget _buildDomainsList() {
+  Widget _buildDomainsList(whitelistViewModel) {
+    List<String> whitelistedDomains = whitelistViewModel.whitelistedDomains;
+    
+    // Create a padded list to ensure minimum 10 rows for better UX
+    List<String> paddedDomains = whitelistedDomains.toList();
+    final padding = List.filled(math.max(0, 10 - paddedDomains.length), '');
+    paddedDomains = paddedDomains + padding;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
       height: 250, // Fixed height to prevent jumping
       decoration: BoxDecoration(
-        color: MacosColors.controlBackgroundColor,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: MacosColors.separatorColor),
+        color: Platform.isMacOS 
+          ? MacosColors.controlBackgroundColor 
+          : CupertinoColors.secondarySystemBackground,
+        borderRadius: BorderRadius.circular(AppTheme.smallRadius),
+        border: Border.all(color: AppTheme.dividerColor),
       ),
       child: ListView.builder(
         itemCount: paddedDomains.length,
@@ -120,26 +155,36 @@ class _WhitelistManagerViewState extends State<WhitelistManagerView> {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
-          MacosCheckbox(
-            value: isSelected,
-            onChanged: (checked) {
-              setState(() {
-                if (checked == true) {
-                  _selectedDomains.add(domain);
-                } else {
-                  _selectedDomains.remove(domain);
-                }
-              });
-            },
-          ),
+          Platform.isMacOS
+              ? MacosCheckbox(
+                  value: isSelected,
+                  onChanged: (checked) {
+                    setState(() {
+                      if (checked == true) {
+                        _selectedDomains.add(domain);
+                      } else {
+                        _selectedDomains.remove(domain);
+                      }
+                    });
+                  },
+                )
+              : CupertinoCheckbox(
+                  value: isSelected,
+                  onChanged: (checked) {
+                    setState(() {
+                      if (checked == true) {
+                        _selectedDomains.add(domain);
+                      } else {
+                        _selectedDomains.remove(domain);
+                      }
+                    });
+                  },
+                ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               domain,
-              style: const TextStyle(
-                fontSize: 13,
-                color: MacosColors.labelColor,
-              ),
+              style: AppTheme.body.copyWith(fontSize: 13),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -149,22 +194,39 @@ class _WhitelistManagerViewState extends State<WhitelistManagerView> {
     );
   }
 
-  Widget _buildAddDomainSection() {
+  Widget _buildAddDomainSection(whitelistViewModel) {
     return Row(
       children: [
         Expanded(
-          child: MacosTextField(
-            controller: _newDomainController,
-            placeholder: 'Add domain (e.g. example.com)',
-            onSubmitted: (_) => _addDomain(),
-          ),
+          child: Platform.isMacOS
+              ? MacosTextField(
+                  controller: _newDomainController,
+                  placeholder: 'Add domain (e.g. example.com)',
+                  onSubmitted: (_) => _addDomain(whitelistViewModel),
+                )
+              : CupertinoTextField(
+                  controller: _newDomainController,
+                  placeholder: 'Add domain (e.g. example.com)',
+                  padding: const EdgeInsets.all(12),
+                  onSubmitted: (_) => _addDomain(whitelistViewModel),
+                ),
         ),
         const SizedBox(width: 12),
-        PushButton(
-          controlSize: ControlSize.large,
-          onPressed: (_newDomainController.text.trim().isEmpty || _isProcessing) ? null : _addDomain,
-          child: const Text('Add'),
-        ),
+        Platform.isMacOS
+            ? PushButton(
+                controlSize: ControlSize.large,
+                color: AppTheme.primaryColor,
+                onPressed: (_newDomainController.text.trim().isEmpty || _isProcessing) 
+                  ? null 
+                  : () => _addDomain(whitelistViewModel),
+                child: const Text('Add'),
+              )
+            : CupertinoButton.filled(
+                onPressed: (_newDomainController.text.trim().isEmpty || _isProcessing) 
+                  ? null 
+                  : () => _addDomain(whitelistViewModel),
+                child: const Text('Add'),
+              ),
       ],
     );
   }
@@ -174,8 +236,7 @@ class _WhitelistManagerViewState extends State<WhitelistManagerView> {
       margin: const EdgeInsets.only(top: 8),
       child: Text(
         _errorMessage,
-        style: const TextStyle(
-          fontSize: 12,
+        style: AppTheme.caption.copyWith(
           color: Colors.red,
         ),
       ),
@@ -185,45 +246,71 @@ class _WhitelistManagerViewState extends State<WhitelistManagerView> {
   Widget _buildProgressIndicator() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
-      child: const Column(
+      child: Column(
         children: [
-          LinearProgressIndicator(),
-          SizedBox(height: 4),
+          LinearProgressIndicator(
+            backgroundColor: Platform.isMacOS 
+              ? MacosColors.quaternaryLabelColor 
+              : CupertinoColors.systemGrey4,
+            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+          ),
+          const SizedBox(height: 4),
           Text(
             'Processing...',
-            style: TextStyle(
-              fontSize: 12,
-              color: MacosColors.secondaryLabelColor,
-            ),
+            style: AppTheme.caption,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(whitelistViewModel) {
+    List<String> whitelistedDomains = whitelistViewModel.whitelistedDomains;
+    
     return Container(
       margin: const EdgeInsets.only(top: 12),
       child: Row(
         children: [
-          PushButton(
-            controlSize: ControlSize.large,
-            onPressed: (whitelistedDomains.isEmpty || _isProcessing) ? null : _selectAllDomains,
-            child: const Text('Select All'),
-          ),
+          Platform.isMacOS
+              ? PushButton(
+                  controlSize: ControlSize.large,
+                  onPressed: (whitelistedDomains.isEmpty || _isProcessing) 
+                    ? null 
+                    : () => _selectAllDomains(whitelistedDomains),
+                  child: const Text('Select All'),
+                )
+              : CupertinoButton(
+                  onPressed: (whitelistedDomains.isEmpty || _isProcessing) 
+                    ? null 
+                    : () => _selectAllDomains(whitelistedDomains),
+                  child: const Text('Select All'),
+                ),
           const SizedBox(width: 16),
-          PushButton(
-            controlSize: ControlSize.large,
-            onPressed: (_selectedDomains.isEmpty || _isProcessing) ? null : _deleteSelectedDomains,
-            child: const Text('Delete Selected'),
-          ),
+          Platform.isMacOS
+              ? PushButton(
+                  controlSize: ControlSize.large,
+                  onPressed: (_selectedDomains.isEmpty || _isProcessing) 
+                    ? null 
+                    : () => _deleteSelectedDomains(whitelistViewModel),
+                  child: const Text('Delete Selected'),
+                )
+              : CupertinoButton(
+                  color: CupertinoColors.destructiveRed,
+                  onPressed: (_selectedDomains.isEmpty || _isProcessing) 
+                    ? null 
+                    : () => _deleteSelectedDomains(whitelistViewModel),
+                  child: const Text(
+                    'Delete Selected',
+                    style: TextStyle(color: CupertinoColors.white),
+                  ),
+                ),
           const Spacer(),
         ],
       ),
     );
   }
 
-  void _addDomain() {
+  void _addDomain(whitelistViewModel) {
     final trimmed = _newDomainController.text.trim();
     if (trimmed.isEmpty) return;
 
@@ -234,7 +321,7 @@ class _WhitelistManagerViewState extends State<WhitelistManagerView> {
 
     // Simulate async operation
     Future.delayed(const Duration(milliseconds: 500), () {
-      final result = widget.filterManager.whitelistViewModel.addDomain(trimmed);
+      final result = whitelistViewModel.addDomain(trimmed);
 
       setState(() {
         _isProcessing = false;
@@ -248,13 +335,13 @@ class _WhitelistManagerViewState extends State<WhitelistManagerView> {
     });
   }
 
-  void _selectAllDomains() {
+  void _selectAllDomains(List<String> whitelistedDomains) {
     setState(() {
       _selectedDomains = Set<String>.from(whitelistedDomains);
     });
   }
 
-  void _deleteSelectedDomains() {
+  void _deleteSelectedDomains(whitelistViewModel) {
     if (_selectedDomains.isEmpty) return;
 
     setState(() {
@@ -264,7 +351,7 @@ class _WhitelistManagerViewState extends State<WhitelistManagerView> {
     // Simulate async operation
     Future.delayed(const Duration(milliseconds: 500), () {
       for (final domain in _selectedDomains) {
-        widget.filterManager.whitelistViewModel.removeDomain(domain);
+        whitelistViewModel.removeDomain(domain);
       }
 
       setState(() {

@@ -26,27 +26,105 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 
 flutter_macos_podfile_setup
 
-# Add wBlockCoreService from GitHub
-# Note: When ready for production, remove the local podspecs and use only this GitHub source
-# pod 'wBlockCoreService', :git => 'https://github.com/amosogra/wBlockCoreService_Package.git', :tag => '1.0.0'
-
 target 'Runner' do
   use_frameworks!
 
-  # 1) CocoaPods will now load your all podspecs from macos/Podspecs
-  # TEMPORARY: Using local podspecs for development
-  # When ready for production, comment out these lines and uncomment the GitHub source above
+  # Main app pods
   pod 'Punycode', :podspec => '../../macos/Podspecs'
   pod 'FilterEngine', :podspec => '../../macos/Podspecs'
   pod 'PublicSuffixList', :podspec => '../../macos/Podspecs'
-  pod 'ContentBlockerConverter', :podspec => '../../macos/Podspecs'
   pod 'ZIPFoundation', :podspec => '../../macos/Podspecs/ZipFoundation.podspec'
   pod 'wBlockCoreService', :podspec => '../../macos/Podspecs'
 
-  # 2) Now bring in everything else (including your plugin):
   flutter_install_all_macos_pods File.dirname(File.realpath(__FILE__))
 
-  # All wBlock Safari Content Blocker Extensions for macOS
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+
+# All wBlock Safari Content Blocker Extensions for macOS
+%w[
+  wBlock\ Ads\ &\ Privacy
+  wBlock\ Advanced
+  wBlock\ Annoyances
+  wBlock\ Custom
+  wBlock\ Foreign\ &\ Experimental
+  wBlock\ Scripts
+  wBlock\ Security\ &\ Multipurpose
+].each do |extension_name|
+  target extension_name do
+    use_frameworks!
+    
+    # Extensions need these specific pods
+    pod 'ContentBlockerConverter', :podspec => '../../macos/Podspecs'
+    pod 'wBlockCoreService', :podspec => '../../macos/Podspecs'
+    pod 'Punycode', :podspec => '../../macos/Podspecs'
+    pod 'FilterEngine', :podspec => '../../macos/Podspecs'
+    pod 'PublicSuffixList', :podspec => '../../macos/Podspecs'
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_macos_build_settings(target)
+    
+    target.build_configurations.each do |config|
+      # Ensure consistent deployment target
+      config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '14.0'
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+      
+      # Prevent framework embedding conflicts
+      if target.name.include?('ContentBlockerConverter')
+        config.build_settings['SKIP_INSTALL'] = 'YES'
+      end
+    end
+  end
+  
+  # Fix build setting conflicts for all project targets (including app targets)
+  installer.aggregate_targets.each do |target|
+    target.xcconfigs.each do |config_name, config_file|
+      config_file.attributes.each do |key, value|
+        if key == 'OTHER_LDFLAGS'
+          # Ensure OTHER_LDFLAGS includes $(inherited) to prevent conflicts
+          unless value.include?('$(inherited)')
+            config_file.attributes[key] = "$(inherited) #{value}"
+          end
+        end
+      end
+    end
+  end
+  
+  # Additional fix for generated project targets
+  installer.generated_projects.each do |project|
+    project.targets.each do |target|
+      target.build_configurations.each do |config|
+        # Ensure all targets use inherited values to prevent conflicts
+        config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '14.0'
+        
+        # Force inheritance of CocoaPods settings to prevent override warnings
+        if config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER']
+          config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = '$(inherited)'
+        end
+        
+        # Fix OTHER_LDFLAGS inheritance issues
+        if config.build_settings['OTHER_LDFLAGS']
+          existing_flags = config.build_settings['OTHER_LDFLAGS']
+          if existing_flags.is_a?(Array)
+            unless existing_flags.include?('$(inherited)')
+              config.build_settings['OTHER_LDFLAGS'] = ['$(inherited)'] + existing_flags
+            end
+          elsif existing_flags.is_a?(String)
+            unless existing_flags.include?('$(inherited)')
+              config.build_settings['OTHER_LDFLAGS'] = "$(inherited) #{existing_flags}"
+            end
+          end
+        end
+      end
+    end
+  end
+  
+  # Specific fix for wBlock extension targets
   %w[
     wBlock\ Ads\ &\ Privacy
     wBlock\ Advanced
@@ -56,19 +134,17 @@ target 'Runner' do
     wBlock\ Scripts
     wBlock\ Security\ &\ Multipurpose
   ].each do |extension_name|
-    target extension_name do
-      inherit! :search_paths
-      pod 'wBlockCoreService', :podspec => '../../macos/Podspecs'
+    extension_target = installer.pods_project.targets.find { |t| t.name.include?(extension_name.gsub('\ ', ' ')) }
+    next unless extension_target
+    
+    extension_target.build_configurations.each do |config|
+      # Ensure these targets properly inherit OTHER_LDFLAGS
+      existing_flags = config.build_settings['OTHER_LDFLAGS']
+      if existing_flags && !existing_flags.to_s.include?('$(inherited)')
+        config.build_settings['OTHER_LDFLAGS'] = "$(inherited) #{existing_flags}"
+      elsif !existing_flags
+        config.build_settings['OTHER_LDFLAGS'] = '$(inherited)'
+      end
     end
-  end
-
-  target 'RunnerTests' do
-    inherit! :search_paths
-  end
-end
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    flutter_additional_macos_build_settings(target)
   end
 end

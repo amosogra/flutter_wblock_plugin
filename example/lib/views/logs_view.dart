@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wblock_plugin/flutter_wblock_plugin.dart';
-import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
+import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'dart:io';
 
-class LogsView extends StatefulWidget {
+class LogsView extends ConsumerStatefulWidget {
   final VoidCallback onDismiss;
 
   const LogsView({
@@ -14,10 +15,10 @@ class LogsView extends StatefulWidget {
   });
 
   @override
-  State<LogsView> createState() => _LogsViewState();
+  ConsumerState<LogsView> createState() => _LogsViewState();
 }
 
-class _LogsViewState extends State<LogsView> {
+class _LogsViewState extends ConsumerState<LogsView> {
   String _logs = '';
   bool _isLoading = false;
 
@@ -74,8 +75,9 @@ class _LogsViewState extends State<LogsView> {
           width: 600,
           height: 650,
           decoration: BoxDecoration(
-            color: WBlockTheme.cardBackgroundColor,
-            borderRadius: BorderRadius.circular(10),
+            color: AppTheme.cardBackground,
+            borderRadius: BorderRadius.circular(AppTheme.defaultRadius),
+            boxShadow: [AppTheme.cardShadow],
           ),
           child: Column(
             children: [
@@ -93,9 +95,9 @@ class _LogsViewState extends State<LogsView> {
 
   Widget _buildIOSView() {
     return CupertinoPageScaffold(
-      backgroundColor: WBlockTheme.iOSBackgroundColor,
+      backgroundColor: AppTheme.backgroundColor,
       navigationBar: CupertinoNavigationBar(
-        backgroundColor: WBlockTheme.iOSNavigationBarColorTranslucent,
+        backgroundColor: AppTheme.cardBackground.withOpacity(0.94),
         middle: const Text('wBlock Logs'),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
@@ -119,13 +121,9 @@ class _LogsViewState extends State<LogsView> {
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          const Text(
+          Text(
             'wBlock Logs',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: WBlockTheme.primaryTextColor,
-            ),
+            style: AppTheme.headline,
           ),
           const Spacer(),
           MacosIconButton(
@@ -140,7 +138,9 @@ class _LogsViewState extends State<LogsView> {
   Widget _buildContent() {
     if (_isLoading) {
       return Center(
-        child: Platform.isMacOS ? const ProgressCircle() : const CupertinoActivityIndicator(),
+        child: Platform.isMacOS 
+          ? const ProgressCircle() 
+          : const CupertinoActivityIndicator(),
       );
     }
 
@@ -148,35 +148,37 @@ class _LogsViewState extends State<LogsView> {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF2F2F7), // Light background for code
-        borderRadius: BorderRadius.circular(8),
+        color: Platform.isMacOS 
+          ? const Color(0xFFF2F2F7)
+          : CupertinoColors.systemGrey6.resolveFrom(context),
+        borderRadius: BorderRadius.circular(AppTheme.smallRadius),
         border: Border.all(
-          color: WBlockTheme.dividerColor,
+          color: AppTheme.dividerColor,
         ),
       ),
-      child: Platform.isMacOS
-          ? SelectableText(
-              _logs.isEmpty ? 'No logs available' : _logs,
-              style: const TextStyle(
-                fontFamily: 'SF Mono',
-                fontSize: 12,
-              ),
-            )
-          : SingleChildScrollView(
-              child: SelectableText(
-                _logs.isEmpty ? 'No logs available' : _logs,
-                style: const TextStyle(
-                  fontFamily: 'SF Mono',
-                  fontSize: 12,
-                ),
-              ),
-            ),
+      child: SingleChildScrollView(
+        child: SelectableText(
+          _logs.isEmpty ? 'No logs available' : _logs,
+          style: TextStyle(
+            fontFamily: Platform.isMacOS ? 'SF Mono' : 'Courier',
+            fontSize: 12,
+            color: CupertinoColors.label,
+          ),
+        ),
+      ),
     );
   }
 
   Widget _buildMacOSButtons() {
     return Container(
       padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: AppTheme.dividerColor,
+          ),
+        ),
+      ),
       child: Row(
         children: [
           PushButton(
@@ -198,6 +200,14 @@ class _LogsViewState extends State<LogsView> {
   Widget _buildIOSButtons() {
     return Container(
       padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppTheme.cardBackground,
+        border: Border(
+          top: BorderSide(
+            color: AppTheme.dividerColor,
+          ),
+        ),
+      ),
       child: Row(
         children: [
           Expanded(
@@ -211,7 +221,10 @@ class _LogsViewState extends State<LogsView> {
             child: CupertinoButton(
               color: CupertinoColors.destructiveRed,
               onPressed: _clearLogs,
-              child: const Text('Clear Logs'),
+              child: const Text(
+                'Clear Logs',
+                style: TextStyle(color: CupertinoColors.white),
+              ),
             ),
           ),
         ],

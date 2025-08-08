@@ -1,38 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
-import 'package:flutter_wblock_plugin_example/managers/user_script_manager.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wblock_plugin_example/providers/providers.dart';
 import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
 import 'package:flutter_wblock_plugin_example/models/user_script.dart';
-import 'package:flutter_wblock_plugin_example/theme/theme_constants.dart';
+import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'dart:io';
+import 'dart:ui';
 
-class UpdatePopupView extends StatefulWidget {
-  final AppFilterManager filterManager;
-  final UserScriptManager? userScriptManager;
+class UpdatePopupView extends ConsumerStatefulWidget {
   final VoidCallback onDismiss;
 
   const UpdatePopupView({
     super.key,
-    required this.filterManager,
-    this.userScriptManager,
     required this.onDismiss,
   });
 
   @override
-  State<UpdatePopupView> createState() => _UpdatePopupViewState();
+  ConsumerState<UpdatePopupView> createState() => _UpdatePopupViewState();
 }
 
-class _UpdatePopupViewState extends State<UpdatePopupView> {
+class _UpdatePopupViewState extends ConsumerState<UpdatePopupView> {
   Set<String> _selectedFilters = <String>{};
   Set<String> _selectedScripts = <String>{};
   Set<FilterListCategory> _selectedCategories = <FilterListCategory>{};
   List<UserScript> _scriptsWithUpdates = [];
-
-  int get progressPercentage => (widget.filterManager.progress * 100).round();
-
-  bool get hasScriptUpdates => _scriptsWithUpdates.isNotEmpty;
 
   @override
   void initState() {
@@ -42,103 +35,106 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
   }
 
   void _initializeSelectedItems() {
+    final filterManager = ref.read(appFilterManagerProvider);
+    
     // Initialize selected filters
-    _selectedFilters = Set<String>.from(widget.filterManager.availableUpdates.map((f) => f.id));
+    _selectedFilters = Set<String>.from(filterManager.availableUpdates.map((f) => f.id));
 
     // Initialize selected categories from filters
     final categories = <FilterListCategory>{};
-    for (final filter in widget.filterManager.availableUpdates) {
+    for (final filter in filterManager.availableUpdates) {
       categories.add(filter.category);
     }
     _selectedCategories = categories;
   }
 
   Future<void> _loadScriptUpdates() async {
-    if (widget.userScriptManager != null) {
-      // In a real implementation, you would check for script updates
-      // For now, we'll simulate this
-      _scriptsWithUpdates = widget.userScriptManager!.userScripts
-          .where((script) => script.isDownloaded)
-          .take(2) // Simulate some scripts having updates
-          .toList();
+    final userScriptManager = ref.read(userScriptManagerProvider);
+    
+    // In a real implementation, you would check for script updates
+    // For now, we'll simulate this
+    _scriptsWithUpdates = userScriptManager.userScripts
+        .where((script) => script.isDownloaded)
+        .take(2) // Simulate some scripts having updates
+        .toList();
 
-      if (_scriptsWithUpdates.isNotEmpty) {
-        _selectedScripts = Set<String>.from(_scriptsWithUpdates.map((s) => s.id));
-        _selectedCategories.add(FilterListCategory.scripts);
-      }
+    if (_scriptsWithUpdates.isNotEmpty) {
+      _selectedScripts = Set<String>.from(_scriptsWithUpdates.map((s) => s.id));
+      _selectedCategories.add(FilterListCategory.scripts);
+    }
+    if (mounted) {
       setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final filterManager = ref.watch(appFilterManagerProvider);
+    final progressPercentage = (filterManager.progress * 100).round();
+
     if (Platform.isMacOS) {
-      return _buildMacOSView();
+      return _buildMacOSView(filterManager, progressPercentage);
     } else {
-      return _buildIOSView();
+      return _buildIOSView(filterManager, progressPercentage);
     }
   }
 
-  Widget _buildMacOSView() {
+  Widget _buildMacOSView(filterManager, int progressPercentage) {
     return Container(
       color: Colors.black.withOpacity(0.5),
       child: Center(
         child: Container(
           width: 450,
           height: 350,
-          decoration: BoxDecoration(
-            color: WBlockTheme.cardBackgroundColor,
-            borderRadius: BorderRadius.circular(10),
+          child: AppTheme.ultraThinMaterial(
+            child: _buildContent(filterManager, progressPercentage),
           ),
-          child: _buildContent(),
         ),
       ),
     );
   }
 
-  Widget _buildIOSView() {
+  Widget _buildIOSView(filterManager, int progressPercentage) {
     return Container(
       color: CupertinoColors.black.withOpacity(0.5),
       child: Center(
         child: Container(
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: WBlockTheme.cardBackgroundColor,
+            color: AppTheme.cardBackground,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: _buildContent(),
+          child: _buildContent(filterManager, progressPercentage),
         ),
       ),
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(filterManager, int progressPercentage) {
     return Column(
       children: [
-        _buildHeader(),
+        _buildHeader(filterManager),
         Expanded(
-          child: widget.filterManager.isLoading ? _buildDownloadProgress() : _buildFilterSelection(),
+          child: filterManager.isLoading 
+            ? _buildDownloadProgress(filterManager, progressPercentage) 
+            : _buildFilterSelection(filterManager),
         ),
-        if (!widget.filterManager.isLoading) _buildButtons(),
+        if (!filterManager.isLoading) _buildButtons(filterManager),
       ],
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(filterManager) {
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
           Text(
-            widget.filterManager.isLoading ? 'Downloading Updates' : 'Available Updates',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: WBlockTheme.primaryTextColor,
-            ),
+            filterManager.isLoading ? 'Downloading Updates' : 'Available Updates',
+            style: AppTheme.headline.copyWith(fontSize: 18),
           ),
           const Spacer(),
-          if (!widget.filterManager.isLoading)
+          if (!filterManager.isLoading)
             Platform.isMacOS
                 ? MacosIconButton(
                     icon: const MacosIcon(CupertinoIcons.xmark_circle_fill),
@@ -147,69 +143,66 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
                 : CupertinoButton(
                     padding: EdgeInsets.zero,
                     onPressed: widget.onDismiss,
-                    child: const Icon(CupertinoIcons.xmark_circle_fill),
+                    child: Icon(
+                      CupertinoIcons.xmark_circle_fill,
+                      color: AppTheme.secondaryLabel,
+                    ),
                   ),
         ],
       ),
     );
   }
 
-  Widget _buildDownloadProgress() {
+  Widget _buildDownloadProgress(filterManager, int progressPercentage) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildProgressIndicator(),
+          _buildProgressIndicator(filterManager, progressPercentage),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'After downloading, filter lists will be applied automatically.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: WBlockTheme.secondaryTextColor,
-            ),
+            style: AppTheme.caption,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildProgressIndicator() {
+  Widget _buildProgressIndicator(filterManager, int progressPercentage) {
     return Column(
       children: [
         SizedBox(
           width: 200,
           child: LinearProgressIndicator(
-            value: widget.filterManager.progress,
-            backgroundColor: WBlockTheme.dividerColor,
-            valueColor: AlwaysStoppedAnimation<Color>(
-              Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue,
-            ),
+            value: filterManager.progress,
+            backgroundColor: AppTheme.dividerColor,
+            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+            minHeight: 3,
           ),
         ),
         const SizedBox(height: 8),
         Text(
           '$progressPercentage%',
-          style: const TextStyle(
-            fontSize: 12,
+          style: AppTheme.caption.copyWith(
             fontWeight: FontWeight.w500,
-            color: WBlockTheme.secondaryTextColor,
-            fontFeatures: [FontFeature.tabularFigures()],
+            fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
       ],
     );
   }
 
-  Widget _buildFilterSelection() {
+  Widget _buildFilterSelection(filterManager) {
     final filtersByCategory = <FilterListCategory, List<FilterList>>{};
-    for (final filter in widget.filterManager.availableUpdates) {
+    for (final filter in filterManager.availableUpdates) {
       filtersByCategory.putIfAbsent(filter.category, () => []).add(filter);
     }
 
     final allCategories = <FilterListCategory>[...filtersByCategory.keys];
-    if (hasScriptUpdates) {
+    if (_scriptsWithUpdates.isNotEmpty) {
       allCategories.add(FilterListCategory.scripts);
     }
 
@@ -230,7 +223,8 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
         _buildCategoryHeader(category, filters),
         const SizedBox(height: 8),
         ...filters.map((filter) => _buildFilterRow(filter)),
-        if (category == FilterListCategory.scripts && hasScriptUpdates) ..._scriptsWithUpdates.map((script) => _buildScriptRow(script)),
+        if (category == FilterListCategory.scripts && _scriptsWithUpdates.isNotEmpty) 
+          ..._scriptsWithUpdates.map((script) => _buildScriptRow(script)),
         const SizedBox(height: 16),
       ],
     );
@@ -243,11 +237,7 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
       children: [
         Text(
           category.rawValue,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: WBlockTheme.primaryTextColor,
-          ),
+          style: AppTheme.headline,
         ),
         const Spacer(),
         Platform.isMacOS
@@ -267,64 +257,14 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
     final isSelected = _selectedFilters.contains(filter.id);
 
     return GestureDetector(
-        onTap: () => _toggleFilter(filter.id),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: [
-              Icon(
-                isSelected ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
-                color: isSelected
-                    ? (Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue)
-                    : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
-                size: 20,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      filter.name,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: WBlockTheme.primaryTextColor,
-                      ),
-                    ),
-                    if (filter.description.isNotEmpty) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        filter.description,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: WBlockTheme.secondaryTextColor,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ));
-  }
-
-  Widget _buildScriptRow(UserScript script) {
-    final isSelected = _selectedScripts.contains(script.id);
-
-    return GestureDetector(
-      onTap: () => _toggleScript(script.id),
+      onTap: () => _toggleFilter(filter.id),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
           children: [
             Icon(
               isSelected ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
-              color: isSelected
-                  ? (Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue)
-                  : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
+              color: isSelected ? AppTheme.primaryColor : AppTheme.secondaryLabel,
               size: 20,
             ),
             const SizedBox(width: 12),
@@ -333,20 +273,14 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    script.name,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: WBlockTheme.primaryTextColor,
-                    ),
+                    filter.name,
+                    style: AppTheme.body,
                   ),
-                  if (script.description.isNotEmpty) ...[
+                  if (filter.description.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(
-                      script.description,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: WBlockTheme.secondaryTextColor,
-                      ),
+                      filter.description,
+                      style: AppTheme.caption,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -360,7 +294,48 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
     );
   }
 
-  Widget _buildButtons() {
+  Widget _buildScriptRow(UserScript script) {
+    final isSelected = _selectedScripts.contains(script.id);
+
+    return GestureDetector(
+      onTap: () => _toggleScript(script.id),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Icon(
+              isSelected ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
+              color: isSelected ? AppTheme.primaryColor : AppTheme.secondaryLabel,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    script.name,
+                    style: AppTheme.body,
+                  ),
+                  if (script.description.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      script.description,
+                      style: AppTheme.caption,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtons(filterManager) {
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
@@ -369,11 +344,16 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
           Platform.isMacOS
               ? PushButton(
                   controlSize: ControlSize.large,
-                  onPressed: (_selectedFilters.isEmpty && _selectedScripts.isEmpty) ? null : _downloadUpdates,
+                  color: AppTheme.primaryColor,
+                  onPressed: (_selectedFilters.isEmpty && _selectedScripts.isEmpty) 
+                      ? null 
+                      : _downloadUpdates,
                   child: const Text('Download'),
                 )
               : CupertinoButton.filled(
-                  onPressed: (_selectedFilters.isEmpty && _selectedScripts.isEmpty) ? null : _downloadUpdates,
+                  onPressed: (_selectedFilters.isEmpty && _selectedScripts.isEmpty) 
+                      ? null 
+                      : _downloadUpdates,
                   child: const Text('Download'),
                 ),
           const Spacer(),
@@ -405,21 +385,27 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
   }
 
   void _toggleFilter(String filterId) {
+    final filterManager = ref.read(appFilterManagerProvider);
+    
     setState(() {
       if (_selectedFilters.contains(filterId)) {
         _selectedFilters.remove(filterId);
 
         // Check if all filters in this category are deselected
-        final filter = widget.filterManager.availableUpdates.firstWhere((f) => f.id == filterId);
-        final categoryFilters = widget.filterManager.availableUpdates.where((f) => f.category == filter.category).toList();
-        final selectedCategoryFilters = categoryFilters.where((f) => _selectedFilters.contains(f.id)).toList();
+        final filter = filterManager.availableUpdates.firstWhere((f) => f.id == filterId);
+        final categoryFilters = filterManager.availableUpdates
+            .where((f) => f.category == filter.category)
+            .toList();
+        final selectedCategoryFilters = categoryFilters
+            .where((f) => _selectedFilters.contains(f.id))
+            .toList();
 
         if (selectedCategoryFilters.isEmpty) {
           _selectedCategories.remove(filter.category);
         }
       } else {
         _selectedFilters.add(filterId);
-        final filter = widget.filterManager.availableUpdates.firstWhere((f) => f.id == filterId);
+        final filter = filterManager.availableUpdates.firstWhere((f) => f.id == filterId);
         _selectedCategories.add(filter.category);
       }
     });
@@ -440,20 +426,27 @@ class _UpdatePopupViewState extends State<UpdatePopupView> {
   }
 
   Future<void> _downloadUpdates() async {
+    final filterManager = ref.read(appFilterManagerProvider);
+    final userScriptManager = ref.read(userScriptManagerProvider);
+    
     // Handle filter list updates
-    final filtersToUpdate = widget.filterManager.availableUpdates.where((f) => _selectedFilters.contains(f.id)).toList();
+    final filtersToUpdate = filterManager.availableUpdates
+        .where((f) => _selectedFilters.contains(f.id))
+        .toList();
 
     if (filtersToUpdate.isNotEmpty) {
-      await widget.filterManager.downloadSelectedFilters(filtersToUpdate);
+      await filterManager.downloadSelectedFilters(filtersToUpdate);
     }
 
     // Handle script updates
-    if (widget.userScriptManager != null && _selectedScripts.isNotEmpty) {
-      final scriptsToUpdate = _scriptsWithUpdates.where((s) => _selectedScripts.contains(s.id)).toList();
+    if (_selectedScripts.isNotEmpty) {
+      final scriptsToUpdate = _scriptsWithUpdates
+          .where((s) => _selectedScripts.contains(s.id))
+          .toList();
 
       if (scriptsToUpdate.isNotEmpty) {
         for (final script in scriptsToUpdate) {
-          await widget.userScriptManager!.updateUserScript(script);
+          await userScriptManager.updateUserScript(script);
         }
       }
     }

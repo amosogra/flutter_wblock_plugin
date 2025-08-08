@@ -236,6 +236,90 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
         case "getMissingFilters":
             getMissingFilters(result: result)
             
+        case "getTimingStatistics":
+            getTimingStatistics(result: result)
+            
+        case "getSourceRulesCount":
+            getSourceRulesCount(result: result)
+            
+        case "getDetailedProgress":
+            getDetailedProgress(result: result)
+            
+        case "getShowingUpdatePopup":
+            getShowingUpdatePopup(result: result)
+            
+        case "getShowingApplyProgressSheet":
+            getShowingApplyProgressSheet(result: result)
+            
+        case "getShowMissingFiltersSheet":
+            getShowMissingFiltersSheet(result: result)
+            
+        case "setShowingUpdatePopup":
+            guard let args = call.arguments as? [String: Any],
+                  let value = args["value"] as? Bool else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing value", details: nil))
+                return
+            }
+            setShowingUpdatePopup(value: value, result: result)
+            
+        case "setShowingApplyProgressSheet":
+            guard let args = call.arguments as? [String: Any],
+                  let value = args["value"] as? Bool else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing value", details: nil))
+                return
+            }
+            setShowingApplyProgressSheet(value: value, result: result)
+            
+        case "setShowMissingFiltersSheet":
+            guard let args = call.arguments as? [String: Any],
+                  let value = args["value"] as? Bool else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing value", details: nil))
+                return
+            }
+            setShowMissingFiltersSheet(value: value, result: result)
+            
+        case "getAvailableUpdates":
+            getAvailableUpdates(result: result)
+            
+        case "getCategoryWarningMessage":
+            getCategoryWarningMessage(result: result)
+            
+        case "getShowingCategoryWarningAlert":
+            getShowingCategoryWarningAlert(result: result)
+            
+        case "setShowingCategoryWarningAlert":
+            guard let args = call.arguments as? [String: Any],
+                  let value = args["value"] as? Bool else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing value", details: nil))
+                return
+            }
+            setShowingCategoryWarningAlert(value: value, result: result)
+            
+        case "getShowingNoUpdatesAlert":
+            getShowingNoUpdatesAlert(result: result)
+            
+        case "setShowingNoUpdatesAlert":
+            guard let args = call.arguments as? [String: Any],
+                  let value = args["value"] as? Bool else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing value", details: nil))
+                return
+            }
+            setShowingNoUpdatesAlert(value: value, result: result)
+            
+        case "getShowingDownloadCompleteAlert":
+            getShowingDownloadCompleteAlert(result: result)
+            
+        case "setShowingDownloadCompleteAlert":
+            guard let args = call.arguments as? [String: Any],
+                  let value = args["value"] as? Bool else {
+                result(FlutterError(code: "INVALID_ARGUMENT", message: "Missing value", details: nil))
+                return
+            }
+            setShowingDownloadCompleteAlert(value: value, result: result)
+            
+        case "getDownloadCompleteMessage":
+            getDownloadCompleteMessage(result: result)
+            
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -713,6 +797,172 @@ public class FlutterWblockPlugin: NSObject, FlutterPlugin {
                 ]
             }
             result(missingFilters)
+        }
+    }
+}
+
+
+extension FlutterWblockPlugin {
+    
+    // MARK: - Additional Method Implementations
+    
+    func getTimingStatistics(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result([:])
+                return
+            }
+            
+            let timingStats: [String: Any] = [
+                "lastConversionTime": filterManager.lastConversionTime,
+                "lastReloadTime": filterManager.lastReloadTime,
+                "lastFastUpdateTime": filterManager.lastFastUpdateTime,
+                "fastUpdateCount": filterManager.fastUpdateCount
+            ]
+            
+            result(timingStats)
+        }
+    }
+    
+    func getSourceRulesCount(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            result(filterManager?.sourceRulesCount ?? 0)
+        }
+    }
+    
+    func getDetailedProgress(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result([:])
+                return
+            }
+            
+            let detailedProgress: [String: Any] = [
+                "sourceRulesCount": filterManager.sourceRulesCount,
+                "conversionStageDescription": filterManager.conversionStageDescription,
+                "currentFilterName": filterManager.currentFilterName,
+                "processedFiltersCount": filterManager.processedFiltersCount,
+                "totalFiltersCount": filterManager.totalFiltersCount,
+                "isInConversionPhase": filterManager.isInConversionPhase,
+                "isInSavingPhase": filterManager.isInSavingPhase,
+                "isInEnginePhase": filterManager.isInEnginePhase,
+                "isInReloadPhase": filterManager.isInReloadPhase
+            ]
+            
+            result(detailedProgress)
+        }
+    }
+    
+    func getShowingUpdatePopup(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            result(filterManager?.showingUpdatePopup ?? false)
+        }
+    }
+    
+    func getShowingApplyProgressSheet(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            result(filterManager?.showingApplyProgressSheet ?? false)
+        }
+    }
+    
+    func getShowMissingFiltersSheet(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            result(filterManager?.showMissingFiltersSheet ?? false)
+        }
+    }
+    
+    func setShowingUpdatePopup(value: Bool, result: @escaping FlutterResult) {
+        Task { @MainActor in
+            filterManager?.showingUpdatePopup = value
+            result(nil)
+        }
+    }
+    
+    func setShowingApplyProgressSheet(value: Bool, result: @escaping FlutterResult) {
+        Task { @MainActor in
+            filterManager?.showingApplyProgressSheet = value
+            result(nil)
+        }
+    }
+    
+    func setShowMissingFiltersSheet(value: Bool, result: @escaping FlutterResult) {
+        Task { @MainActor in
+            filterManager?.showMissingFiltersSheet = value
+            result(nil)
+        }
+    }
+    
+    func getAvailableUpdates(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            guard let filterManager = filterManager else {
+                result([])
+                return
+            }
+            
+            let availableUpdates = filterManager.availableUpdates.map { filter in
+                return [
+                    "id": filter.id.uuidString,
+                    "name": filter.name,
+                    "description": filter.description,
+                    "category": filter.category.rawValue,
+                    "url": filter.url.absoluteString,
+                    "version": filter.version,
+                    "isSelected": filter.isSelected,
+                    "sourceRuleCount": filter.sourceRuleCount as Any
+                ]
+            }
+            result(availableUpdates)
+        }
+    }
+    
+    func getCategoryWarningMessage(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            result(filterManager?.categoryWarningMessage ?? "")
+        }
+    }
+    
+    func getShowingCategoryWarningAlert(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            result(filterManager?.showingCategoryWarningAlert ?? false)
+        }
+    }
+    
+    func setShowingCategoryWarningAlert(value: Bool, result: @escaping FlutterResult) {
+        Task { @MainActor in
+            filterManager?.showingCategoryWarningAlert = value
+            result(nil)
+        }
+    }
+    
+    func getShowingNoUpdatesAlert(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            result(filterManager?.showingNoUpdatesAlert ?? false)
+        }
+    }
+    
+    func setShowingNoUpdatesAlert(value: Bool, result: @escaping FlutterResult) {
+        Task { @MainActor in
+            filterManager?.showingNoUpdatesAlert = value
+            result(nil)
+        }
+    }
+    
+    func getShowingDownloadCompleteAlert(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            result(filterManager?.showingDownloadCompleteAlert ?? false)
+        }
+    }
+    
+    func setShowingDownloadCompleteAlert(value: Bool, result: @escaping FlutterResult) {
+        Task { @MainActor in
+            filterManager?.showingDownloadCompleteAlert = value
+            result(nil)
+        }
+    }
+    
+    func getDownloadCompleteMessage(result: @escaping FlutterResult) {
+        Task { @MainActor in
+            result(filterManager?.downloadCompleteMessage ?? "")
         }
     }
 }

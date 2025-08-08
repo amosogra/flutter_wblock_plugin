@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wblock_plugin_example/providers/providers.dart';
 import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'package:flutter_wblock_plugin_example/views/logs_view.dart';
-import 'package:flutter_wblock_plugin_example/views/whitelist_view.dart';
 import 'package:flutter_wblock_plugin_example/views/user_script_manager_view.dart';
 import 'package:flutter_wblock_plugin_example/views/whitelist_manager_view.dart';
 import 'package:flutter_wblock_plugin_example/views/apply_changes_progress_view.dart';
@@ -27,6 +26,14 @@ class ContentView extends ConsumerStatefulWidget {
 class _ContentViewState extends ConsumerState<ContentView> {
   List<FilterListCategory> get displayableCategories =>
       FilterListCategory.values.where((c) => c != FilterListCategory.all && c != FilterListCategory.custom).toList();
+
+  // Track which sheets/dialogs are currently showing to prevent duplicates
+  bool _isShowingUpdatePopup = false;
+  bool _isShowingMissingFiltersSheet = false;
+  bool _isShowingApplyProgressSheet = false;
+  bool _isShowingNoUpdatesAlert = false;
+  bool _isShowingDownloadCompleteAlert = false;
+  bool _isShowingCategoryWarningAlert = false;
 
   @override
   void initState() {
@@ -54,22 +61,23 @@ class _ContentViewState extends ConsumerState<ContentView> {
       
       final filterManager = ref.read(appFilterManagerProvider);
       
-      if (filterManager.showingUpdatePopup) {
+      // Only show sheets/dialogs if they're not already showing
+      if (filterManager.showingUpdatePopup && !_isShowingUpdatePopup) {
         _showUpdatePopup();
       }
-      if (filterManager.showMissingFiltersSheet) {
+      if (filterManager.showMissingFiltersSheet && !_isShowingMissingFiltersSheet) {
         _showMissingFiltersSheet();
       }
-      if (filterManager.showingApplyProgressSheet) {
+      if (filterManager.showingApplyProgressSheet && !_isShowingApplyProgressSheet) {
         _showApplyProgressSheet();
       }
-      if (filterManager.showingNoUpdatesAlert) {
+      if (filterManager.showingNoUpdatesAlert && !_isShowingNoUpdatesAlert) {
         _showNoUpdatesAlert();
       }
-      if (filterManager.showingDownloadCompleteAlert) {
+      if (filterManager.showingDownloadCompleteAlert && !_isShowingDownloadCompleteAlert) {
         _showDownloadCompleteAlert();
       }
-      if (filterManager.showingCategoryWarningAlert) {
+      if (filterManager.showingCategoryWarningAlert && !_isShowingCategoryWarningAlert) {
         _showCategoryWarningAlert();
       }
     });
@@ -505,11 +513,12 @@ class _ContentViewState extends ConsumerState<ContentView> {
   }
 
   void _showUpdatePopup() {
-    if (!mounted) return;
+    if (!mounted || _isShowingUpdatePopup) return;
     
     final filterManager = ref.read(appFilterManagerProvider);
     if (!filterManager.showingUpdatePopup) return;
     
+    _isShowingUpdatePopup = true;
     showMacosSheet(
       context: context,
       barrierDismissible: false,
@@ -517,16 +526,18 @@ class _ContentViewState extends ConsumerState<ContentView> {
         onDismiss: () => Navigator.of(context).pop(),
       ),
     ).whenComplete(() {
+      _isShowingUpdatePopup = false;
       filterManager.showingUpdatePopup = false;
     });
   }
 
   void _showMissingFiltersSheet() {
-    if (!mounted) return;
+    if (!mounted || _isShowingMissingFiltersSheet) return;
     
     final filterManager = ref.read(appFilterManagerProvider);
     if (!filterManager.showMissingFiltersSheet) return;
     
+    _isShowingMissingFiltersSheet = true;
     showMacosSheet(
       context: context,
       barrierDismissible: false,
@@ -534,16 +545,18 @@ class _ContentViewState extends ConsumerState<ContentView> {
         onDismiss: () => Navigator.of(context).pop(),
       ),
     ).whenComplete(() {
+      _isShowingMissingFiltersSheet = false;
       filterManager.showMissingFiltersSheet = false;
     });
   }
 
   void _showApplyProgressSheet() {
-    if (!mounted) return;
+    if (!mounted || _isShowingApplyProgressSheet) return;
     
     final filterManager = ref.read(appFilterManagerProvider);
     if (!filterManager.showingApplyProgressSheet) return;
     
+    _isShowingApplyProgressSheet = true;
     showMacosSheet(
       context: context,
       barrierDismissible: false,
@@ -555,6 +568,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
         },
       ),
     ).whenComplete(() {
+      _isShowingApplyProgressSheet = false;
       if (mounted) {
         final fm = ref.read(appFilterManagerProvider);
         fm.showingApplyProgressSheet = false;
@@ -563,11 +577,12 @@ class _ContentViewState extends ConsumerState<ContentView> {
   }
 
   void _showNoUpdatesAlert() {
-    if (!mounted) return;
+    if (!mounted || _isShowingNoUpdatesAlert) return;
     
     final filterManager = ref.read(appFilterManagerProvider);
     if (!filterManager.showingNoUpdatesAlert) return;
     
+    _isShowingNoUpdatesAlert = true;
     showMacosAlertDialog(
       context: context,
       builder: (context) => MacosAlertDialog(
@@ -581,16 +596,18 @@ class _ContentViewState extends ConsumerState<ContentView> {
         ),
       ),
     ).whenComplete(() {
+      _isShowingNoUpdatesAlert = false;
       filterManager.showingNoUpdatesAlert = false;
     });
   }
 
   void _showDownloadCompleteAlert() {
-    if (!mounted) return;
+    if (!mounted || _isShowingDownloadCompleteAlert) return;
     
     final filterManager = ref.read(appFilterManagerProvider);
     if (!filterManager.showingDownloadCompleteAlert) return;
     
+    _isShowingDownloadCompleteAlert = true;
     showMacosAlertDialog(
       context: context,
       builder: (context) => MacosAlertDialog(
@@ -613,16 +630,18 @@ class _ContentViewState extends ConsumerState<ContentView> {
         ),
       ),
     ).whenComplete(() {
+      _isShowingDownloadCompleteAlert = false;
       filterManager.showingDownloadCompleteAlert = false;
     });
   }
 
   void _showCategoryWarningAlert() {
-    if (!mounted) return;
+    if (!mounted || _isShowingCategoryWarningAlert) return;
     
     final filterManager = ref.read(appFilterManagerProvider);
     if (!filterManager.showingCategoryWarningAlert) return;
     
+    _isShowingCategoryWarningAlert = true;
     showMacosAlertDialog(
       context: context,
       builder: (context) => MacosAlertDialog(
@@ -636,6 +655,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
         ),
       ),
     ).whenComplete(() {
+      _isShowingCategoryWarningAlert = false;
       filterManager.showingCategoryWarningAlert = false;
     });
   }

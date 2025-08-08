@@ -98,7 +98,7 @@ class _LogsViewState extends ConsumerState<LogsView> {
       backgroundColor: AppTheme.backgroundColor,
       navigationBar: CupertinoNavigationBar(
         backgroundColor: AppTheme.cardBackground.withOpacity(0.94),
-        middle: const Text('wBlock Logs'),
+        middle: const Text('Syferlab Logs'),
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: widget.onDismiss,
@@ -122,7 +122,7 @@ class _LogsViewState extends ConsumerState<LogsView> {
       child: Row(
         children: [
           Text(
-            'wBlock Logs',
+            'Syferlab Logs',
             style: AppTheme.headline,
           ),
           const Spacer(),
@@ -138,9 +138,7 @@ class _LogsViewState extends ConsumerState<LogsView> {
   Widget _buildContent() {
     if (_isLoading) {
       return Center(
-        child: Platform.isMacOS 
-          ? const ProgressCircle() 
-          : const CupertinoActivityIndicator(),
+        child: Platform.isMacOS ? const ProgressCircle() : const CupertinoActivityIndicator(),
       );
     }
 
@@ -148,9 +146,7 @@ class _LogsViewState extends ConsumerState<LogsView> {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Platform.isMacOS 
-          ? const Color(0xFFF2F2F7)
-          : CupertinoColors.systemGrey6.resolveFrom(context),
+        color: Platform.isMacOS ? const Color(0xFFF2F2F7) : CupertinoColors.systemGrey6.resolveFrom(context),
         borderRadius: BorderRadius.circular(AppTheme.smallRadius),
         border: Border.all(
           color: AppTheme.dividerColor,

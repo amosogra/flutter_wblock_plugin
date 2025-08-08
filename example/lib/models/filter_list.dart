@@ -40,13 +40,45 @@ extension ParseFilterListCategory on FilterListCategory {
   String get displayName => rawValue;
 
   static FilterListCategory? fromRawValue(String rawValue) {
+    // First try to match by rawValue property
+    for (final category in FilterListCategory.values) {
+      if (category.rawValue == rawValue) {
+        return category;
+      }
+    }
+    
+    // Then try to match by enum name (for backward compatibility)
     try {
       return FilterListCategory.values.firstWhere(
-        (e) => e.name == rawValue,
+        (e) => e.name.toLowerCase() == rawValue.toLowerCase(),
         orElse: () => throw ArgumentError('Invalid category: $rawValue'),
       );
     } catch (e) {
-      return null;
+      // Finally, try the _categoryFromString logic
+      switch (rawValue.toLowerCase()) {
+        case 'ads':
+          return FilterListCategory.ads;
+        case 'privacy':
+          return FilterListCategory.privacy;
+        case 'security':
+          return FilterListCategory.security;
+        case 'multipurpose':
+          return FilterListCategory.multipurpose;
+        case 'annoyances':
+          return FilterListCategory.annoyances;
+        case 'experimental':
+          return FilterListCategory.experimental;
+        case 'foreign':
+          return FilterListCategory.foreign;
+        case 'custom':
+          return FilterListCategory.custom;
+        case 'scripts':
+          return FilterListCategory.scripts;
+        case 'all':
+          return FilterListCategory.all;
+        default:
+          return null;
+      }
     }
   }
 }

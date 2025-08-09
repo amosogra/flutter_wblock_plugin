@@ -7,20 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1186E2F7FB0F41CAE8EB1C53 /* Pods_wBlock_Privacy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA1E4FA0090806FD88F47965 /* Pods_wBlock_Privacy.framework */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
-		1C6680E112130B688788B577 /* Pods_wBlock_Privacy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7022C73813D17A9532537030 /* Pods_wBlock_Privacy.framework */; };
-		2285FB685B2909033205D90A /* Pods_wBlock_Experimental.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6777080383B5A6DCB49C1C43 /* Pods_wBlock_Experimental.framework */; };
+		2BAD42552C75DDE225B861EF /* Pods_wBlock_Custom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09F79E3850F30FB9B0EC5901 /* Pods_wBlock_Custom.framework */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
-		51B8F670AB9C852AAA435991 /* Pods_wBlock_Foreign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E32D010F62D8FC84BF7BE17A /* Pods_wBlock_Foreign.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
-		8F4DD3980806AD33BD4EFE38 /* Pods_wBlock_Annoyances.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A5BB8DCD1B9FA1D26EFD0A9 /* Pods_wBlock_Annoyances.framework */; };
-		8FF967A05A78BE4A31F60272 /* Pods_wBlock_Custom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FCFD27FD50485FDBB71C85B /* Pods_wBlock_Custom.framework */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		AB8CA9A62FDA09988394FD2C /* Pods_wBlock_Foreign.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3904DBF2602478716BE085 /* Pods_wBlock_Foreign.framework */; };
+		B0202627A0001FC225E9A9D8 /* Pods_wBlock_Multipurpose.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A944B834B1172DE12AF6D5 /* Pods_wBlock_Multipurpose.framework */; };
 		B082686F2E3C4014002A26B8 /* wBlock Ads.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08268662E3C4014002A26B8 /* wBlock Ads.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		B08268772E3C402F002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08268762E3C402F002A26B8 /* wBlockCoreService.framework */; };
 		B082688E2E3C4220002A26B8 /* wBlock Privacy.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08268852E3C4220002A26B8 /* wBlock Privacy.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B08268952E3C4242002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08268942E3C4242002A26B8 /* wBlockCoreService.framework */; };
 		B08268A62E3C438B002A26B8 /* wBlock Security.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B082689D2E3C438B002A26B8 /* wBlock Security.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -37,11 +35,13 @@
 		B082697C2E3C4C3E002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B082697B2E3C4C3E002A26B8 /* wBlockCoreService.framework */; };
 		B082699C2E3C514B002A26B8 /* wBlock Scripts.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B08269842E3C514B002A26B8 /* wBlock Scripts.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B08269B32E3C5361002A26B8 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08269B22E3C5361002A26B8 /* wBlockCoreService.framework */; };
-		BF8728EA2E0002BD0CC4197A /* Pods_wBlock_Scripts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E07AB7BA4B1B1D86FB9F752 /* Pods_wBlock_Scripts.framework */; };
-		D48C1CE536EDFA2DAB729C98 /* Pods_wBlock_Ads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A25439A6F75A3749182FA25 /* Pods_wBlock_Ads.framework */; };
-		DEFB0C50542A68287382234E /* Pods_wBlock_Multipurpose.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B94A7DFC7C10CECBF51F9F0D /* Pods_wBlock_Multipurpose.framework */; };
-		E79EE64AC692A4D0B8E52F26 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBDA89EB796478217B276AF9 /* Pods_Runner.framework */; };
-		F0A3B2B27BECBD8E43E17BDD /* Pods_wBlock_Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E01BD8FC4DBCCAF1A0290A /* Pods_wBlock_Security.framework */; };
+		B0AF9AFF2E466FF000DCB728 /* wBlockCoreService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B08268762E3C402F002A26B8 /* wBlockCoreService.framework */; };
+		B4F6336596EA1C87D253D960 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71D8921444BE6B5C26911C23 /* Pods_Runner.framework */; };
+		C66EB09528D729B4C16C31C1 /* Pods_wBlock_Annoyances.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F3977481221680B8F90F2CC /* Pods_wBlock_Annoyances.framework */; };
+		CBDBC448E48380953687E85B /* Pods_wBlock_Ads.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 647D70258A2255851DBF162D /* Pods_wBlock_Ads.framework */; };
+		D42FF9D4C9ED8C4E35DBE1AB /* Pods_wBlock_Experimental.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72BD6215D7FFBCD912889299 /* Pods_wBlock_Experimental.framework */; };
+		DF159F11CA557EE6FC61A91B /* Pods_wBlock_Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66CD5D3412CA602FF926FF37 /* Pods_wBlock_Security.framework */; };
+		DF1D401323E3E3DF90369B55 /* Pods_wBlock_Scripts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91752914E20087A356C5499C /* Pods_wBlock_Scripts.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,38 +140,40 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		08C7369CE585BC64D2AFF8F1 /* Pods-wBlock Privacy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Privacy.release.xcconfig"; path = "Target Support Files/Pods-wBlock Privacy/Pods-wBlock Privacy.release.xcconfig"; sourceTree = "<group>"; };
-		0D3CB4F73B317C2CEC349EB1 /* Pods-wBlock Annoyances.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Annoyances.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Annoyances/Pods-wBlock Annoyances.debug.xcconfig"; sourceTree = "<group>"; };
-		0E07AB7BA4B1B1D86FB9F752 /* Pods_wBlock_Scripts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Scripts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		10407D8E344E60920E2550DE /* Pods-wBlock Experimental.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Experimental.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Experimental/Pods-wBlock Experimental.debug.xcconfig"; sourceTree = "<group>"; };
-		10550E95BE2AEA3EF11B31C0 /* Pods-wBlock Multipurpose.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Multipurpose.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Multipurpose/Pods-wBlock Multipurpose.debug.xcconfig"; sourceTree = "<group>"; };
+		01049ACD52C2FD40E039161E /* Pods-wBlock Privacy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Privacy.release.xcconfig"; path = "Target Support Files/Pods-wBlock Privacy/Pods-wBlock Privacy.release.xcconfig"; sourceTree = "<group>"; };
+		021F3C1232EFD767E8474609 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		09F79E3850F30FB9B0EC5901 /* Pods_wBlock_Custom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Custom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		108B4B93C1D158C96E1AE76D /* Pods-wBlock Scripts.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Scripts.release.xcconfig"; path = "Target Support Files/Pods-wBlock Scripts/Pods-wBlock Scripts.release.xcconfig"; sourceTree = "<group>"; };
+		1131D3FD0C58C475DEDC169B /* Pods-wBlock Privacy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Privacy.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Privacy/Pods-wBlock Privacy.debug.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
-		29E01BD8FC4DBCCAF1A0290A /* Pods_wBlock_Security.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Security.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		313C79E0CF34076B6A08D6A5 /* Pods-wBlock Scripts.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Scripts.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Scripts/Pods-wBlock Scripts.debug.xcconfig"; sourceTree = "<group>"; };
-		32ACF707F540D00A4CB9852E /* Pods-wBlock Security.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Security.release.xcconfig"; path = "Target Support Files/Pods-wBlock Security/Pods-wBlock Security.release.xcconfig"; sourceTree = "<group>"; };
+		15C53A1C2908149DC8F80BCF /* Pods-wBlock Ads.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Ads.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Ads/Pods-wBlock Ads.debug.xcconfig"; sourceTree = "<group>"; };
+		21F7DCBD2811C91A05FBD767 /* Pods-wBlock Privacy.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Privacy.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Privacy/Pods-wBlock Privacy.profile.xcconfig"; sourceTree = "<group>"; };
+		3114F7F07318E563B2573DEF /* Pods-wBlock Security.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Security.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Security/Pods-wBlock Security.debug.xcconfig"; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		346B9F46A44FD6D5099F26B2 /* Pods-wBlock Privacy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Privacy.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Privacy/Pods-wBlock Privacy.debug.xcconfig"; sourceTree = "<group>"; };
-		369FFC1F37847B3AA4C63555 /* Pods-wBlock Custom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Custom.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Custom/Pods-wBlock Custom.debug.xcconfig"; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
-		40EF1035CE01E90051A70313 /* Pods-wBlock Ads.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Ads.release.xcconfig"; path = "Target Support Files/Pods-wBlock Ads/Pods-wBlock Ads.release.xcconfig"; sourceTree = "<group>"; };
-		4693BD56AAF15A969C3F597C /* Pods-wBlock Privacy.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Privacy.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Privacy/Pods-wBlock Privacy.profile.xcconfig"; sourceTree = "<group>"; };
-		4B59D73C2149B9AED6E90FAE /* Pods-wBlock Scripts.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Scripts.release.xcconfig"; path = "Target Support Files/Pods-wBlock Scripts/Pods-wBlock Scripts.release.xcconfig"; sourceTree = "<group>"; };
-		4FCFD27FD50485FDBB71C85B /* Pods_wBlock_Custom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Custom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		55F5F96651461333FDFFD5FB /* Pods-wBlock Custom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Custom.release.xcconfig"; path = "Target Support Files/Pods-wBlock Custom/Pods-wBlock Custom.release.xcconfig"; sourceTree = "<group>"; };
-		66E65D53BAEE86CFF4EC215C /* Pods-wBlock Multipurpose.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Multipurpose.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Multipurpose/Pods-wBlock Multipurpose.profile.xcconfig"; sourceTree = "<group>"; };
-		6777080383B5A6DCB49C1C43 /* Pods_wBlock_Experimental.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Experimental.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6A25439A6F75A3749182FA25 /* Pods_wBlock_Ads.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Ads.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6A5BB8DCD1B9FA1D26EFD0A9 /* Pods_wBlock_Annoyances.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Annoyances.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6AA9B217DDCC5FBB907A0320 /* Pods-wBlock Scripts.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Scripts.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Scripts/Pods-wBlock Scripts.profile.xcconfig"; sourceTree = "<group>"; };
-		7022C73813D17A9532537030 /* Pods_wBlock_Privacy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Privacy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7239D25FC0125D941E953086 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		3D31CE53B2CB35C3076AD1C2 /* Pods-wBlock Custom.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Custom.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Custom/Pods-wBlock Custom.profile.xcconfig"; sourceTree = "<group>"; };
+		3DBB0046D2F3A90C635E9347 /* Pods-wBlock Annoyances.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Annoyances.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Annoyances/Pods-wBlock Annoyances.profile.xcconfig"; sourceTree = "<group>"; };
+		3E93F5E18F66988FC6A8EEEB /* Pods-wBlock Scripts.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Scripts.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Scripts/Pods-wBlock Scripts.debug.xcconfig"; sourceTree = "<group>"; };
+		42C05876AE4D3844B9C2D92E /* Pods-wBlock Experimental.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Experimental.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Experimental/Pods-wBlock Experimental.debug.xcconfig"; sourceTree = "<group>"; };
+		4A573231DC7A92A9FED14786 /* Pods-wBlock Foreign.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Foreign.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Foreign/Pods-wBlock Foreign.debug.xcconfig"; sourceTree = "<group>"; };
+		518454650818E16008DD2A04 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		58856B6C855E1A774213482A /* Pods-wBlock Ads.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Ads.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Ads/Pods-wBlock Ads.profile.xcconfig"; sourceTree = "<group>"; };
+		647D70258A2255851DBF162D /* Pods_wBlock_Ads.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Ads.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		65529CCE54C47C61D5ACED9F /* Pods-wBlock Experimental.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Experimental.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Experimental/Pods-wBlock Experimental.profile.xcconfig"; sourceTree = "<group>"; };
+		66CD5D3412CA602FF926FF37 /* Pods_wBlock_Security.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Security.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		71D8921444BE6B5C26911C23 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		72BD6215D7FFBCD912889299 /* Pods_wBlock_Experimental.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Experimental.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		75611FE94E02CA9ECDD780A0 /* Pods-wBlock Custom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Custom.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Custom/Pods-wBlock Custom.debug.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
-		88E4DFDDC2494BDD71BAD015 /* Pods-wBlock Experimental.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Experimental.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Experimental/Pods-wBlock Experimental.profile.xcconfig"; sourceTree = "<group>"; };
-		93E9D4950A30F8B8EE0C8442 /* Pods-wBlock Ads.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Ads.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Ads/Pods-wBlock Ads.profile.xcconfig"; sourceTree = "<group>"; };
+		7F9E869E8A521CF0FF1077F3 /* Pods-wBlock Foreign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Foreign.release.xcconfig"; path = "Target Support Files/Pods-wBlock Foreign/Pods-wBlock Foreign.release.xcconfig"; sourceTree = "<group>"; };
+		8A5B959DF73AE36E09B4EC01 /* Pods-wBlock Ads.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Ads.release.xcconfig"; path = "Target Support Files/Pods-wBlock Ads/Pods-wBlock Ads.release.xcconfig"; sourceTree = "<group>"; };
+		8CE96E56FE1D6D34254F3FFD /* Pods-wBlock Annoyances.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Annoyances.release.xcconfig"; path = "Target Support Files/Pods-wBlock Annoyances/Pods-wBlock Annoyances.release.xcconfig"; sourceTree = "<group>"; };
+		91752914E20087A356C5499C /* Pods_wBlock_Scripts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Scripts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		930AF2B341FB91316021D8FA /* Pods-wBlock Experimental.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Experimental.release.xcconfig"; path = "Target Support Files/Pods-wBlock Experimental/Pods-wBlock Experimental.release.xcconfig"; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -179,8 +181,8 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		97E7B57E8444D95A0D01EE3B /* Pods-wBlock Annoyances.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Annoyances.release.xcconfig"; path = "Target Support Files/Pods-wBlock Annoyances/Pods-wBlock Annoyances.release.xcconfig"; sourceTree = "<group>"; };
-		9F0066BDF892876551C1988C /* Pods-wBlock Custom.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Custom.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Custom/Pods-wBlock Custom.profile.xcconfig"; sourceTree = "<group>"; };
+		9F3977481221680B8F90F2CC /* Pods_wBlock_Annoyances.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Annoyances.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A90EF6CB9C57C632B2B92E67 /* Pods-wBlock Annoyances.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Annoyances.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Annoyances/Pods-wBlock Annoyances.debug.xcconfig"; sourceTree = "<group>"; };
 		B082679B2E3C37B2002A26B8 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		B08268662E3C4014002A26B8 /* wBlock Ads.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Ads.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B08268762E3C402F002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -202,20 +204,20 @@
 		B08269842E3C514B002A26B8 /* wBlock Scripts.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "wBlock Scripts.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B08269B22E3C5361002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B08275782E3D1212002A26B8 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B8EF5FE9383F770B5E123FE5 /* Pods-wBlock Foreign.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Foreign.release.xcconfig"; path = "Target Support Files/Pods-wBlock Foreign/Pods-wBlock Foreign.release.xcconfig"; sourceTree = "<group>"; };
-		B94A7DFC7C10CECBF51F9F0D /* Pods_wBlock_Multipurpose.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Multipurpose.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B96CD29AA66F30F56D04E974 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
-		BB1CB6E5EA958C3DA0896845 /* Pods-wBlock Security.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Security.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Security/Pods-wBlock Security.profile.xcconfig"; sourceTree = "<group>"; };
-		BD91D0CA7F1D3404EEEE4ED9 /* Pods-wBlock Experimental.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Experimental.release.xcconfig"; path = "Target Support Files/Pods-wBlock Experimental/Pods-wBlock Experimental.release.xcconfig"; sourceTree = "<group>"; };
-		C48E2C11BBE280AF53A38087 /* Pods-wBlock Foreign.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Foreign.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Foreign/Pods-wBlock Foreign.profile.xcconfig"; sourceTree = "<group>"; };
-		C5460A5B6EF650100716AB9D /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
-		C6AFB9ECAEE46D772F448DC1 /* Pods-wBlock Security.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Security.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Security/Pods-wBlock Security.debug.xcconfig"; sourceTree = "<group>"; };
-		C93045719E9172B8A11FE714 /* Pods-wBlock Annoyances.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Annoyances.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Annoyances/Pods-wBlock Annoyances.profile.xcconfig"; sourceTree = "<group>"; };
-		CBDA89EB796478217B276AF9 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CBFE8EB40A329E120636E976 /* Pods-wBlock Multipurpose.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Multipurpose.release.xcconfig"; path = "Target Support Files/Pods-wBlock Multipurpose/Pods-wBlock Multipurpose.release.xcconfig"; sourceTree = "<group>"; };
-		E32D010F62D8FC84BF7BE17A /* Pods_wBlock_Foreign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Foreign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E3CC2F9B385D824812EAD4F9 /* Pods-wBlock Ads.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Ads.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Ads/Pods-wBlock Ads.debug.xcconfig"; sourceTree = "<group>"; };
-		ED1580F0967FBD6ED6259131 /* Pods-wBlock Foreign.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Foreign.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Foreign/Pods-wBlock Foreign.debug.xcconfig"; sourceTree = "<group>"; };
+		B0AF8DE22E4643CD00DCB728 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0AF9AF62E466F5A00DCB728 /* wBlockCoreService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = wBlockCoreService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8A644EC477F2E3A07463D5E /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		BA1E4FA0090806FD88F47965 /* Pods_wBlock_Privacy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Privacy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB3904DBF2602478716BE085 /* Pods_wBlock_Foreign.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Foreign.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D001C7E5028C8E4EA54C22E0 /* Pods-wBlock Multipurpose.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Multipurpose.release.xcconfig"; path = "Target Support Files/Pods-wBlock Multipurpose/Pods-wBlock Multipurpose.release.xcconfig"; sourceTree = "<group>"; };
+		D0996A8A98209C47DF381A94 /* Pods-wBlock Foreign.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Foreign.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Foreign/Pods-wBlock Foreign.profile.xcconfig"; sourceTree = "<group>"; };
+		D1D515559190AD784772077D /* Pods-wBlock Security.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Security.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Security/Pods-wBlock Security.profile.xcconfig"; sourceTree = "<group>"; };
+		D8B06F2C3C11DB537611EF31 /* Pods-wBlock Custom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Custom.release.xcconfig"; path = "Target Support Files/Pods-wBlock Custom/Pods-wBlock Custom.release.xcconfig"; sourceTree = "<group>"; };
+		DB87CF148F21B2F59D81DB4C /* Pods-wBlock Multipurpose.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Multipurpose.debug.xcconfig"; path = "Target Support Files/Pods-wBlock Multipurpose/Pods-wBlock Multipurpose.debug.xcconfig"; sourceTree = "<group>"; };
+		DC638C2DAA06ADA8CCEFC065 /* Pods-wBlock Multipurpose.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Multipurpose.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Multipurpose/Pods-wBlock Multipurpose.profile.xcconfig"; sourceTree = "<group>"; };
+		DDCA3E878E4FE9B4CF935746 /* Pods-wBlock Security.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Security.release.xcconfig"; path = "Target Support Files/Pods-wBlock Security/Pods-wBlock Security.release.xcconfig"; sourceTree = "<group>"; };
+		E85A042663BB94A632A10BC3 /* Pods-wBlock Scripts.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wBlock Scripts.profile.xcconfig"; path = "Target Support Files/Pods-wBlock Scripts/Pods-wBlock Scripts.profile.xcconfig"; sourceTree = "<group>"; };
+		F7A944B834B1172DE12AF6D5 /* Pods_wBlock_Multipurpose.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_wBlock_Multipurpose.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -369,7 +371,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E79EE64AC692A4D0B8E52F26 /* Pods_Runner.framework in Frameworks */,
+				B4F6336596EA1C87D253D960 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,8 +386,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B08268772E3C402F002A26B8 /* wBlockCoreService.framework in Frameworks */,
-				D48C1CE536EDFA2DAB729C98 /* Pods_wBlock_Ads.framework in Frameworks */,
+				B0AF9AFF2E466FF000DCB728 /* wBlockCoreService.framework in Frameworks */,
+				CBDBC448E48380953687E85B /* Pods_wBlock_Ads.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,7 +396,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B08268952E3C4242002A26B8 /* wBlockCoreService.framework in Frameworks */,
-				1C6680E112130B688788B577 /* Pods_wBlock_Privacy.framework in Frameworks */,
+				1186E2F7FB0F41CAE8EB1C53 /* Pods_wBlock_Privacy.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,7 +405,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B08268AD2E3C43A9002A26B8 /* wBlockCoreService.framework in Frameworks */,
-				F0A3B2B27BECBD8E43E17BDD /* Pods_wBlock_Security.framework in Frameworks */,
+				DF159F11CA557EE6FC61A91B /* Pods_wBlock_Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,7 +414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B082691C2E3C4752002A26B8 /* wBlockCoreService.framework in Frameworks */,
-				8F4DD3980806AD33BD4EFE38 /* Pods_wBlock_Annoyances.framework in Frameworks */,
+				C66EB09528D729B4C16C31C1 /* Pods_wBlock_Annoyances.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,7 +423,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B08269352E3C4A5A002A26B8 /* wBlockCoreService.framework in Frameworks */,
-				DEFB0C50542A68287382234E /* Pods_wBlock_Multipurpose.framework in Frameworks */,
+				B0202627A0001FC225E9A9D8 /* Pods_wBlock_Multipurpose.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,7 +432,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B082694C2E3C4AB6002A26B8 /* wBlockCoreService.framework in Frameworks */,
-				51B8F670AB9C852AAA435991 /* Pods_wBlock_Foreign.framework in Frameworks */,
+				AB8CA9A62FDA09988394FD2C /* Pods_wBlock_Foreign.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,7 +441,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B08269642E3C4B51002A26B8 /* wBlockCoreService.framework in Frameworks */,
-				2285FB685B2909033205D90A /* Pods_wBlock_Experimental.framework in Frameworks */,
+				D42FF9D4C9ED8C4E35DBE1AB /* Pods_wBlock_Experimental.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,7 +450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B082697C2E3C4C3E002A26B8 /* wBlockCoreService.framework in Frameworks */,
-				8FF967A05A78BE4A31F60272 /* Pods_wBlock_Custom.framework in Frameworks */,
+				2BAD42552C75DDE225B861EF /* Pods_wBlock_Custom.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,7 +459,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B08269B32E3C5361002A26B8 /* wBlockCoreService.framework in Frameworks */,
-				BF8728EA2E0002BD0CC4197A /* Pods_wBlock_Scripts.framework in Frameworks */,
+				DF1D401323E3E3DF90369B55 /* Pods_wBlock_Scripts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,36 +469,36 @@
 		28E8A5F640B3891B0EAFC6F1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B96CD29AA66F30F56D04E974 /* Pods-Runner.debug.xcconfig */,
-				7239D25FC0125D941E953086 /* Pods-Runner.release.xcconfig */,
-				C5460A5B6EF650100716AB9D /* Pods-Runner.profile.xcconfig */,
-				E3CC2F9B385D824812EAD4F9 /* Pods-wBlock Ads.debug.xcconfig */,
-				40EF1035CE01E90051A70313 /* Pods-wBlock Ads.release.xcconfig */,
-				93E9D4950A30F8B8EE0C8442 /* Pods-wBlock Ads.profile.xcconfig */,
-				0D3CB4F73B317C2CEC349EB1 /* Pods-wBlock Annoyances.debug.xcconfig */,
-				97E7B57E8444D95A0D01EE3B /* Pods-wBlock Annoyances.release.xcconfig */,
-				C93045719E9172B8A11FE714 /* Pods-wBlock Annoyances.profile.xcconfig */,
-				369FFC1F37847B3AA4C63555 /* Pods-wBlock Custom.debug.xcconfig */,
-				55F5F96651461333FDFFD5FB /* Pods-wBlock Custom.release.xcconfig */,
-				9F0066BDF892876551C1988C /* Pods-wBlock Custom.profile.xcconfig */,
-				10407D8E344E60920E2550DE /* Pods-wBlock Experimental.debug.xcconfig */,
-				BD91D0CA7F1D3404EEEE4ED9 /* Pods-wBlock Experimental.release.xcconfig */,
-				88E4DFDDC2494BDD71BAD015 /* Pods-wBlock Experimental.profile.xcconfig */,
-				ED1580F0967FBD6ED6259131 /* Pods-wBlock Foreign.debug.xcconfig */,
-				B8EF5FE9383F770B5E123FE5 /* Pods-wBlock Foreign.release.xcconfig */,
-				C48E2C11BBE280AF53A38087 /* Pods-wBlock Foreign.profile.xcconfig */,
-				10550E95BE2AEA3EF11B31C0 /* Pods-wBlock Multipurpose.debug.xcconfig */,
-				CBFE8EB40A329E120636E976 /* Pods-wBlock Multipurpose.release.xcconfig */,
-				66E65D53BAEE86CFF4EC215C /* Pods-wBlock Multipurpose.profile.xcconfig */,
-				346B9F46A44FD6D5099F26B2 /* Pods-wBlock Privacy.debug.xcconfig */,
-				08C7369CE585BC64D2AFF8F1 /* Pods-wBlock Privacy.release.xcconfig */,
-				4693BD56AAF15A969C3F597C /* Pods-wBlock Privacy.profile.xcconfig */,
-				313C79E0CF34076B6A08D6A5 /* Pods-wBlock Scripts.debug.xcconfig */,
-				4B59D73C2149B9AED6E90FAE /* Pods-wBlock Scripts.release.xcconfig */,
-				6AA9B217DDCC5FBB907A0320 /* Pods-wBlock Scripts.profile.xcconfig */,
-				C6AFB9ECAEE46D772F448DC1 /* Pods-wBlock Security.debug.xcconfig */,
-				32ACF707F540D00A4CB9852E /* Pods-wBlock Security.release.xcconfig */,
-				BB1CB6E5EA958C3DA0896845 /* Pods-wBlock Security.profile.xcconfig */,
+				518454650818E16008DD2A04 /* Pods-Runner.debug.xcconfig */,
+				B8A644EC477F2E3A07463D5E /* Pods-Runner.release.xcconfig */,
+				021F3C1232EFD767E8474609 /* Pods-Runner.profile.xcconfig */,
+				15C53A1C2908149DC8F80BCF /* Pods-wBlock Ads.debug.xcconfig */,
+				8A5B959DF73AE36E09B4EC01 /* Pods-wBlock Ads.release.xcconfig */,
+				58856B6C855E1A774213482A /* Pods-wBlock Ads.profile.xcconfig */,
+				A90EF6CB9C57C632B2B92E67 /* Pods-wBlock Annoyances.debug.xcconfig */,
+				8CE96E56FE1D6D34254F3FFD /* Pods-wBlock Annoyances.release.xcconfig */,
+				3DBB0046D2F3A90C635E9347 /* Pods-wBlock Annoyances.profile.xcconfig */,
+				75611FE94E02CA9ECDD780A0 /* Pods-wBlock Custom.debug.xcconfig */,
+				D8B06F2C3C11DB537611EF31 /* Pods-wBlock Custom.release.xcconfig */,
+				3D31CE53B2CB35C3076AD1C2 /* Pods-wBlock Custom.profile.xcconfig */,
+				42C05876AE4D3844B9C2D92E /* Pods-wBlock Experimental.debug.xcconfig */,
+				930AF2B341FB91316021D8FA /* Pods-wBlock Experimental.release.xcconfig */,
+				65529CCE54C47C61D5ACED9F /* Pods-wBlock Experimental.profile.xcconfig */,
+				4A573231DC7A92A9FED14786 /* Pods-wBlock Foreign.debug.xcconfig */,
+				7F9E869E8A521CF0FF1077F3 /* Pods-wBlock Foreign.release.xcconfig */,
+				D0996A8A98209C47DF381A94 /* Pods-wBlock Foreign.profile.xcconfig */,
+				DB87CF148F21B2F59D81DB4C /* Pods-wBlock Multipurpose.debug.xcconfig */,
+				D001C7E5028C8E4EA54C22E0 /* Pods-wBlock Multipurpose.release.xcconfig */,
+				DC638C2DAA06ADA8CCEFC065 /* Pods-wBlock Multipurpose.profile.xcconfig */,
+				1131D3FD0C58C475DEDC169B /* Pods-wBlock Privacy.debug.xcconfig */,
+				01049ACD52C2FD40E039161E /* Pods-wBlock Privacy.release.xcconfig */,
+				21F7DCBD2811C91A05FBD767 /* Pods-wBlock Privacy.profile.xcconfig */,
+				3E93F5E18F66988FC6A8EEEB /* Pods-wBlock Scripts.debug.xcconfig */,
+				108B4B93C1D158C96E1AE76D /* Pods-wBlock Scripts.release.xcconfig */,
+				E85A042663BB94A632A10BC3 /* Pods-wBlock Scripts.profile.xcconfig */,
+				3114F7F07318E563B2573DEF /* Pods-wBlock Security.debug.xcconfig */,
+				DDCA3E878E4FE9B4CF935746 /* Pods-wBlock Security.release.xcconfig */,
+				D1D515559190AD784772077D /* Pods-wBlock Security.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -578,6 +580,8 @@
 		CF6E672101AF92C6C29AADA1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0AF9AF62E466F5A00DCB728 /* wBlockCoreService.framework */,
+				B0AF8DE22E4643CD00DCB728 /* wBlockCoreService.framework */,
 				B08275782E3D1212002A26B8 /* wBlockCoreService.framework */,
 				B08269B22E3C5361002A26B8 /* wBlockCoreService.framework */,
 				B082697B2E3C4C3E002A26B8 /* wBlockCoreService.framework */,
@@ -589,16 +593,16 @@
 				B08268942E3C4242002A26B8 /* wBlockCoreService.framework */,
 				B082687B2E3C41B3002A26B8 /* wBlockCoreService.framework */,
 				B08268762E3C402F002A26B8 /* wBlockCoreService.framework */,
-				CBDA89EB796478217B276AF9 /* Pods_Runner.framework */,
-				6A25439A6F75A3749182FA25 /* Pods_wBlock_Ads.framework */,
-				6A5BB8DCD1B9FA1D26EFD0A9 /* Pods_wBlock_Annoyances.framework */,
-				4FCFD27FD50485FDBB71C85B /* Pods_wBlock_Custom.framework */,
-				6777080383B5A6DCB49C1C43 /* Pods_wBlock_Experimental.framework */,
-				E32D010F62D8FC84BF7BE17A /* Pods_wBlock_Foreign.framework */,
-				B94A7DFC7C10CECBF51F9F0D /* Pods_wBlock_Multipurpose.framework */,
-				7022C73813D17A9532537030 /* Pods_wBlock_Privacy.framework */,
-				0E07AB7BA4B1B1D86FB9F752 /* Pods_wBlock_Scripts.framework */,
-				29E01BD8FC4DBCCAF1A0290A /* Pods_wBlock_Security.framework */,
+				71D8921444BE6B5C26911C23 /* Pods_Runner.framework */,
+				647D70258A2255851DBF162D /* Pods_wBlock_Ads.framework */,
+				9F3977481221680B8F90F2CC /* Pods_wBlock_Annoyances.framework */,
+				09F79E3850F30FB9B0EC5901 /* Pods_wBlock_Custom.framework */,
+				72BD6215D7FFBCD912889299 /* Pods_wBlock_Experimental.framework */,
+				BB3904DBF2602478716BE085 /* Pods_wBlock_Foreign.framework */,
+				F7A944B834B1172DE12AF6D5 /* Pods_wBlock_Multipurpose.framework */,
+				BA1E4FA0090806FD88F47965 /* Pods_wBlock_Privacy.framework */,
+				91752914E20087A356C5499C /* Pods_wBlock_Scripts.framework */,
+				66CD5D3412CA602FF926FF37 /* Pods_wBlock_Security.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -628,14 +632,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
-				316E6032F6DCBFDAAF6745F0 /* [CP] Check Pods Manifest.lock */,
+				3CF30FB942A508A92D766396 /* [CP] Check Pods Manifest.lock */,
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
-				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				B08268702E3C4014002A26B8 /* Embed Foundation Extensions */,
-				A94B4443A17FD40C57018C21 /* [CP] Embed Pods Frameworks */,
+				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
+				D237FD9D70BDF222BB70E140 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -659,7 +663,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B08268752E3C4014002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Ads" */;
 			buildPhases = (
-				37366713066B79822B85AC63 /* [CP] Check Pods Manifest.lock */,
+				E089FD4A1FFE43040ED5AD71 /* [CP] Check Pods Manifest.lock */,
 				B08268622E3C4014002A26B8 /* Sources */,
 				B08268632E3C4014002A26B8 /* Frameworks */,
 				B08268642E3C4014002A26B8 /* Resources */,
@@ -680,7 +684,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B08268902E3C4220002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Privacy" */;
 			buildPhases = (
-				3AAA49CD2B13DF0B199CEB89 /* [CP] Check Pods Manifest.lock */,
+				118EC542F4724665F8794D7C /* [CP] Check Pods Manifest.lock */,
 				B08268812E3C4220002A26B8 /* Sources */,
 				B08268822E3C4220002A26B8 /* Frameworks */,
 				B08268832E3C4220002A26B8 /* Resources */,
@@ -701,7 +705,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B08268A82E3C438B002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Security" */;
 			buildPhases = (
-				415D451322DE70BC6D35AF7E /* [CP] Check Pods Manifest.lock */,
+				052917B1B800DFEB9379510B /* [CP] Check Pods Manifest.lock */,
 				B08268992E3C438B002A26B8 /* Sources */,
 				B082689A2E3C438B002A26B8 /* Frameworks */,
 				B082689B2E3C438B002A26B8 /* Resources */,
@@ -722,7 +726,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B08269172E3C473C002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Annoyances" */;
 			buildPhases = (
-				955C2765ED1AEFC65400E0CC /* [CP] Check Pods Manifest.lock */,
+				C063C58EB9BB9FCA576D8500 /* [CP] Check Pods Manifest.lock */,
 				B08269082E3C473C002A26B8 /* Sources */,
 				B08269092E3C473C002A26B8 /* Frameworks */,
 				B082690A2E3C473C002A26B8 /* Resources */,
@@ -743,7 +747,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B082692F2E3C4A2A002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Multipurpose" */;
 			buildPhases = (
-				31427AEB89F84A132A93A8CE /* [CP] Check Pods Manifest.lock */,
+				166E612DFE96DCBDCB482204 /* [CP] Check Pods Manifest.lock */,
 				B08269202E3C4A2A002A26B8 /* Sources */,
 				B08269212E3C4A2A002A26B8 /* Frameworks */,
 				B08269222E3C4A2A002A26B8 /* Resources */,
@@ -764,7 +768,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B08269472E3C4AA4002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Foreign" */;
 			buildPhases = (
-				DC91534CB22EBA818EEBE217 /* [CP] Check Pods Manifest.lock */,
+				127BA86C915A1DAE344A29C9 /* [CP] Check Pods Manifest.lock */,
 				B08269382E3C4AA4002A26B8 /* Sources */,
 				B08269392E3C4AA4002A26B8 /* Frameworks */,
 				B082693A2E3C4AA4002A26B8 /* Resources */,
@@ -785,7 +789,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B082695F2E3C4B42002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Experimental" */;
 			buildPhases = (
-				AEDA06BB83FE0E41D362C9E3 /* [CP] Check Pods Manifest.lock */,
+				A7E040720DEE1E6A6BB4600E /* [CP] Check Pods Manifest.lock */,
 				B08269502E3C4B42002A26B8 /* Sources */,
 				B08269512E3C4B42002A26B8 /* Frameworks */,
 				B08269522E3C4B42002A26B8 /* Resources */,
@@ -806,7 +810,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B08269772E3C4C30002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Custom" */;
 			buildPhases = (
-				06336D5CE437ECF4A3AB2979 /* [CP] Check Pods Manifest.lock */,
+				8E9574BB8F292F53D8B9A2FA /* [CP] Check Pods Manifest.lock */,
 				B08269682E3C4C2F002A26B8 /* Sources */,
 				B08269692E3C4C2F002A26B8 /* Frameworks */,
 				B082696A2E3C4C2F002A26B8 /* Resources */,
@@ -827,7 +831,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B082699E2E3C514B002A26B8 /* Build configuration list for PBXNativeTarget "wBlock Scripts" */;
 			buildPhases = (
-				D45E49E7BD756266696A2B33 /* [CP] Check Pods Manifest.lock */,
+				C903057DD3142D17F61D0429 /* [CP] Check Pods Manifest.lock */,
 				B08269802E3C514B002A26B8 /* Sources */,
 				B08269812E3C514B002A26B8 /* Frameworks */,
 				B08269822E3C514B002A26B8 /* Resources */,
@@ -1005,133 +1009,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		06336D5CE437ECF4A3AB2979 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-wBlock Custom-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		31427AEB89F84A132A93A8CE /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-wBlock Multipurpose-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		316E6032F6DCBFDAAF6745F0 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Runner-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		37366713066B79822B85AC63 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-wBlock Ads-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3AAA49CD2B13DF0B199CEB89 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-wBlock Privacy-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}",
-			);
-			name = "Thin Binary";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
-		};
-		415D451322DE70BC6D35AF7E /* [CP] Check Pods Manifest.lock */ = {
+		052917B1B800DFEB9379510B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1153,7 +1031,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		955C2765ED1AEFC65400E0CC /* [CP] Check Pods Manifest.lock */ = {
+		118EC542F4724665F8794D7C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1168,7 +1046,111 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-wBlock Annoyances-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Privacy-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		127BA86C915A1DAE344A29C9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Foreign-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		166E612DFE96DCBDCB482204 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Multipurpose-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}",
+			);
+			name = "Thin Binary";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
+		};
+		3CF30FB942A508A92D766396 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Runner-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8E9574BB8F292F53D8B9A2FA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Custom-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1190,24 +1172,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
 		};
-		A94B4443A17FD40C57018C21 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AEDA06BB83FE0E41D362C9E3 /* [CP] Check Pods Manifest.lock */ = {
+		A7E040720DEE1E6A6BB4600E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1229,7 +1194,29 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D45E49E7BD756266696A2B33 /* [CP] Check Pods Manifest.lock */ = {
+		C063C58EB9BB9FCA576D8500 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Annoyances-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C903057DD3142D17F61D0429 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1251,7 +1238,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DC91534CB22EBA818EEBE217 /* [CP] Check Pods Manifest.lock */ = {
+		D237FD9D70BDF222BB70E140 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E089FD4A1FFE43040ED5AD71 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1266,7 +1270,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-wBlock Foreign-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-wBlock Ads-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1504,8 +1508,13 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = syferlab.wBlock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
@@ -1517,12 +1526,18 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = syferlab.wBlock.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
 			};
 			name = Debug;
@@ -1534,10 +1549,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = syferlab.wBlock.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
 			};
 			name = Release;
@@ -1549,10 +1570,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = syferlab.wBlock.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
 			};
 			name = Profile;
@@ -1689,9 +1716,14 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = syferlab.wBlock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1717,15 +1749,20 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = syferlab.wBlock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
 		B08268712E3C4014002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E3CC2F9B385D824812EAD4F9 /* Pods-wBlock Ads.debug.xcconfig */;
+			baseConfigurationReference = 15C53A1C2908149DC8F80BCF /* Pods-wBlock Ads.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1757,6 +1794,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Ads";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1767,7 +1808,7 @@
 		};
 		B08268722E3C4014002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40EF1035CE01E90051A70313 /* Pods-wBlock Ads.release.xcconfig */;
+			baseConfigurationReference = 8A5B959DF73AE36E09B4EC01 /* Pods-wBlock Ads.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1798,6 +1839,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Ads";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1806,7 +1851,7 @@
 		};
 		B08268732E3C4014002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 93E9D4950A30F8B8EE0C8442 /* Pods-wBlock Ads.profile.xcconfig */;
+			baseConfigurationReference = 58856B6C855E1A774213482A /* Pods-wBlock Ads.profile.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1837,6 +1882,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Ads";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1845,7 +1894,7 @@
 		};
 		B08268912E3C4220002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 346B9F46A44FD6D5099F26B2 /* Pods-wBlock Privacy.debug.xcconfig */;
+			baseConfigurationReference = 1131D3FD0C58C475DEDC169B /* Pods-wBlock Privacy.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1877,6 +1926,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Privacy";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1887,7 +1940,7 @@
 		};
 		B08268922E3C4220002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 08C7369CE585BC64D2AFF8F1 /* Pods-wBlock Privacy.release.xcconfig */;
+			baseConfigurationReference = 01049ACD52C2FD40E039161E /* Pods-wBlock Privacy.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1918,6 +1971,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Privacy";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1926,7 +1983,7 @@
 		};
 		B08268932E3C4220002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4693BD56AAF15A969C3F597C /* Pods-wBlock Privacy.profile.xcconfig */;
+			baseConfigurationReference = 21F7DCBD2811C91A05FBD767 /* Pods-wBlock Privacy.profile.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1957,6 +2014,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Privacy";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1965,7 +2026,7 @@
 		};
 		B08268A92E3C438B002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C6AFB9ECAEE46D772F448DC1 /* Pods-wBlock Security.debug.xcconfig */;
+			baseConfigurationReference = 3114F7F07318E563B2573DEF /* Pods-wBlock Security.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1979,6 +2040,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5ZPWU6AY92;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "wBlock Security/Info.plist";
@@ -1997,6 +2059,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Security";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2007,7 +2073,7 @@
 		};
 		B08268AA2E3C438B002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 32ACF707F540D00A4CB9852E /* Pods-wBlock Security.release.xcconfig */;
+			baseConfigurationReference = DDCA3E878E4FE9B4CF935746 /* Pods-wBlock Security.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2021,6 +2087,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5ZPWU6AY92;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "wBlock Security/Info.plist";
@@ -2038,6 +2105,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Security";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2046,7 +2117,7 @@
 		};
 		B08268AB2E3C438B002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BB1CB6E5EA958C3DA0896845 /* Pods-wBlock Security.profile.xcconfig */;
+			baseConfigurationReference = D1D515559190AD784772077D /* Pods-wBlock Security.profile.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2060,6 +2131,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5ZPWU6AY92;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "wBlock Security/Info.plist";
@@ -2077,6 +2149,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Security";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2085,7 +2161,7 @@
 		};
 		B08269182E3C473C002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0D3CB4F73B317C2CEC349EB1 /* Pods-wBlock Annoyances.debug.xcconfig */;
+			baseConfigurationReference = A90EF6CB9C57C632B2B92E67 /* Pods-wBlock Annoyances.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2117,6 +2193,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Annoyances";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2127,7 +2207,7 @@
 		};
 		B08269192E3C473C002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 97E7B57E8444D95A0D01EE3B /* Pods-wBlock Annoyances.release.xcconfig */;
+			baseConfigurationReference = 8CE96E56FE1D6D34254F3FFD /* Pods-wBlock Annoyances.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2158,6 +2238,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Annoyances";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2166,7 +2250,7 @@
 		};
 		B082691A2E3C473C002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C93045719E9172B8A11FE714 /* Pods-wBlock Annoyances.profile.xcconfig */;
+			baseConfigurationReference = 3DBB0046D2F3A90C635E9347 /* Pods-wBlock Annoyances.profile.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2197,6 +2281,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Annoyances";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2205,7 +2293,7 @@
 		};
 		B08269302E3C4A2A002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 10550E95BE2AEA3EF11B31C0 /* Pods-wBlock Multipurpose.debug.xcconfig */;
+			baseConfigurationReference = DB87CF148F21B2F59D81DB4C /* Pods-wBlock Multipurpose.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2237,6 +2325,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Multipurpose";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2247,7 +2339,7 @@
 		};
 		B08269312E3C4A2A002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CBFE8EB40A329E120636E976 /* Pods-wBlock Multipurpose.release.xcconfig */;
+			baseConfigurationReference = D001C7E5028C8E4EA54C22E0 /* Pods-wBlock Multipurpose.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2278,6 +2370,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Multipurpose";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2286,7 +2382,7 @@
 		};
 		B08269322E3C4A2A002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 66E65D53BAEE86CFF4EC215C /* Pods-wBlock Multipurpose.profile.xcconfig */;
+			baseConfigurationReference = DC638C2DAA06ADA8CCEFC065 /* Pods-wBlock Multipurpose.profile.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2317,6 +2413,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Multipurpose";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2325,7 +2425,7 @@
 		};
 		B08269482E3C4AA4002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ED1580F0967FBD6ED6259131 /* Pods-wBlock Foreign.debug.xcconfig */;
+			baseConfigurationReference = 4A573231DC7A92A9FED14786 /* Pods-wBlock Foreign.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2357,6 +2457,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Foreign";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2367,7 +2471,7 @@
 		};
 		B08269492E3C4AA4002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B8EF5FE9383F770B5E123FE5 /* Pods-wBlock Foreign.release.xcconfig */;
+			baseConfigurationReference = 7F9E869E8A521CF0FF1077F3 /* Pods-wBlock Foreign.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2398,6 +2502,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Foreign";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2406,7 +2514,7 @@
 		};
 		B082694A2E3C4AA4002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C48E2C11BBE280AF53A38087 /* Pods-wBlock Foreign.profile.xcconfig */;
+			baseConfigurationReference = D0996A8A98209C47DF381A94 /* Pods-wBlock Foreign.profile.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2437,6 +2545,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Foreign";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2445,7 +2557,7 @@
 		};
 		B08269602E3C4B42002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 10407D8E344E60920E2550DE /* Pods-wBlock Experimental.debug.xcconfig */;
+			baseConfigurationReference = 42C05876AE4D3844B9C2D92E /* Pods-wBlock Experimental.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2477,6 +2589,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Experimental";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2487,7 +2603,7 @@
 		};
 		B08269612E3C4B42002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BD91D0CA7F1D3404EEEE4ED9 /* Pods-wBlock Experimental.release.xcconfig */;
+			baseConfigurationReference = 930AF2B341FB91316021D8FA /* Pods-wBlock Experimental.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2518,6 +2634,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Experimental";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2526,7 +2646,7 @@
 		};
 		B08269622E3C4B42002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 88E4DFDDC2494BDD71BAD015 /* Pods-wBlock Experimental.profile.xcconfig */;
+			baseConfigurationReference = 65529CCE54C47C61D5ACED9F /* Pods-wBlock Experimental.profile.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2557,6 +2677,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Experimental";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2565,7 +2689,7 @@
 		};
 		B08269782E3C4C30002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 369FFC1F37847B3AA4C63555 /* Pods-wBlock Custom.debug.xcconfig */;
+			baseConfigurationReference = 75611FE94E02CA9ECDD780A0 /* Pods-wBlock Custom.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2597,6 +2721,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Custom";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2607,7 +2735,7 @@
 		};
 		B08269792E3C4C30002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 55F5F96651461333FDFFD5FB /* Pods-wBlock Custom.release.xcconfig */;
+			baseConfigurationReference = D8B06F2C3C11DB537611EF31 /* Pods-wBlock Custom.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2638,6 +2766,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Custom";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2646,7 +2778,7 @@
 		};
 		B082697A2E3C4C30002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9F0066BDF892876551C1988C /* Pods-wBlock Custom.profile.xcconfig */;
+			baseConfigurationReference = 3D31CE53B2CB35C3076AD1C2 /* Pods-wBlock Custom.profile.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2677,6 +2809,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Custom";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2685,7 +2821,7 @@
 		};
 		B082699F2E3C514B002A26B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 313C79E0CF34076B6A08D6A5 /* Pods-wBlock Scripts.debug.xcconfig */;
+			baseConfigurationReference = 3E93F5E18F66988FC6A8EEEB /* Pods-wBlock Scripts.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -2699,6 +2835,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5ZPWU6AY92;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "wBlock Scripts/Info.plist";
@@ -2718,6 +2855,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Scripts";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2728,7 +2869,7 @@
 		};
 		B08269A02E3C514B002A26B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4B59D73C2149B9AED6E90FAE /* Pods-wBlock Scripts.release.xcconfig */;
+			baseConfigurationReference = 108B4B93C1D158C96E1AE76D /* Pods-wBlock Scripts.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -2742,6 +2883,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5ZPWU6AY92;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "wBlock Scripts/Info.plist";
@@ -2760,6 +2902,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Scripts";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2768,7 +2914,7 @@
 		};
 		B08269A12E3C514B002A26B8 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6AA9B217DDCC5FBB907A0320 /* Pods-wBlock Scripts.profile.xcconfig */;
+			baseConfigurationReference = E85A042663BB94A632A10BC3 /* Pods-wBlock Scripts.profile.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -2782,6 +2928,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5ZPWU6AY92;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "wBlock Scripts/Info.plist";
@@ -2800,6 +2947,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "syferlab.wBlock.wBlock-Scripts";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

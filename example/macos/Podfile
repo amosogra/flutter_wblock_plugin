@@ -44,24 +44,24 @@ target 'Runner' do
 end
 
 # All wBlock Safari Content Blocker Extensions for macOS
-%w[
-  wBlock\ Ads\ &\ Privacy
-  wBlock\ Advanced
-  wBlock\ Annoyances
-  wBlock\ Custom
-  wBlock\ Foreign\ &\ Experimental
-  wBlock\ Scripts
-  wBlock\ Security\ &\ Multipurpose
+[
+  'wBlock Ads & Privacy',
+  'wBlock Advanced',
+  'wBlock Annoyances',
+  'wBlock Custom',
+  'wBlock Foreign & Experimental',
+  'wBlock Scripts',
+  'wBlock Security & Multipurpose'
 ].each do |extension_name|
   target extension_name do
     use_frameworks!
-    
-    # Extensions need these specific pods
-    pod 'ContentBlockerConverter', :podspec => '../../macos/Podspecs'
+
     pod 'wBlockCoreService', :podspec => '../../macos/Podspecs'
-    pod 'Punycode', :podspec => '../../macos/Podspecs'
+    
+    # Also add dependencies that wBlockCoreService needs
+    pod 'ContentBlockerConverter', :podspec => '../../macos/Podspecs'
     pod 'FilterEngine', :podspec => '../../macos/Podspecs'
-    pod 'PublicSuffixList', :podspec => '../../macos/Podspecs'
+    pod 'ZIPFoundation', :podspec => '../../macos/Podspecs/ZipFoundation.podspec'
   end
 end
 
@@ -81,20 +81,6 @@ post_install do |installer|
     end
   end
   
-  # Fix build setting conflicts for all project targets (including app targets)
-  installer.aggregate_targets.each do |target|
-    target.xcconfigs.each do |config_name, config_file|
-      config_file.attributes.each do |key, value|
-        if key == 'OTHER_LDFLAGS'
-          # Ensure OTHER_LDFLAGS includes $(inherited) to prevent conflicts
-          unless value.include?('$(inherited)')
-            config_file.attributes[key] = "$(inherited) #{value}"
-          end
-        end
-      end
-    end
-  end
-  
   # Additional fix for generated project targets
   installer.generated_projects.each do |project|
     project.targets.each do |target|
@@ -106,44 +92,6 @@ post_install do |installer|
         if config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER']
           config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = '$(inherited)'
         end
-        
-        # Fix OTHER_LDFLAGS inheritance issues
-        if config.build_settings['OTHER_LDFLAGS']
-          existing_flags = config.build_settings['OTHER_LDFLAGS']
-          if existing_flags.is_a?(Array)
-            unless existing_flags.include?('$(inherited)')
-              config.build_settings['OTHER_LDFLAGS'] = ['$(inherited)'] + existing_flags
-            end
-          elsif existing_flags.is_a?(String)
-            unless existing_flags.include?('$(inherited)')
-              config.build_settings['OTHER_LDFLAGS'] = "$(inherited) #{existing_flags}"
-            end
-          end
-        end
-      end
-    end
-  end
-  
-  # Specific fix for wBlock extension targets
-  %w[
-    wBlock\ Ads\ &\ Privacy
-    wBlock\ Advanced
-    wBlock\ Annoyances
-    wBlock\ Custom
-    wBlock\ Foreign\ &\ Experimental
-    wBlock\ Scripts
-    wBlock\ Security\ &\ Multipurpose
-  ].each do |extension_name|
-    extension_target = installer.pods_project.targets.find { |t| t.name.include?(extension_name.gsub('\ ', ' ')) }
-    next unless extension_target
-    
-    extension_target.build_configurations.each do |config|
-      # Ensure these targets properly inherit OTHER_LDFLAGS
-      existing_flags = config.build_settings['OTHER_LDFLAGS']
-      if existing_flags && !existing_flags.to_s.include?('$(inherited)')
-        config.build_settings['OTHER_LDFLAGS'] = "$(inherited) #{existing_flags}"
-      elsif !existing_flags
-        config.build_settings['OTHER_LDFLAGS'] = '$(inherited)'
       end
     end
   end

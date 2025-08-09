@@ -55,6 +55,7 @@ class _ApplyChangesProgressViewState extends ConsumerState<ApplyChangesProgressV
             minHeight: 400,
           ),
           child: AppTheme.ultraThinMaterial(
+            context: context,
             child: _buildContent(filterManager, titleText, hasStatistics, progressPercentage),
           ),
         ),
@@ -358,12 +359,13 @@ class _ApplyChangesProgressViewState extends ConsumerState<ApplyChangesProgressV
         mainAxisSpacing: 12,
       ),
       itemCount: stats.length,
-      itemBuilder: (context, index) => _buildStatisticCard(stats[index]),
+      itemBuilder: (context, index) => _buildStatisticCard(context, stats[index]),
     );
   }
 
-  Widget _buildStatisticCard(StatisticData stat) {
+  Widget _buildStatisticCard(BuildContext context, StatisticData stat) {
     return AppTheme.regularMaterial(
+      context: context,
       child: Container(
         padding: const EdgeInsets.all(12),
         child: Column(

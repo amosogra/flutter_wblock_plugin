@@ -9,7 +9,7 @@ class AppTheme {
   AppTheme._();
   
   // Material-style backgrounds with blur
-  static Widget regularMaterial({required Widget child}) {
+  static Widget regularMaterial({required Widget child, BuildContext? context}) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: BackdropFilter(
@@ -18,9 +18,9 @@ class AppTheme {
           decoration: BoxDecoration(
             color: Platform.isMacOS 
               ? Colors.white.withOpacity(0.72)
-              : CupertinoColors.systemBackground.resolveFrom(
-                  NavigatorState().context
-                ).withOpacity(0.72),
+              : context != null 
+                ? CupertinoColors.systemBackground.resolveFrom(context).withOpacity(0.72)
+                : CupertinoColors.systemBackground.withOpacity(0.72),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: Colors.white.withOpacity(0.2),
@@ -33,7 +33,7 @@ class AppTheme {
     );
   }
   
-  static Widget ultraThinMaterial({required Widget child}) {
+  static Widget ultraThinMaterial({required Widget child, BuildContext? context}) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: BackdropFilter(
@@ -42,9 +42,9 @@ class AppTheme {
           decoration: BoxDecoration(
             color: Platform.isMacOS 
               ? Colors.white.withOpacity(0.5)
-              : CupertinoColors.systemBackground.resolveFrom(
-                  NavigatorState().context
-                ).withOpacity(0.5),
+              : context != null
+                ? CupertinoColors.systemBackground.resolveFrom(context).withOpacity(0.5)
+                : CupertinoColors.systemBackground.withOpacity(0.5),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: Colors.white.withOpacity(0.15),

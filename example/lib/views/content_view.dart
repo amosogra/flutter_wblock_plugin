@@ -59,7 +59,8 @@ class _ContentViewState extends ConsumerState<ContentView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       
-      final filterManager = ref.read(appFilterManagerProvider);
+      try {
+        final filterManager = ref.read(appFilterManagerProvider);
       
       // Only show sheets/dialogs if they're not already showing
       if (filterManager.showingUpdatePopup && !_isShowingUpdatePopup) {
@@ -79,6 +80,9 @@ class _ContentViewState extends ConsumerState<ContentView> {
       }
       if (filterManager.showingCategoryWarningAlert && !_isShowingCategoryWarningAlert) {
         _showCategoryWarningAlert();
+      }
+      } catch (e) {
+        // Silently handle if context is not available
       }
     });
   }
@@ -357,6 +361,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
         ),
         const SizedBox(height: 12),
         AppTheme.regularMaterial(
+          context: context,
           child: Column(
             children: filters.asMap().entries.map((entry) {
               final index = entry.key;

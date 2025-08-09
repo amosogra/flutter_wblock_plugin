@@ -32,7 +32,7 @@ cd ios && pod install && cd ..
 ./ClearPreferences.sh
 
 echo "6️⃣  Building macOS app with light theme..."
-flutter run -d macos
+flutter run -d iPhone
 # flutter build macos --release
 
 # echo "✅ Build complete! Running the app..."

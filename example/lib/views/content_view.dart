@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_wblock_plugin_example/views/whitelist_view.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wblock_plugin_example/providers/providers.dart';
@@ -54,33 +55,33 @@ class _ContentViewState extends ConsumerState<ContentView> {
 
   void _handleFilterManagerChanges() {
     if (!mounted) return;
-    
+
     // Use post frame callback to avoid setState during build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      
+
       try {
         final filterManager = ref.read(appFilterManagerProvider);
-      
-      // Only show sheets/dialogs if they're not already showing
-      if (filterManager.showingUpdatePopup && !_isShowingUpdatePopup) {
-        _showUpdatePopup();
-      }
-      if (filterManager.showMissingFiltersSheet && !_isShowingMissingFiltersSheet) {
-        _showMissingFiltersSheet();
-      }
-      if (filterManager.showingApplyProgressSheet && !_isShowingApplyProgressSheet) {
-        _showApplyProgressSheet();
-      }
-      if (filterManager.showingNoUpdatesAlert && !_isShowingNoUpdatesAlert) {
-        _showNoUpdatesAlert();
-      }
-      if (filterManager.showingDownloadCompleteAlert && !_isShowingDownloadCompleteAlert) {
-        _showDownloadCompleteAlert();
-      }
-      if (filterManager.showingCategoryWarningAlert && !_isShowingCategoryWarningAlert) {
-        _showCategoryWarningAlert();
-      }
+
+        // Only show sheets/dialogs if they're not already showing
+        if (filterManager.showingUpdatePopup && !_isShowingUpdatePopup) {
+          _showUpdatePopup();
+        }
+        if (filterManager.showMissingFiltersSheet && !_isShowingMissingFiltersSheet) {
+          _showMissingFiltersSheet();
+        }
+        if (filterManager.showingApplyProgressSheet && !_isShowingApplyProgressSheet) {
+          _showApplyProgressSheet();
+        }
+        if (filterManager.showingNoUpdatesAlert && !_isShowingNoUpdatesAlert) {
+          _showNoUpdatesAlert();
+        }
+        if (filterManager.showingDownloadCompleteAlert && !_isShowingDownloadCompleteAlert) {
+          _showDownloadCompleteAlert();
+        }
+        if (filterManager.showingCategoryWarningAlert && !_isShowingCategoryWarningAlert) {
+          _showCategoryWarningAlert();
+        }
       } catch (e) {
         // Silently handle if context is not available
       }
@@ -107,6 +108,12 @@ class _ContentViewState extends ConsumerState<ContentView> {
         toolBar: ToolBar(
           title: const Text('Syferlab'),
           titleWidth: 150.0,
+          decoration: BoxDecoration(
+            color: AppTheme.cardBackground.withOpacity(0.94),
+            border: Border(
+              bottom: BorderSide(color: AppTheme.dividerColor, width: 0.5),
+            ),
+          ),
           leading: MacosIcon(
             CupertinoIcons.shield_lefthalf_fill,
             color: AppTheme.primaryColor,
@@ -144,7 +151,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
             ToolBarIconButton(
               label: 'Whitelisted Domains',
               icon: const MacosIcon(CupertinoIcons.list_bullet_indent),
-              onPressed: _showWhitelistSheet,
+              onPressed: _showWhitelistViewSheet,
               tooltipMessage: 'Configure whitelisted domains',
               showLabel: false,
             ),
@@ -168,16 +175,23 @@ class _ContentViewState extends ConsumerState<ContentView> {
           ContentArea(
             builder: (context, scrollController) => Stack(
               children: [
-                SingleChildScrollView(
-                  controller: scrollController,
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildStatsCardsView(),
-                      const SizedBox(height: 20),
-                      ..._buildFilterSections(),
-                    ],
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppTheme.backgroundColor,
+                    //borderRadius: BorderRadius.circular(AppTheme.smallRadius),
+                    boxShadow: [AppTheme.cardShadow],
+                  ),
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildStatsCardsView(),
+                        const SizedBox(height: 20),
+                        ..._buildFilterSections(),
+                      ],
+                    ),
                   ),
                 ),
                 // Only show loading overlay when actually loading and no sheet is showing
@@ -209,6 +223,11 @@ class _ContentViewState extends ConsumerState<ContentView> {
               CupertinoSliverNavigationBar(
                 backgroundColor: AppTheme.cardBackground.withOpacity(0.94),
                 largeTitle: const Text('Syferlab'),
+                leading: Icon(
+                  CupertinoIcons.shield_lefthalf_fill,
+                  color: AppTheme.primaryColor,
+                  size: 20.0,
+                ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -221,6 +240,27 @@ class _ContentViewState extends ConsumerState<ContentView> {
                       padding: EdgeInsets.zero,
                       onPressed: filterManager.isLoading || enabledListsCount == 0 ? null : () => filterManager.checkAndEnableFilters(forceReload: true),
                       child: Icon(CupertinoIcons.arrow_2_circlepath, color: AppTheme.primaryColor),
+                    ),
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: _showLogsViewIOS,
+                      child: Icon(CupertinoIcons.doc_text_search, color: AppTheme.primaryColor),
+                    ),
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: _showUserScriptsViewIOS,
+                      child: Icon(CupertinoIcons.doc_text_fill, color: AppTheme.primaryColor),
+                    ),
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: _showWhitelistSheetIOS,
+                      child: Icon(CupertinoIcons.list_bullet_indent, color: AppTheme.primaryColor),
+                    ),
+                    CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () => ref.read(showOnlyEnabledListsProvider.notifier).state = !showOnlyEnabledLists,
+                      child: Icon(showOnlyEnabledLists ? CupertinoIcons.line_horizontal_3_decrease_circle_fill : CupertinoIcons.line_horizontal_3_decrease_circle,
+                          color: AppTheme.primaryColor),
                     ),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
@@ -245,9 +285,9 @@ class _ContentViewState extends ConsumerState<ContentView> {
             ],
           ),
           // Only show loading overlay when actually loading and no sheet is showing
-          if (filterManager.isLoading && 
-              !filterManager.showingApplyProgressSheet && 
-              !filterManager.showMissingFiltersSheet && 
+          if (filterManager.isLoading &&
+              !filterManager.showingApplyProgressSheet &&
+              !filterManager.showMissingFiltersSheet &&
               !filterManager.showingUpdatePopup &&
               filterManager.statusDescription.isNotEmpty)
             _buildLoadingOverlay(),
@@ -267,7 +307,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
             title: 'Enabled Lists',
             value: '$enabledListsCount',
             icon: 'list.bullet.rectangle',
-            pillColor: Colors.transparent,
+            pillColor: CupertinoColors.darkBackgroundGray.withOpacity(0.2),
             valueColor: CupertinoColors.label,
           ),
         ),
@@ -277,7 +317,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
             title: 'Safari Rules',
             value: filterManager.lastRuleCount.toString(),
             icon: 'shield.lefthalf.filled',
-            pillColor: Colors.transparent,
+            pillColor: CupertinoColors.darkBackgroundGray.withOpacity(0.2),
             valueColor: CupertinoColors.label,
           ),
         ),
@@ -474,10 +514,10 @@ class _ContentViewState extends ConsumerState<ContentView> {
     );
   }
 
-  // Sheet methods
+  // macOS Sheet methods
   void _showAddFilterSheet() {
     if (!mounted) return;
-    
+
     showMacosSheet(
       context: context,
       builder: (context) => const AddFilterListView(),
@@ -486,7 +526,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
 
   void _showLogsView() {
     if (!mounted) return;
-    
+
     showMacosSheet(
       context: context,
       builder: (context) => LogsView(
@@ -497,7 +537,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
 
   void _showUserScriptsView() {
     if (!mounted) return;
-    
+
     showMacosSheet(
       context: context,
       builder: (context) => UserScriptManagerView(
@@ -506,9 +546,9 @@ class _ContentViewState extends ConsumerState<ContentView> {
     );
   }
 
-  void _showWhitelistSheet() {
+  void _showWhitelistViewSheet() {
     if (!mounted) return;
-    
+
     showMacosSheet(
       context: context,
       builder: (context) => WhitelistManagerView(
@@ -517,162 +557,337 @@ class _ContentViewState extends ConsumerState<ContentView> {
     );
   }
 
-  void _showUpdatePopup() {
-    if (!mounted || _isShowingUpdatePopup) return;
-    
-    final filterManager = ref.read(appFilterManagerProvider);
-    if (!filterManager.showingUpdatePopup) return;
-    
-    _isShowingUpdatePopup = true;
-    showMacosSheet(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => UpdatePopupView(
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    ).whenComplete(() {
-      _isShowingUpdatePopup = false;
-      filterManager.showingUpdatePopup = false;
-    });
-  }
+  // iOS Sheet methods
+  void _showLogsViewIOS() {
+    if (!mounted) return;
 
-  void _showMissingFiltersSheet() {
-    if (!mounted || _isShowingMissingFiltersSheet) return;
-    
-    final filterManager = ref.read(appFilterManagerProvider);
-    if (!filterManager.showMissingFiltersSheet) return;
-    
-    _isShowingMissingFiltersSheet = true;
-    showMacosSheet(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => MissingFiltersView(
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    ).whenComplete(() {
-      _isShowingMissingFiltersSheet = false;
-      filterManager.showMissingFiltersSheet = false;
-    });
-  }
-
-  void _showApplyProgressSheet() {
-    if (!mounted || _isShowingApplyProgressSheet) return;
-    
-    final filterManager = ref.read(appFilterManagerProvider);
-    if (!filterManager.showingApplyProgressSheet) return;
-    
-    _isShowingApplyProgressSheet = true;
-    showMacosSheet(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => ApplyChangesProgressView(
-        onDismiss: () {
-          Navigator.of(context).pop();
-          final fm = ref.read(appFilterManagerProvider);
-          fm.showingApplyProgressSheet = false;
-        },
-      ),
-    ).whenComplete(() {
-      _isShowingApplyProgressSheet = false;
-      if (mounted) {
-        final fm = ref.read(appFilterManagerProvider);
-        fm.showingApplyProgressSheet = false;
-      }
-    });
-  }
-
-  void _showNoUpdatesAlert() {
-    if (!mounted || _isShowingNoUpdatesAlert) return;
-    
-    final filterManager = ref.read(appFilterManagerProvider);
-    if (!filterManager.showingNoUpdatesAlert) return;
-    
-    _isShowingNoUpdatesAlert = true;
-    showMacosAlertDialog(
-      context: context,
-      builder: (context) => MacosAlertDialog(
-        appIcon: const MacosIcon(CupertinoIcons.info_circle),
-        title: const Text('No Updates Found'),
-        message: const Text('All your filters and userscripts are up to date.'),
-        primaryButton: PushButton(
-          controlSize: ControlSize.large,
-          child: const Text('OK'),
-          onPressed: () => Navigator.of(context).pop(),
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => Material(
+          child: LogsView(
+            onDismiss: () => Navigator.of(context).pop(),
+          ),
         ),
       ),
-    ).whenComplete(() {
-      _isShowingNoUpdatesAlert = false;
-      filterManager.showingNoUpdatesAlert = false;
-    });
+    );
   }
 
-  void _showDownloadCompleteAlert() {
-    if (!mounted || _isShowingDownloadCompleteAlert) return;
-    
-    final filterManager = ref.read(appFilterManagerProvider);
-    if (!filterManager.showingDownloadCompleteAlert) return;
-    
-    _isShowingDownloadCompleteAlert = true;
-    showMacosAlertDialog(
-      context: context,
-      builder: (context) => MacosAlertDialog(
-        appIcon: const MacosIcon(CupertinoIcons.checkmark_circle),
-        title: const Text('Download Complete'),
-        message: Text(filterManager.downloadCompleteMessage),
-        primaryButton: PushButton(
-          controlSize: ControlSize.large,
-          color: AppTheme.primaryColor,
-          child: const Text('Apply Now'),
-          onPressed: () {
-            Navigator.of(context).pop();
-            filterManager.applyDownloadedChanges();
-          },
-        ),
-        secondaryButton: PushButton(
-          controlSize: ControlSize.large,
-          child: const Text('Later'),
-          onPressed: () => Navigator.of(context).pop(),
+  void _showUserScriptsViewIOS() {
+    if (!mounted) return;
+
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => Material(
+          child: UserScriptManagerView(
+            onDismiss: () => Navigator.of(context).pop(),
+          ),
         ),
       ),
-    ).whenComplete(() {
-      _isShowingDownloadCompleteAlert = false;
-      filterManager.showingDownloadCompleteAlert = false;
-    });
+    );
   }
 
-  void _showCategoryWarningAlert() {
-    if (!mounted || _isShowingCategoryWarningAlert) return;
-    
-    final filterManager = ref.read(appFilterManagerProvider);
-    if (!filterManager.showingCategoryWarningAlert) return;
-    
-    _isShowingCategoryWarningAlert = true;
-    showMacosAlertDialog(
-      context: context,
-      builder: (context) => MacosAlertDialog(
-        appIcon: const MacosIcon(CupertinoIcons.exclamationmark_triangle),
-        title: const Text('Category Rule Limit Warning'),
-        message: Text(filterManager.categoryWarningMessage),
-        primaryButton: PushButton(
-          controlSize: ControlSize.large,
-          child: const Text('OK'),
-          onPressed: () => Navigator.of(context).pop(),
+  void _showWhitelistSheetIOS() {
+    if (!mounted) return;
+
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => Material(
+          child: WhitelistView(
+            onDismiss: () => Navigator.of(context).pop(),
+          ),
         ),
       ),
-    ).whenComplete(() {
-      _isShowingCategoryWarningAlert = false;
-      filterManager.showingCategoryWarningAlert = false;
-    });
+    );
   }
 
-  // iOS-specific methods
   void _showAddFilterSheetIOS() {
     if (!mounted) return;
-    
+
     showCupertinoModalPopup(
       context: context,
       builder: (context) => const AddFilterListViewIOS(),
     );
+  }
+
+  // Sheet methods for update/progress/alerts that work on both platforms
+  void _showUpdatePopup() {
+    if (!mounted || _isShowingUpdatePopup) return;
+
+    final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showingUpdatePopup) return;
+
+    _isShowingUpdatePopup = true;
+    
+    if (Platform.isMacOS) {
+      showMacosSheet(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => UpdatePopupView(
+          onDismiss: () => Navigator.of(context).pop(),
+        ),
+      ).whenComplete(() {
+        _isShowingUpdatePopup = false;
+        filterManager.showingUpdatePopup = false;
+      });
+    } else {
+      // iOS - Use fullscreen modal
+      Navigator.of(context).push(
+        CupertinoPageRoute(
+          fullscreenDialog: true,
+          builder: (context) => Material(
+            child: UpdatePopupView(
+              onDismiss: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ),
+      ).whenComplete(() {
+        _isShowingUpdatePopup = false;
+        filterManager.showingUpdatePopup = false;
+      });
+    }
+  }
+
+  void _showMissingFiltersSheet() {
+    if (!mounted || _isShowingMissingFiltersSheet) return;
+
+    final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showMissingFiltersSheet) return;
+
+    _isShowingMissingFiltersSheet = true;
+    
+    if (Platform.isMacOS) {
+      showMacosSheet(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => MissingFiltersView(
+          onDismiss: () => Navigator.of(context).pop(),
+        ),
+      ).whenComplete(() {
+        _isShowingMissingFiltersSheet = false;
+        filterManager.showMissingFiltersSheet = false;
+      });
+    } else {
+      // iOS - Use fullscreen modal
+      Navigator.of(context).push(
+        CupertinoPageRoute(
+          fullscreenDialog: true,
+          builder: (context) => Material(
+            child: MissingFiltersView(
+              onDismiss: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ),
+      ).whenComplete(() {
+        _isShowingMissingFiltersSheet = false;
+        filterManager.showMissingFiltersSheet = false;
+      });
+    }
+  }
+
+  void _showApplyProgressSheet() {
+    if (!mounted || _isShowingApplyProgressSheet) return;
+
+    final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showingApplyProgressSheet) return;
+
+    _isShowingApplyProgressSheet = true;
+    
+    if (Platform.isMacOS) {
+      showMacosSheet(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => ApplyChangesProgressView(
+          onDismiss: () {
+            Navigator.of(context).pop();
+            final fm = ref.read(appFilterManagerProvider);
+            fm.showingApplyProgressSheet = false;
+          },
+        ),
+      ).whenComplete(() {
+        _isShowingApplyProgressSheet = false;
+        if (mounted) {
+          final fm = ref.read(appFilterManagerProvider);
+          fm.showingApplyProgressSheet = false;
+        }
+      });
+    } else {
+      // iOS - Use modal popup
+      showCupertinoModalPopup(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => ApplyChangesProgressView(
+          onDismiss: () {
+            Navigator.of(context).pop();
+            final fm = ref.read(appFilterManagerProvider);
+            fm.showingApplyProgressSheet = false;
+          },
+        ),
+      ).whenComplete(() {
+        _isShowingApplyProgressSheet = false;
+        if (mounted) {
+          final fm = ref.read(appFilterManagerProvider);
+          fm.showingApplyProgressSheet = false;
+        }
+      });
+    }
+  }
+
+  void _showNoUpdatesAlert() {
+    if (!mounted || _isShowingNoUpdatesAlert) return;
+
+    final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showingNoUpdatesAlert) return;
+
+    _isShowingNoUpdatesAlert = true;
+    
+    if (Platform.isMacOS) {
+      showMacosAlertDialog(
+        context: context,
+        builder: (context) => MacosAlertDialog(
+          appIcon: const MacosIcon(CupertinoIcons.info_circle),
+          title: const Text('No Updates Found'),
+          message: const Text('All your filters and userscripts are up to date.'),
+          primaryButton: PushButton(
+            controlSize: ControlSize.large,
+            child: const Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+      ).whenComplete(() {
+        _isShowingNoUpdatesAlert = false;
+        filterManager.showingNoUpdatesAlert = false;
+      });
+    } else {
+      // iOS - Use Cupertino alert dialog
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: const Text('No Updates Found'),
+          content: const Text('All your filters and userscripts are up to date.'),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      ).whenComplete(() {
+        _isShowingNoUpdatesAlert = false;
+        filterManager.showingNoUpdatesAlert = false;
+      });
+    }
+  }
+
+  void _showDownloadCompleteAlert() {
+    if (!mounted || _isShowingDownloadCompleteAlert) return;
+
+    final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showingDownloadCompleteAlert) return;
+
+    _isShowingDownloadCompleteAlert = true;
+    
+    if (Platform.isMacOS) {
+      showMacosAlertDialog(
+        context: context,
+        builder: (context) => MacosAlertDialog(
+          appIcon: const MacosIcon(CupertinoIcons.checkmark_circle),
+          title: const Text('Download Complete'),
+          message: Text(filterManager.downloadCompleteMessage),
+          primaryButton: PushButton(
+            controlSize: ControlSize.large,
+            color: AppTheme.primaryColor,
+            child: const Text('Apply Now'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              filterManager.applyDownloadedChanges();
+            },
+          ),
+          secondaryButton: PushButton(
+            controlSize: ControlSize.large,
+            child: const Text('Later'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+      ).whenComplete(() {
+        _isShowingDownloadCompleteAlert = false;
+        filterManager.showingDownloadCompleteAlert = false;
+      });
+    } else {
+      // iOS - Use Cupertino alert dialog
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: const Text('Download Complete'),
+          content: Text(filterManager.downloadCompleteMessage),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('Later'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: const Text('Apply Now'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                filterManager.applyDownloadedChanges();
+              },
+            ),
+          ],
+        ),
+      ).whenComplete(() {
+        _isShowingDownloadCompleteAlert = false;
+        filterManager.showingDownloadCompleteAlert = false;
+      });
+    }
+  }
+
+  void _showCategoryWarningAlert() {
+    if (!mounted || _isShowingCategoryWarningAlert) return;
+
+    final filterManager = ref.read(appFilterManagerProvider);
+    if (!filterManager.showingCategoryWarningAlert) return;
+
+    _isShowingCategoryWarningAlert = true;
+    
+    if (Platform.isMacOS) {
+      showMacosAlertDialog(
+        context: context,
+        builder: (context) => MacosAlertDialog(
+          appIcon: const MacosIcon(CupertinoIcons.exclamationmark_triangle),
+          title: const Text('Category Rule Limit Warning'),
+          message: Text(filterManager.categoryWarningMessage),
+          primaryButton: PushButton(
+            controlSize: ControlSize.large,
+            child: const Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+      ).whenComplete(() {
+        _isShowingCategoryWarningAlert = false;
+        filterManager.showingCategoryWarningAlert = false;
+      });
+    } else {
+      // iOS - Use Cupertino alert dialog
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: const Text('Category Rule Limit Warning'),
+          content: Text(filterManager.categoryWarningMessage),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      ).whenComplete(() {
+        _isShowingCategoryWarningAlert = false;
+        filterManager.showingCategoryWarningAlert = false;
+      });
+    }
   }
 }
 

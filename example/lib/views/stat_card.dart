@@ -12,7 +12,7 @@ class StatCard extends StatelessWidget {
   final Color pillColor;
   final Color valueColor;
 
-  static const double valueWidth = 80;
+  static const double valueWidth = 100;
 
   const StatCard({
     super.key,
@@ -37,12 +37,13 @@ class StatCard extends StatelessWidget {
             : null,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildIcon(),
           const SizedBox(width: 12),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -50,14 +51,11 @@ class StatCard extends StatelessWidget {
                 style: AppTheme.statLabel,
               ),
               const SizedBox(height: 4),
-              SizedBox(
-                width: valueWidth,
-                child: Text(
-                  value,
-                  style: AppTheme.statValue.copyWith(
-                    color: valueColor,
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
+              Text(
+                value,
+                style: AppTheme.statValue.copyWith(
+                  color: valueColor,
+                  fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
             ],

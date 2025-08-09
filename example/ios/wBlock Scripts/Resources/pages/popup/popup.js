@@ -1,1 +1,1 @@
-console.log("Hello World!", browser);
+console.log("Syferlab will block stubborn ads!", browser);

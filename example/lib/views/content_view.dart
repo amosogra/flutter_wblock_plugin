@@ -620,7 +620,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
     if (!filterManager.showingUpdatePopup) return;
 
     _isShowingUpdatePopup = true;
-
+    
     if (Platform.isMacOS) {
       showMacosSheet(
         context: context,
@@ -634,8 +634,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
       });
     } else {
       // iOS - Use fullscreen modal
-      Navigator.of(context)
-          .push(
+      Navigator.of(context).push(
         CupertinoPageRoute(
           fullscreenDialog: true,
           builder: (context) => Material(
@@ -644,8 +643,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
             ),
           ),
         ),
-      )
-          .whenComplete(() {
+      ).whenComplete(() {
         _isShowingUpdatePopup = false;
         filterManager.showingUpdatePopup = false;
       });
@@ -659,7 +657,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
     if (!filterManager.showMissingFiltersSheet) return;
 
     _isShowingMissingFiltersSheet = true;
-
+    
     if (Platform.isMacOS) {
       showMacosSheet(
         context: context,
@@ -673,8 +671,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
       });
     } else {
       // iOS - Use fullscreen modal
-      Navigator.of(context)
-          .push(
+      Navigator.of(context).push(
         CupertinoPageRoute(
           fullscreenDialog: true,
           builder: (context) => Material(
@@ -683,8 +680,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
             ),
           ),
         ),
-      )
-          .whenComplete(() {
+      ).whenComplete(() {
         _isShowingMissingFiltersSheet = false;
         filterManager.showMissingFiltersSheet = false;
       });
@@ -698,7 +694,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
     if (!filterManager.showingApplyProgressSheet) return;
 
     _isShowingApplyProgressSheet = true;
-
+    
     if (Platform.isMacOS) {
       showMacosSheet(
         context: context,
@@ -746,7 +742,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
     if (!filterManager.showingNoUpdatesAlert) return;
 
     _isShowingNoUpdatesAlert = true;
-
+    
     if (Platform.isMacOS) {
       showMacosAlertDialog(
         context: context,
@@ -792,7 +788,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
     if (!filterManager.showingDownloadCompleteAlert) return;
 
     _isShowingDownloadCompleteAlert = true;
-
+    
     if (Platform.isMacOS) {
       showMacosAlertDialog(
         context: context,
@@ -855,7 +851,7 @@ class _ContentViewState extends ConsumerState<ContentView> {
     if (!filterManager.showingCategoryWarningAlert) return;
 
     _isShowingCategoryWarningAlert = true;
-
+    
     if (Platform.isMacOS) {
       showMacosAlertDialog(
         context: context,

@@ -1,21 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:macos_ui/macos_ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wblock_plugin_example/providers/providers.dart';
+import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'dart:io';
-import '../managers/app_filter_manager.dart';
 
-class AddFilterListView extends StatefulWidget {
-  final AppFilterManager filterManager;
-
-  const AddFilterListView({
-    super.key,
-    required this.filterManager,
-  });
+class AddFilterListView extends ConsumerStatefulWidget {
+  const AddFilterListView({super.key});
 
   @override
-  State<AddFilterListView> createState() => _AddFilterListViewState();
+  ConsumerState<AddFilterListView> createState() => _AddFilterListViewState();
 }
 
-class _AddFilterListViewState extends State<AddFilterListView> {
+class _AddFilterListViewState extends ConsumerState<AddFilterListView> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _urlController = TextEditingController();
 
@@ -27,6 +25,7 @@ class _AddFilterListViewState extends State<AddFilterListView> {
   }
 
   void _validateAndAdd() {
+    final filterManager = ref.read(appFilterManagerProvider);
     final trimmedUrl = _urlController.text.trim();
     
     if (trimmedUrl.isEmpty) {
@@ -42,12 +41,12 @@ class _AddFilterListViewState extends State<AddFilterListView> {
       }
 
       // Check if URL already exists
-      if (widget.filterManager.filterLists.any((filter) => filter.url == trimmedUrl)) {
+      if (filterManager.filterLists.any((filter) => filter.url == trimmedUrl)) {
         _showErrorAlert('A filter list with this URL already exists.');
         return;
       }
 
-      widget.filterManager.addFilterList(
+      filterManager.addFilterList(
         name: _nameController.text.trim(),
         urlString: trimmedUrl,
       );
@@ -73,17 +72,17 @@ class _AddFilterListViewState extends State<AddFilterListView> {
         ),
       );
     } else {
-      showDialog(
+      showMacosAlertDialog(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (context) => MacosAlertDialog(
+          appIcon: const MacosIcon(CupertinoIcons.exclamationmark_triangle),
           title: const Text('Invalid Input'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
+          message: Text(message),
+          primaryButton: PushButton(
+            controlSize: ControlSize.large,
+            child: const Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
       );
     }
@@ -105,7 +104,7 @@ class _AddFilterListViewState extends State<AddFilterListView> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       decoration: BoxDecoration(
-        color: CupertinoColors.systemBackground.resolveFrom(context),
+        color: AppTheme.cardBackground,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
@@ -115,7 +114,7 @@ class _AddFilterListViewState extends State<AddFilterListView> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: CupertinoColors.separator.resolveFrom(context),
+                  color: AppTheme.dividerColor,
                   width: 0.5,
                 ),
               ),
@@ -128,17 +127,20 @@ class _AddFilterListViewState extends State<AddFilterListView> {
                   onPressed: () => Navigator.of(context).pop(),
                   child: const Text('Cancel'),
                 ),
-                const Text(
+                Text(
                   'Add Custom Filter List',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTheme.headline,
                 ),
                 CupertinoButton(
                   padding: EdgeInsets.zero,
                   onPressed: _urlController.text.trim().isEmpty ? null : _validateAndAdd,
-                  child: const Text('Add'),
+                  child: Text(
+                    'Add',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.primaryColor,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -149,9 +151,9 @@ class _AddFilterListViewState extends State<AddFilterListView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Filter Name (Optional):',
-                    style: TextStyle(fontSize: 12),
+                    style: AppTheme.caption,
                   ),
                   const SizedBox(height: 4),
                   CupertinoTextField(
@@ -164,9 +166,9 @@ class _AddFilterListViewState extends State<AddFilterListView> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
+                  Text(
                     'Filter URL:',
-                    style: TextStyle(fontSize: 12),
+                    style: AppTheme.caption,
                   ),
                   const SizedBox(height: 4),
                   CupertinoTextField(
@@ -194,53 +196,49 @@ class _AddFilterListViewState extends State<AddFilterListView> {
   }
 
   Widget _buildMacOSView() {
-    return AlertDialog(
-      title: const Text('Add Custom Filter List'),
-      content: SizedBox(
-        width: 400,
+    return MacosSheet(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Filter Name (Optional):', style: TextStyle(fontSize: 12)),
+            Text('Add Custom Filter List', style: AppTheme.headline),
+            const SizedBox(height: 20),
+            Text('Filter Name (Optional):', style: AppTheme.caption),
             const SizedBox(height: 4),
-            TextField(
+            MacosTextField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                hintText: 'e.g., My Ad Block List',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              ),
+              placeholder: 'e.g., My Ad Block List',
             ),
             const SizedBox(height: 16),
-            const Text('Filter URL:', style: TextStyle(fontSize: 12)),
+            Text('Filter URL:', style: AppTheme.caption),
             const SizedBox(height: 4),
-            TextField(
+            MacosTextField(
               controller: _urlController,
-              keyboardType: TextInputType.url,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'https://example.com/filter.txt',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              ),
-              onChanged: (value) {
-                setState(() {});
-              },
+              placeholder: 'https://example.com/filter.txt',
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                PushButton(
+                  controlSize: ControlSize.large,
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
+                const SizedBox(width: 8),
+                PushButton(
+                  controlSize: ControlSize.large,
+                  color: AppTheme.primaryColor,
+                  onPressed: _urlController.text.trim().isEmpty ? null : _validateAndAdd,
+                  child: const Text('Add'),
+                ),
+              ],
             ),
           ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: _urlController.text.trim().isEmpty ? null : _validateAndAdd,
-          child: const Text('Add'),
-        ),
-      ],
     );
   }
 }

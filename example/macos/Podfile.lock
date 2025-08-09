@@ -8,7 +8,7 @@ PODS:
     - PublicSuffixList (= 2.0.0)
   - flutter_wblock_plugin (2.0.0):
     - FlutterMacOS
-    - wBlockCoreService (= 3.0.0)
+    - wBlockCoreService (= 4.0.0)
   - FlutterMacOS (1.0.0)
   - macos_ui (0.1.0):
     - FlutterMacOS
@@ -18,7 +18,7 @@ PODS:
   - Punycode (3.0.0)
   - url_launcher_macos (0.0.1):
     - FlutterMacOS
-  - wBlockCoreService (3.0.0):
+  - wBlockCoreService (4.0.0):
     - ContentBlockerConverter (= 2.0.48)
     - FilterEngine (= 2.0.48)
     - ZIPFoundation (= 0.9.19)
@@ -68,16 +68,16 @@ SPEC CHECKSUMS:
   appkit_ui_element_colors: bb247a2d02b8313cc47e1b83be48d996034c4001
   ContentBlockerConverter: 92635e566a6986a09538c107b3b605b590ea47bc
   FilterEngine: 887554152db46d3ca40e61648dc820272137bafb
-  flutter_wblock_plugin: 8fac12f8895b43d97643dfb9c8252266fd37a584
+  flutter_wblock_plugin: 13d40cdc4cb1e5ffe7890012b8ead0722ba1fc4b
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   macos_ui: 50a2048b7ef82bde42570e2775f50907537a0eeb
   macos_window_utils: 721df4da91cb4bde7b2b7b6ae93cdead4851118f
   PublicSuffixList: a721f52d168f67a8787bb867f25ddda90a9b4ffa
   Punycode: 177e2ef2a9b3678cbdae851be6df1ee4d27f036b
   url_launcher_macos: c82c93949963e55b228a30115bd219499a6fe404
-  wBlockCoreService: 95aacd481097c18ca0b00e8fcbbbb50038512259
+  wBlockCoreService: 0af3c55df1abc20310691cf35f516861514859c4
   ZIPFoundation: bcece1699f80b5d63488c3886daa80a14ebe0a60
 
-PODFILE CHECKSUM: 719a3393478c4c8d244d43b58fc7c90c740baf30
+PODFILE CHECKSUM: e8bc91e507def2ab96eab96f19f22c49fa973c66
 
 COCOAPODS: 1.16.2

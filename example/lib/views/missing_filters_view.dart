@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_wblock_plugin_example/providers/providers.dart';
 import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
+import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'dart:io';
 
-class MissingFiltersView extends StatefulWidget {
-  final AppFilterManager filterManager;
+class MissingFiltersView extends ConsumerStatefulWidget {
   final VoidCallback onDismiss;
 
   const MissingFiltersView({
     super.key,
-    required this.filterManager,
     required this.onDismiss,
   });
 
   @override
-  State<MissingFiltersView> createState() => _MissingFiltersViewState();
+  ConsumerState<MissingFiltersView> createState() => _MissingFiltersViewState();
 }
 
-class _MissingFiltersViewState extends State<MissingFiltersView> {
-  int get progressPercentage => (widget.filterManager.progress * 100).round();
-
+class _MissingFiltersViewState extends ConsumerState<MissingFiltersView> {
   @override
   Widget build(BuildContext context) {
+    final filterManager = ref.watch(appFilterManagerProvider);
+    final progressPercentage = (filterManager.progress * 100).round();
+
     if (Platform.isMacOS) {
-      return _buildMacOSView();
+      return _buildMacOSView(filterManager, progressPercentage);
     } else {
-      return _buildIOSView();
+      return _buildIOSView(filterManager, progressPercentage);
     }
   }
 
-  Widget _buildMacOSView() {
+  Widget _buildMacOSView(filterManager, int progressPercentage) {
     return Container(
       color: Colors.black.withOpacity(0.5),
       child: Center(
@@ -39,16 +40,17 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
           width: 400,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: MacosColors.windowBackgroundColor,
-            borderRadius: BorderRadius.circular(10),
+            color: AppTheme.cardBackground,
+            borderRadius: BorderRadius.circular(AppTheme.defaultRadius),
+            boxShadow: [AppTheme.cardShadow],
           ),
-          child: _buildContent(),
+          child: _buildContent(filterManager, progressPercentage),
         ),
       ),
     );
   }
 
-  Widget _buildIOSView() {
+  Widget _buildIOSView(filterManager, int progressPercentage) {
     return Container(
       color: CupertinoColors.black.withOpacity(0.5),
       child: Center(
@@ -56,47 +58,46 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
           margin: const EdgeInsets.all(20),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: CupertinoColors.systemBackground,
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.cardBackground,
+            borderRadius: BorderRadius.circular(AppTheme.defaultRadius),
+            boxShadow: [AppTheme.cardShadow],
           ),
-          child: _buildContent(),
+          child: _buildContent(filterManager, progressPercentage),
         ),
       ),
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(filterManager, int progressPercentage) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildHeader(),
+        _buildHeader(filterManager),
         const SizedBox(height: 20),
         SizedBox(
-          height: widget.filterManager.isLoading ? 200 : 250,
-          child: widget.filterManager.isLoading ? _buildDownloadProgress() : _buildFilterList(),
+          height: filterManager.isLoading ? 200 : 250,
+          child: filterManager.isLoading 
+            ? _buildDownloadProgress(filterManager, progressPercentage) 
+            : _buildFilterList(filterManager),
         ),
-        if (!widget.filterManager.isLoading) ...[
+        if (!filterManager.isLoading) ...[
           const SizedBox(height: 20),
-          _buildButtons(),
+          _buildButtons(filterManager),
         ],
       ],
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(filterManager) {
     return Row(
       children: [
         Text(
-          widget.filterManager.isLoading ? 'Downloading Missing Filters' : 'Missing Filters',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-          ),
+          filterManager.isLoading ? 'Downloading Missing Filters' : 'Missing Filters',
+          style: AppTheme.headline,
         ),
         const Spacer(),
-        if (!widget.filterManager.isLoading)
+        if (!filterManager.isLoading)
           Platform.isMacOS
               ? MacosIconButton(
                   icon: const MacosIcon(CupertinoIcons.xmark_circle_fill),
@@ -111,44 +112,39 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
     );
   }
 
-  Widget _buildDownloadProgress() {
+  Widget _buildDownloadProgress(filterManager, int progressPercentage) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildProgressIndicator(),
+        _buildProgressIndicator(filterManager, progressPercentage),
         const SizedBox(height: 16),
         Text(
           'After downloading, filter lists will be applied automatically.',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-          ),
+          style: AppTheme.caption,
         ),
       ],
     );
   }
 
-  Widget _buildProgressIndicator() {
+  Widget _buildProgressIndicator(filterManager, int progressPercentage) {
     return Column(
       children: [
         SizedBox(
           width: 200,
           child: LinearProgressIndicator(
-            value: widget.filterManager.progress,
-            backgroundColor: Platform.isMacOS ? MacosColors.quaternaryLabelColor : CupertinoColors.systemGrey4,
-            valueColor: AlwaysStoppedAnimation<Color>(
-              Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue,
-            ),
+            value: filterManager.progress,
+            backgroundColor: Platform.isMacOS 
+              ? MacosColors.quaternaryLabelColor 
+              : CupertinoColors.systemGrey4,
+            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
           ),
         ),
         const SizedBox(height: 8),
         Text(
           '$progressPercentage%',
-          style: TextStyle(
-            fontSize: 12,
+          style: AppTheme.caption.copyWith(
             fontWeight: FontWeight.w500,
-            color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
             fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
@@ -156,26 +152,31 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
     );
   }
 
-  Widget _buildFilterList() {
-    if (widget.filterManager.missingFilters.isEmpty) {
+  Widget _buildFilterList(filterManager) {
+    if (filterManager.missingFilters.isEmpty) {
       return _buildEmptyState();
     }
 
     return Container(
       decoration: BoxDecoration(
-        color: Platform.isMacOS ? MacosColors.controlBackgroundColor : CupertinoColors.secondarySystemBackground,
-        borderRadius: BorderRadius.circular(8),
-        border: Platform.isMacOS ? Border.all(color: MacosColors.separatorColor) : null,
+        color: Platform.isMacOS 
+          ? MacosColors.controlBackgroundColor 
+          : CupertinoColors.secondarySystemBackground,
+        borderRadius: BorderRadius.circular(AppTheme.smallRadius),
+        border: Platform.isMacOS 
+          ? Border.all(color: MacosColors.separatorColor) 
+          : null,
       ),
       child: ListView.separated(
-        itemCount: widget.filterManager.missingFilters.length,
-        separatorBuilder: (context, index) => const Divider(
+        itemCount: filterManager.missingFilters.length,
+        separatorBuilder: (context, index) => Divider(
           height: 1,
+          color: AppTheme.dividerColor,
           indent: 16,
           endIndent: 16,
         ),
         itemBuilder: (context, index) {
-          final filter = widget.filterManager.missingFilters[index];
+          final filter = filterManager.missingFilters[index];
           return _buildFilterRow(filter);
         },
       ),
@@ -195,20 +196,13 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
           const SizedBox(height: 16),
           Text(
             'No Missing Filters',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-            ),
+            style: AppTheme.headline,
           ),
           const SizedBox(height: 8),
           Text(
             'All enabled filter lists are downloaded and ready',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-            ),
+            style: AppTheme.caption,
           ),
         ],
       ),
@@ -232,10 +226,8 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
               Expanded(
                 child: Text(
                   filter.name,
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: AppTheme.body.copyWith(
                     fontWeight: FontWeight.w500,
-                    color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
                   ),
                 ),
               ),
@@ -247,10 +239,7 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
               padding: const EdgeInsets.only(left: 24),
               child: Text(
                 filter.description,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-                ),
+                style: AppTheme.caption,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -284,7 +273,7 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
     );
   }
 
-  Widget _buildButtons() {
+  Widget _buildButtons(filterManager) {
     return Row(
       children: [
         Platform.isMacOS
@@ -301,11 +290,16 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
         Platform.isMacOS
             ? PushButton(
                 controlSize: ControlSize.large,
-                onPressed: widget.filterManager.missingFilters.isEmpty ? null : _downloadMissingFilters,
+                color: AppTheme.primaryColor,
+                onPressed: filterManager.missingFilters.isEmpty 
+                  ? null 
+                  : () => _downloadMissingFilters(filterManager),
                 child: const Text('Download'),
               )
             : CupertinoButton.filled(
-                onPressed: widget.filterManager.missingFilters.isEmpty ? null : _downloadMissingFilters,
+                onPressed: filterManager.missingFilters.isEmpty 
+                  ? null 
+                  : () => _downloadMissingFilters(filterManager),
                 child: const Text('Download'),
               ),
       ],
@@ -317,7 +311,7 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
       case FilterListCategory.ads:
         return Colors.red;
       case FilterListCategory.privacy:
-        return Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue;
+        return AppTheme.primaryColor;
       case FilterListCategory.security:
         return Colors.green;
       case FilterListCategory.multipurpose:
@@ -327,15 +321,19 @@ class _MissingFiltersViewState extends State<MissingFiltersView> {
       case FilterListCategory.experimental:
         return Colors.yellow;
       case FilterListCategory.foreign:
-        return Platform.isMacOS ? MacosColors.systemTealColor : CupertinoColors.systemTeal;
+        return Platform.isMacOS 
+          ? MacosColors.systemTealColor 
+          : CupertinoColors.systemTeal;
       case FilterListCategory.custom:
-        return Platform.isMacOS ? MacosColors.systemGrayColor : CupertinoColors.systemGrey;
+        return Platform.isMacOS 
+          ? MacosColors.systemGrayColor 
+          : CupertinoColors.systemGrey;
       default:
-        return Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label;
+        return CupertinoColors.label;
     }
   }
 
-  Future<void> _downloadMissingFilters() async {
-    await widget.filterManager.downloadMissingFilters();
+  Future<void> _downloadMissingFilters(filterManager) async {
+    await filterManager.downloadMissingFilters();
   }
 }

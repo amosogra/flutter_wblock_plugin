@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wblock_plugin/flutter_wblock_plugin.dart';
-import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
-import 'package:flutter_wblock_plugin_example/managers/user_script_manager.dart';
+import 'package:flutter_wblock_plugin_example/providers/providers.dart';
+import 'package:flutter_wblock_plugin_example/theme/app_theme.dart';
 import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
 import 'package:flutter_wblock_plugin_example/models/user_script.dart';
 import 'dart:io';
+import 'dart:ui';
 import 'package:url_launcher/url_launcher.dart';
 
 enum BlockingLevel {
@@ -26,62 +28,36 @@ enum BlockingLevel {
   }
 }
 
-class OnboardingView extends StatefulWidget {
-  final AppFilterManager filterManager;
-  final UserScriptManager userScriptManager;
-  final VoidCallback? onComplete;
-
-  const OnboardingView({
-    super.key,
-    required this.filterManager,
-    required this.userScriptManager,
-    this.onComplete,
-  });
+class OnboardingView extends ConsumerStatefulWidget {
+  const OnboardingView({super.key});
 
   @override
-  State<OnboardingView> createState() => _OnboardingViewState();
+  ConsumerState<OnboardingView> createState() => _OnboardingViewState();
 }
 
-class _OnboardingViewState extends State<OnboardingView> {
+class _OnboardingViewState extends ConsumerState<OnboardingView> {
   BlockingLevel _selectedBlockingLevel = BlockingLevel.recommended;
   final Set<String> _selectedUserscripts = <String>{};
   int _step = 0;
   bool _isApplying = false;
   double _applyProgress = 0.0;
 
-  List<UserScript> get defaultUserScripts => widget.userScriptManager.userScripts;
-
-  UserScript? get bypassPaywallsScript {
-    try {
-      return widget.userScriptManager.userScripts.where((script) => script.name.toLowerCase().contains('bypass paywalls')).first;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  String? get bypassPaywallsFilterName {
-    final candidates = ['Bypass Paywalls Filter', 'Bypass Paywalls', 'Bypass Paywalls (Custom)'];
-
-    try {
-      return widget.filterManager.filterLists
-          .where((filter) => candidates.any((candidate) => filter.name.toLowerCase().contains(candidate.toLowerCase())))
-          .first
-          .name;
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Platform.isMacOS ? MacosColors.windowBackgroundColor : CupertinoColors.systemBackground,
-      child: Center(
+    return ClipRRect(
+      borderRadius: Platform.isMacOS ? BorderRadius.circular(10) : BorderRadius.zero,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
-          width: Platform.isMacOS ? 500 : double.infinity,
-          height: Platform.isMacOS ? 600 : double.infinity,
-          padding: const EdgeInsets.all(30),
-          child: _isApplying ? _buildDownloadView() : _buildStepView(),
+          color: AppTheme.cardBackground,
+          child: Center(
+            child: Container(
+              width: Platform.isMacOS ? 500 : double.infinity,
+              height: Platform.isMacOS ? 600 : double.infinity,
+              padding: const EdgeInsets.all(30),
+              child: _isApplying ? _buildDownloadView() : _buildStepView(),
+            ),
+          ),
         ),
       ),
     );
@@ -110,19 +86,15 @@ class _OnboardingViewState extends State<OnboardingView> {
       children: [
         Text(
           'Welcome to wBlock!',
-          style: TextStyle(
+          style: AppTheme.headline.copyWith(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
           ),
         ),
         const SizedBox(height: 16),
         Text(
           'Choose your preferred blocking level. You can adjust enabled filters later.',
-          style: TextStyle(
-            fontSize: 16,
-            color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-          ),
+          style: AppTheme.body,
         ),
         const SizedBox(height: 32),
         ...BlockingLevel.values.map((level) => _buildBlockingLevelOption(level)),
@@ -133,6 +105,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             Platform.isMacOS
                 ? PushButton(
                     controlSize: ControlSize.large,
+                    color: AppTheme.primaryColor,
                     onPressed: () => setState(() => _step = 1),
                     child: const Text('Next'),
                   )
@@ -161,9 +134,7 @@ class _OnboardingViewState extends State<OnboardingView> {
           children: [
             Icon(
               isSelected ? CupertinoIcons.largecircle_fill_circle : CupertinoIcons.circle,
-              color: isSelected
-                  ? (Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue)
-                  : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
+              color: isSelected ? AppTheme.primaryColor : AppTheme.secondaryLabel,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -172,19 +143,15 @@ class _OnboardingViewState extends State<OnboardingView> {
                 children: [
                   Text(
                     level.rawValue,
-                    style: TextStyle(
+                    style: AppTheme.body.copyWith(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     _blockingLevelDescription(level),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-                    ),
+                    style: AppTheme.caption,
                   ),
                 ],
               ),
@@ -207,31 +174,30 @@ class _OnboardingViewState extends State<OnboardingView> {
   }
 
   Widget _buildUserscriptStep() {
+    final userScriptManager = ref.watch(userScriptManagerProvider);
+    final defaultUserScripts = userScriptManager.userScripts;
+    final bypassPaywallsScript = _getBypassPaywallsScript(userScriptManager);
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Userscripts',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-          ),
+          style: AppTheme.headline.copyWith(fontSize: 24),
         ),
         const SizedBox(height: 16),
         Text(
           'Select any userscripts you want to enable. These add extra features or fixes. You can always add more in the settings later.',
-          style: TextStyle(
-            fontSize: 16,
-            color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-          ),
+          style: AppTheme.body,
         ),
         const SizedBox(height: 32),
         Expanded(
           child: ListView(
             children: [
               ...defaultUserScripts.map((script) => _buildUserscriptOption(script)),
-              if (bypassPaywallsScript != null && _selectedUserscripts.contains(bypassPaywallsScript!.id) && bypassPaywallsFilterName != null)
+              if (bypassPaywallsScript != null && 
+                  _selectedUserscripts.contains(bypassPaywallsScript.id) && 
+                  _getBypassPaywallsFilterName() != null)
                 _buildBypassPaywallsNote(),
             ],
           ),
@@ -252,6 +218,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             Platform.isMacOS
                 ? PushButton(
                     controlSize: ControlSize.large,
+                    color: AppTheme.primaryColor,
                     onPressed: () => setState(() => _step = 2),
                     child: const Text('Next'),
                   )
@@ -297,9 +264,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   )
                 : Icon(
                     isSelected ? CupertinoIcons.checkmark_square_fill : CupertinoIcons.square,
-                    color: isSelected
-                        ? (Platform.isMacOS ? MacosColors.systemBlueColor : CupertinoColors.systemBlue)
-                        : (Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel),
+                    color: isSelected ? AppTheme.primaryColor : AppTheme.secondaryLabel,
                   ),
             const SizedBox(width: 12),
             Expanded(
@@ -308,19 +273,13 @@ class _OnboardingViewState extends State<OnboardingView> {
                 children: [
                   Text(
                     script.name,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-                    ),
+                    style: AppTheme.body,
                   ),
                   if (script.description.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(
                       script.description,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-                      ),
+                      style: AppTheme.caption,
                     ),
                   ],
                 ],
@@ -333,20 +292,23 @@ class _OnboardingViewState extends State<OnboardingView> {
   }
 
   Widget _buildBypassPaywallsNote() {
+    final bypassPaywallsScript = _getBypassPaywallsScript(ref.read(userScriptManagerProvider));
+    final filterName = _getBypassPaywallsFilterName();
+    
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.yellow.withOpacity(0.1),
+        color: CupertinoColors.systemYellow.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.yellow.withOpacity(0.3)),
+        border: Border.all(color: CupertinoColors.systemYellow.withOpacity(0.3)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Icon(
             CupertinoIcons.exclamationmark_triangle_fill,
-            color: Colors.yellow,
+            color: CupertinoColors.systemYellow,
             size: 20,
           ),
           const SizedBox(width: 8),
@@ -355,20 +317,16 @@ class _OnboardingViewState extends State<OnboardingView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'The ${bypassPaywallsScript!.name} userscript requires the $bypassPaywallsFilterName',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.orange,
+                  'The ${bypassPaywallsScript!.name} userscript requires the $filterName',
+                  style: AppTheme.caption.copyWith(
+                    color: CupertinoColors.systemOrange,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   'It will be enabled automatically.',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-                  ),
+                  style: AppTheme.caption2,
                 ),
               ],
             ),
@@ -384,47 +342,33 @@ class _OnboardingViewState extends State<OnboardingView> {
       children: [
         Text(
           'Summary',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-          ),
+          style: AppTheme.headline.copyWith(fontSize: 24),
         ),
         const SizedBox(height: 16),
         Text(
           'Review your choices and apply settings.',
-          style: TextStyle(
-            fontSize: 16,
-            color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-          ),
+          style: AppTheme.body,
         ),
         const SizedBox(height: 32),
-        const Divider(),
+        Divider(color: AppTheme.dividerColor),
         const SizedBox(height: 16),
         Text(
           'Blocking Level: ${_selectedBlockingLevel.rawValue}',
-          style: TextStyle(
-            fontSize: 16,
-            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-          ),
+          style: AppTheme.body,
         ),
         const SizedBox(height: 8),
         Text(
           'Userscripts: ${_selectedUserscripts.isEmpty ? "None" : _getSelectedUserscriptNames()}',
-          style: TextStyle(
-            fontSize: 16,
-            color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-          ),
+          style: AppTheme.body,
         ),
         const SizedBox(height: 16),
-        const Divider(),
+        Divider(color: AppTheme.dividerColor),
         const SizedBox(height: 16),
         if (_selectedBlockingLevel == BlockingLevel.complete) ...[
-          const Text(
+          Text(
             'Warning: Complete mode may break some websites. Proceed with caution.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.red,
+            style: AppTheme.body.copyWith(
+              color: CupertinoColors.systemRed,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -448,6 +392,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             Platform.isMacOS
                 ? PushButton(
                     controlSize: ControlSize.large,
+                    color: AppTheme.primaryColor,
                     onPressed: _applySettings,
                     child: const Text('Apply & Finish'),
                   )
@@ -462,72 +407,62 @@ class _OnboardingViewState extends State<OnboardingView> {
   }
 
   Widget _buildSafariExtensionReminder() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.yellow.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.yellow.withOpacity(0.3)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(
-                CupertinoIcons.exclamationmark_shield_fill,
-                color: Colors.yellow,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'After filters are applied, you must enable all wBlock extensions in Safari\'s extension settings.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'You can enable them in Safari > Settings > Extensions (on Mac) or Settings > Safari > Extensions (on iPhone/iPad).',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          if (Platform.isMacOS) ...[
+    return AppTheme.regularMaterial(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHelpLink(
-                  'How to enable on Mac',
-                  'https://support.apple.com/en-us/102343',
+                const Icon(
+                  CupertinoIcons.exclamationmark_shield_fill,
+                  color: CupertinoColors.systemYellow,
+                  size: 20,
                 ),
-                const SizedBox(width: 16),
-                _buildHelpLink(
-                  'How to enable on iPhone/iPad',
-                  'https://support.apple.com/guide/iphone/get-extensions-iphab0432bf6/ios',
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'After filters are applied, you must enable all wBlock extensions in Safari\'s extension settings.',
+                        style: AppTheme.body.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'You can enable them in Safari > Settings > Extensions (on Mac) or Settings > Safari > Extensions (on iPhone/iPad).',
+                        style: AppTheme.caption,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ] else ...[
-            _buildHelpLink(
-              'How to enable on iPhone/iPad',
-              'https://support.apple.com/guide/iphone/get-extensions-iphab0432bf6/ios',
-            ),
+            const SizedBox(height: 12),
+            if (Platform.isMacOS) ...[
+              Row(
+                children: [
+                  _buildHelpLink(
+                    'How to enable on Mac',
+                    'https://support.apple.com/en-us/102343',
+                  ),
+                  const SizedBox(width: 16),
+                  _buildHelpLink(
+                    'How to enable on iPhone/iPad',
+                    'https://support.apple.com/guide/iphone/get-extensions-iphab0432bf6/ios',
+                  ),
+                ],
+              ),
+            ] else ...[
+              _buildHelpLink(
+                'How to enable on iPhone/iPad',
+                'https://support.apple.com/guide/iphone/get-extensions-iphab0432bf6/ios',
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -535,14 +470,12 @@ class _OnboardingViewState extends State<OnboardingView> {
   Widget _buildHelpLink(String text, String url) {
     return GestureDetector(
       onTap: () {
-        // TODO: Open URL
         launchUrl(Uri.parse(url));
       },
       child: Text(
         text,
-        style: const TextStyle(
-          fontSize: 12,
-          color: Colors.blue,
+        style: AppTheme.caption.copyWith(
+          color: AppTheme.primaryColor,
           decoration: TextDecoration.underline,
         ),
       ),
@@ -550,10 +483,11 @@ class _OnboardingViewState extends State<OnboardingView> {
   }
 
   String _getSelectedUserscriptNames() {
+    final userScriptManager = ref.read(userScriptManagerProvider);
     final names = <String>[];
     for (final id in _selectedUserscripts) {
       try {
-        final script = defaultUserScripts.firstWhere((script) => script.id == id);
+        final script = userScriptManager.userScripts.firstWhere((script) => script.id == id);
         names.add(script.name);
       } catch (e) {
         // Script not found, skip
@@ -562,15 +496,43 @@ class _OnboardingViewState extends State<OnboardingView> {
     return names.join(', ');
   }
 
+  UserScript? _getBypassPaywallsScript(userScriptManager) {
+    try {
+      return userScriptManager.userScripts
+          .where((script) => script.name.toLowerCase().contains('bypass paywalls'))
+          .first;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  String? _getBypassPaywallsFilterName() {
+    final filterManager = ref.read(appFilterManagerProvider);
+    final candidates = ['Bypass Paywalls Filter', 'Bypass Paywalls', 'Bypass Paywalls (Custom)'];
+
+    try {
+      return filterManager.filterLists
+          .where((filter) => candidates.any((candidate) => 
+              filter.name.toLowerCase().contains(candidate.toLowerCase())))
+          .first
+          .name;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<void> _applySettings() async {
     setState(() {
       _isApplying = true;
       _applyProgress = 0.0;
     });
 
+    final filterManager = ref.read(appFilterManagerProvider);
+    final userScriptManager = ref.read(userScriptManagerProvider);
+
     try {
       // 1. Set filter selection based on chosen blocking level
-      var updatedFilters = List<FilterList>.from(widget.filterManager.filterLists);
+      var updatedFilters = List<FilterList>.from(filterManager.filterLists);
 
       switch (_selectedBlockingLevel) {
         case BlockingLevel.minimal:
@@ -611,7 +573,11 @@ class _OnboardingViewState extends State<OnboardingView> {
       }
 
       // If Bypass Paywalls userscript is selected, also enable the required filter list
-      if (bypassPaywallsScript != null && _selectedUserscripts.contains(bypassPaywallsScript!.id) && bypassPaywallsFilterName != null) {
+      final bypassPaywallsScript = _getBypassPaywallsScript(userScriptManager);
+      final bypassPaywallsFilterName = _getBypassPaywallsFilterName();
+      if (bypassPaywallsScript != null && 
+          _selectedUserscripts.contains(bypassPaywallsScript.id) && 
+          bypassPaywallsFilterName != null) {
         for (int i = 0; i < updatedFilters.length; i++) {
           if (updatedFilters[i].name == bypassPaywallsFilterName) {
             updatedFilters[i] = updatedFilters[i].copyWith(isSelected: true);
@@ -619,18 +585,18 @@ class _OnboardingViewState extends State<OnboardingView> {
         }
       }
 
-      widget.filterManager.filterLists = updatedFilters;
-      widget.filterManager.saveFilterLists();
+      filterManager.filterLists = updatedFilters;
+      filterManager.saveFilterLists();
 
       setState(() {
         _applyProgress = 0.3;
       });
 
       // 2. Enable/disable userscripts based on onboarding selection
-      for (final script in widget.userScriptManager.userScripts) {
+      for (final script in userScriptManager.userScripts) {
         final shouldEnable = _selectedUserscripts.contains(script.id);
         if (script.isEnabled != shouldEnable) {
-          await widget.userScriptManager.toggleUserScript(script);
+          await userScriptManager.toggleUserScript(script);
         }
       }
 
@@ -639,8 +605,8 @@ class _OnboardingViewState extends State<OnboardingView> {
       });
 
       // 3. Download and apply enabled filter lists
-      final enabledFilters = widget.filterManager.filterLists.where((f) => f.isSelected).toList();
-      await widget.filterManager.downloadAndApplyFilters(
+      final enabledFilters = filterManager.filterLists.where((f) => f.isSelected).toList();
+      await filterManager.downloadAndApplyFilters(
         enabledFilters,
         progress: (progress) {
           setState(() {
@@ -652,8 +618,10 @@ class _OnboardingViewState extends State<OnboardingView> {
       // Mark onboarding as completed
       await FlutterWblockPlugin.setOnboardingCompleted(true);
 
-      // Call the completion callback
-      widget.onComplete?.call();
+      // Force a rebuild of the app wrapper to hide onboarding
+      if (mounted) {
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+      }
     } catch (e) {
       print('Error applying onboarding settings: $e');
     }
@@ -675,17 +643,12 @@ class OnboardingDownloadView extends StatelessWidget {
       children: [
         SizedBox(
           width: 300,
-          child: Platform.isMacOS
-              ? LinearProgressIndicator(
-                  value: progress,
-                  backgroundColor: MacosColors.quaternaryLabelColor,
-                  valueColor: const AlwaysStoppedAnimation<Color>(MacosColors.systemBlueColor),
-                )
-              : LinearProgressIndicator(
-                  value: progress,
-                  backgroundColor: CupertinoColors.systemGrey4,
-                  valueColor: const AlwaysStoppedAnimation<Color>(CupertinoColors.systemBlue),
-                ),
+          child: LinearProgressIndicator(
+            value: progress,
+            backgroundColor: AppTheme.dividerColor,
+            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+            minHeight: 4,
+          ),
         ),
         const SizedBox(height: 24),
         Column(
@@ -693,28 +656,18 @@ class OnboardingDownloadView extends StatelessWidget {
             Text(
               'Downloading and installing filter lists...',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-              ),
+              style: AppTheme.body,
             ),
             const SizedBox(height: 8),
             Text(
               'Applying filters...',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
-              ),
+              style: AppTheme.headline.copyWith(fontSize: 18),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 4),
             Text(
               'This may take awhile',
-              style: TextStyle(
-                fontSize: 12,
-                color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
-              ),
+              style: AppTheme.caption,
             ),
           ],
         ),

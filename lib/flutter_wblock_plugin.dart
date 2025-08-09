@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
 /// The interface that implementations of flutter_wblock_plugin must implement.
 abstract class FlutterWblockPluginPlatform extends PlatformInterface {
   /// Constructs a FlutterWblockPluginPlatform.
@@ -64,6 +63,24 @@ abstract class FlutterWblockPluginPlatform extends PlatformInterface {
   Future<void> setUserScriptManager();
   Future<bool> doesFilterFileExist(String filterId);
   Future<List<Map<String, dynamic>>> getMissingFilters();
+  Future<Map<String, dynamic>> getTimingStatistics();
+  Future<int> getSourceRulesCount();
+  Future<Map<String, dynamic>> getDetailedProgress();
+  Future<bool> getShowingUpdatePopup();
+  Future<bool> getShowingApplyProgressSheet();
+  Future<bool> getShowMissingFiltersSheet();
+  Future<void> setShowingUpdatePopup(bool value);
+  Future<void> setShowingApplyProgressSheet(bool value);
+  Future<void> setShowMissingFiltersSheet(bool value);
+  Future<List<Map<String, dynamic>>> getAvailableUpdates();
+  Future<String> getCategoryWarningMessage();
+  Future<bool> getShowingCategoryWarningAlert();
+  Future<void> setShowingCategoryWarningAlert(bool value);
+  Future<bool> getShowingNoUpdatesAlert();
+  Future<void> setShowingNoUpdatesAlert(bool value);
+  Future<bool> getShowingDownloadCompleteAlert();
+  Future<void> setShowingDownloadCompleteAlert(bool value);
+  Future<String> getDownloadCompleteMessage();
 }
 
 /// An implementation of [FlutterWblockPluginPlatform] that uses method channels.
@@ -320,6 +337,108 @@ class MethodChannelFlutterWblockPlugin extends FlutterWblockPluginPlatform {
     final result = await methodChannel.invokeMethod<List>('getMissingFilters');
     return (result ?? []).map((e) => Map<String, dynamic>.from(e)).toList();
   }
+
+  @override
+  Future<Map<String, dynamic>> getTimingStatistics() async {
+    final result = await methodChannel.invokeMethod<Map>('getTimingStatistics');
+    return Map<String, dynamic>.from(result ?? {});
+  }
+
+  @override
+  Future<int> getSourceRulesCount() async {
+    final result = await methodChannel.invokeMethod<int>('getSourceRulesCount');
+    return result ?? 0;
+  }
+
+  @override
+  Future<Map<String, dynamic>> getDetailedProgress() async {
+    final result = await methodChannel.invokeMethod<Map>('getDetailedProgress');
+    return Map<String, dynamic>.from(result ?? {});
+  }
+
+  @override
+  Future<bool> getShowingUpdatePopup() async {
+    final result = await methodChannel.invokeMethod<bool>('getShowingUpdatePopup');
+    return result ?? false;
+  }
+
+  @override
+  Future<bool> getShowingApplyProgressSheet() async {
+    final result = await methodChannel.invokeMethod<bool>('getShowingApplyProgressSheet');
+    return result ?? false;
+  }
+
+  @override
+  Future<bool> getShowMissingFiltersSheet() async {
+    final result = await methodChannel.invokeMethod<bool>('getShowMissingFiltersSheet');
+    return result ?? false;
+  }
+
+  @override
+  Future<void> setShowingUpdatePopup(bool value) async {
+    await methodChannel.invokeMethod('setShowingUpdatePopup', {'value': value});
+  }
+
+  @override
+  Future<void> setShowingApplyProgressSheet(bool value) async {
+    await methodChannel.invokeMethod('setShowingApplyProgressSheet', {'value': value});
+  }
+
+  @override
+  Future<void> setShowMissingFiltersSheet(bool value) async {
+    await methodChannel.invokeMethod('setShowMissingFiltersSheet', {'value': value});
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getAvailableUpdates() async {
+    final result = await methodChannel.invokeMethod<List>('getAvailableUpdates');
+    return (result ?? []).map((e) => Map<String, dynamic>.from(e)).toList();
+  }
+
+  @override
+  Future<String> getCategoryWarningMessage() async {
+    final result = await methodChannel.invokeMethod<String>('getCategoryWarningMessage');
+    return result ?? '';
+  }
+
+  @override
+  Future<bool> getShowingCategoryWarningAlert() async {
+    final result = await methodChannel.invokeMethod<bool>('getShowingCategoryWarningAlert');
+    return result ?? false;
+  }
+
+  @override
+  Future<void> setShowingCategoryWarningAlert(bool value) async {
+    await methodChannel.invokeMethod('setShowingCategoryWarningAlert', {'value': value});
+  }
+
+  @override
+  Future<bool> getShowingNoUpdatesAlert() async {
+    final result = await methodChannel.invokeMethod<bool>('getShowingNoUpdatesAlert');
+    return result ?? false;
+  }
+
+  @override
+  Future<void> setShowingNoUpdatesAlert(bool value) async {
+    await methodChannel.invokeMethod('setShowingNoUpdatesAlert', {'value': value});
+  }
+
+  @override
+  Future<bool> getShowingDownloadCompleteAlert() async {
+    final result = await methodChannel.invokeMethod<bool>('getShowingDownloadCompleteAlert');
+    return result ?? false;
+  }
+
+  @override
+  Future<void> setShowingDownloadCompleteAlert(bool value) async {
+    await methodChannel.invokeMethod('setShowingDownloadCompleteAlert', {'value': value});
+  }
+
+  @override
+  Future<String> getDownloadCompleteMessage() async {
+    final result = await methodChannel.invokeMethod<String>('getDownloadCompleteMessage');
+    return result ?? '';
+  }
 }
 
 /// The main plugin class
@@ -524,5 +643,95 @@ class FlutterWblockPlugin {
   /// Get missing filters
   static Future<List<Map<String, dynamic>>> getMissingFilters() {
     return _platform.getMissingFilters();
+  }
+
+  /// Get timing statistics
+  static Future<Map<String, dynamic>> getTimingStatistics() {
+    return _platform.getTimingStatistics();
+  }
+
+  /// Get source rules count
+  static Future<int> getSourceRulesCount() {
+    return _platform.getSourceRulesCount();
+  }
+
+  /// Get detailed progress
+  static Future<Map<String, dynamic>> getDetailedProgress() {
+    return _platform.getDetailedProgress();
+  }
+
+  /// Get showing update popup
+  static Future<bool> getShowingUpdatePopup() {
+    return _platform.getShowingUpdatePopup();
+  }
+
+  /// Get showing apply progress sheet
+  static Future<bool> getShowingApplyProgressSheet() {
+    return _platform.getShowingApplyProgressSheet();
+  }
+
+  /// Get show missing filters sheet
+  static Future<bool> getShowMissingFiltersSheet() {
+    return _platform.getShowMissingFiltersSheet();
+  }
+
+  /// Set showing update popup
+  static Future<void> setShowingUpdatePopup(bool value) {
+    return _platform.setShowingUpdatePopup(value);
+  }
+
+  /// Set showing apply progress sheet
+  static Future<void> setShowingApplyProgressSheet(bool value) {
+    return _platform.setShowingApplyProgressSheet(value);
+  }
+
+  /// Set show missing filters sheet
+  static Future<void> setShowMissingFiltersSheet(bool value) {
+    return _platform.setShowMissingFiltersSheet(value);
+  }
+
+  /// Get available updates
+  static Future<List<Map<String, dynamic>>> getAvailableUpdates() {
+    return _platform.getAvailableUpdates();
+  }
+
+  /// Get category warning message
+  static Future<String> getCategoryWarningMessage() {
+    return _platform.getCategoryWarningMessage();
+  }
+
+  /// Get showing category warning alert
+  static Future<bool> getShowingCategoryWarningAlert() {
+    return _platform.getShowingCategoryWarningAlert();
+  }
+
+  /// Set showing category warning alert
+  static Future<void> setShowingCategoryWarningAlert(bool value) {
+    return _platform.setShowingCategoryWarningAlert(value);
+  }
+
+  /// Get showing no updates alert
+  static Future<bool> getShowingNoUpdatesAlert() {
+    return _platform.getShowingNoUpdatesAlert();
+  }
+
+  /// Set showing no updates alert
+  static Future<void> setShowingNoUpdatesAlert(bool value) {
+    return _platform.setShowingNoUpdatesAlert(value);
+  }
+
+  /// Get showing download complete alert
+  static Future<bool> getShowingDownloadCompleteAlert() {
+    return _platform.getShowingDownloadCompleteAlert();
+  }
+
+  /// Set showing download complete alert
+  static Future<void> setShowingDownloadCompleteAlert(bool value) {
+    return _platform.setShowingDownloadCompleteAlert(value);
+  }
+
+  /// Get download complete message
+  static Future<String> getDownloadCompleteMessage() {
+    return _platform.getDownloadCompleteMessage();
   }
 }

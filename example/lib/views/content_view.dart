@@ -4,388 +4,234 @@ import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_wblock_plugin_example/managers/app_filter_manager.dart';
 import 'package:flutter_wblock_plugin_example/managers/user_script_manager.dart';
-import 'package:flutter_wblock_plugin_example/managers/whitelist_view_model.dart';
+import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
+import 'package:flutter_wblock_plugin_example/views/stat_card.dart';
 import 'package:flutter_wblock_plugin_example/views/logs_view.dart';
-import 'package:flutter_wblock_plugin_example/views/whitelist_view.dart';
 import 'package:flutter_wblock_plugin_example/views/user_script_manager_view.dart';
+import 'package:flutter_wblock_plugin_example/views/whitelist_view.dart';
 import 'package:flutter_wblock_plugin_example/views/whitelist_manager_view.dart';
 import 'package:flutter_wblock_plugin_example/views/apply_changes_progress_view.dart';
 import 'package:flutter_wblock_plugin_example/views/missing_filters_view.dart';
-import 'package:flutter_wblock_plugin_example/views/update_popup_view.dart';
-import 'package:flutter_wblock_plugin_example/views/stat_card.dart';
-import 'package:flutter_wblock_plugin_example/models/filter_list.dart';
 import 'dart:io';
+import 'dart:ui';
 
-class ContentView extends StatefulWidget {
-  final AppFilterManager filterManager;
-  final UserScriptManager userScriptManager;
-
-  const ContentView({
-    super.key,
-    required this.filterManager,
-    required this.userScriptManager,
-  });
+class ContentView extends ConsumerStatefulWidget {
+  const ContentView({super.key});
 
   @override
-  State<ContentView> createState() => _ContentViewState();
+  ConsumerState<ContentView> createState() => _ContentViewState();
 }
 
 class _ContentViewState extends State<ContentView> {
   bool _showOnlyEnabledLists = false;
-  late WhitelistViewModel _whitelistViewModel;
+  bool _showingAddFilterSheet = false;
+  bool _showingLogsView = false;
+  bool _showingUserScriptsView = false;
+  bool _showingWhitelistSheet = false;
 
   int get enabledListsCount => widget.filterManager.filterLists.where((f) => f.isSelected).length;
 
-  List<FilterListCategory> get displayableCategories =>
-      FilterListCategory.values.where((c) => c != FilterListCategory.all && c != FilterListCategory.custom).toList();
+  List<FilterListCategory> get displayableCategories => [
+        FilterListCategory.ads,
+        FilterListCategory.privacy,
+        FilterListCategory.security,
+        FilterListCategory.multipurpose,
+        FilterListCategory.annoyances,
+        FilterListCategory.experimental,
+        FilterListCategory.foreign,
+      ];
 
   @override
   void initState() {
     super.initState();
-    _whitelistViewModel = WhitelistViewModel();
-
     // Set the UserScriptManager for filter updates
     widget.filterManager.setUserScriptManager(widget.userScriptManager);
-
-    // Listen to filter manager changes to show sheets
-    widget.filterManager.addListener(_handleFilterManagerChanges);
-  }
-
-  @override
-  void dispose() {
-    widget.filterManager.removeListener(_handleFilterManagerChanges);
-    super.dispose();
-  }
-
-  void _handleFilterManagerChanges() {
-    if (widget.filterManager.showingUpdatePopup) {
-      _showUpdatePopup();
-    }
-    if (widget.filterManager.showMissingFiltersSheet) {
-      _showMissingFiltersSheet();
-    }
-    if (widget.filterManager.showingApplyProgressSheet) {
-      _showApplyProgressSheet();
-    }
-    if (widget.filterManager.showingNoUpdatesAlert) {
-      _showNoUpdatesAlert();
-    }
-    if (widget.filterManager.showingDownloadCompleteAlert) {
-      _showDownloadCompleteAlert();
-    }
-    if (widget.filterManager.showingCategoryWarningAlert) {
-      _showCategoryWarningAlert();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isMacOS) {
-      return _buildMacOSView();
-    } else {
-      return _buildIOSView();
-    }
+    return Consumer<AppFilterManager>(
+      builder: (context, filterManager, child) {
+        if (Platform.isMacOS) {
+          return _buildMacOSContent(filterManager);
+        } else {
+          return _buildIOSContent(filterManager);
+        }
+      },
+    );
   }
 
-  Widget _buildMacOSView() {
-    return MacosWindow(
-      child: MacosScaffold(
-        toolBar: ToolBar(
-          title: const Text('wBlock'),
-          titleWidth: 150.0,
-          leading: MacosIcon(
-            CupertinoIcons.shield_lefthalf_fill,
-            color: MacosTheme.brightnessOf(context).resolve(
-              const Color.fromRGBO(0, 0, 0, 0.5),
-              const Color.fromRGBO(255, 255, 255, 0.5),
-            ),
-            size: 20.0,
+  Widget _buildMacOSContent(AppFilterManager filterManager) {
+    return MacosScaffold(
+      toolBar: ToolBar(
+        title: const Text('wBlock'),
+        titleWidth: 150.0,
+        leading: MacosTooltip(
+          message: 'Check for filter list updates',
+          child: ToolBarIconButton(
+            label: 'Check for Updates',
+            showLabel: true,
+            icon: const MacosIcon(CupertinoIcons.refresh),
+            onPressed: filterManager.isLoading
+                ? null
+                : () async {
+                    await filterManager.checkForUpdates();
+                  },
+          ) as Widget,
+        ),
+        actions: [
+          ToolBarIconButton(
+            showLabel: true,
+            label: 'Apply Changes',
+            icon: const MacosIcon(CupertinoIcons.refresh_circled),
+            onPressed: (filterManager.isLoading || enabledListsCount == 0)
+                ? null
+                : () {
+                    filterManager.checkAndEnableFilters(forceReload: true);
+                  },
           ),
-          actions: [
-            ToolBarIconButton(
-              label: 'Check for Updates',
-              icon: const MacosIcon(CupertinoIcons.arrow_clockwise),
-              onPressed: widget.filterManager.isLoading ? null : () => widget.filterManager.checkForUpdates(),
-              tooltipMessage: 'Check for filter list updates',
-              showLabel: true,
+          ToolBarIconButton(
+            label: 'Show Logs',
+            icon: const MacosIcon(CupertinoIcons.doc_text_search),
+            showLabel: true,
+            onPressed: () {
+              setState(() {
+                _showingLogsView = true;
+              });
+            },
+          ),
+          ToolBarIconButton(
+            label: 'User Scripts',
+            icon: const MacosIcon(CupertinoIcons.doc_text_fill),
+            showLabel: true,
+            onPressed: () {
+              setState(() {
+                _showingUserScriptsView = true;
+              });
+            },
+          ),
+          ToolBarIconButton(
+            label: 'Whitelisted Domains',
+            icon: const MacosIcon(CupertinoIcons.list_bullet_indent),
+            showLabel: true,
+            onPressed: () {
+              setState(() {
+                _showingWhitelistSheet = true;
+              });
+            },
+          ),
+          ToolBarIconButton(
+            label: 'Add Filter',
+            icon: const MacosIcon(CupertinoIcons.plus),
+            showLabel: true,
+            onPressed: () {
+              setState(() {
+                _showingAddFilterSheet = true;
+              });
+            },
+          ),
+          ToolBarIconButton(
+            label: 'Show Enabled Only',
+            icon: MacosIcon(_showOnlyEnabledLists ? CupertinoIcons.line_horizontal_3_decrease_circle_fill : CupertinoIcons.line_horizontal_3_decrease_circle),
+            onPressed: () {
+              setState(() {
+                _showOnlyEnabledLists = !_showOnlyEnabledLists;
+              });
+            },
+            showLabel: true,
+          ),
+        ],
+      ),
+      children: [
+        ContentArea(
+          builder: (context, scrollController) => _buildContent(filterManager, scrollController),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildIOSContent(AppFilterManager filterManager) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: const Text('wBlock'),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: filterManager.isLoading
+                  ? null
+                  : () async {
+                      await filterManager.checkForUpdates();
+                    },
+              child: const Icon(CupertinoIcons.refresh),
             ),
-            ToolBarIconButton(
-              label: 'Apply Changes',
-              icon: const MacosIcon(CupertinoIcons.arrow_2_circlepath),
-              onPressed: widget.filterManager.isLoading || enabledListsCount == 0 ? null : () => widget.filterManager.checkAndEnableFilters(forceReload: true),
-              tooltipMessage: 'Apply selected filters and reload Safari',
-              showLabel: true,
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: (filterManager.isLoading || enabledListsCount == 0)
+                  ? null
+                  : () {
+                      filterManager.checkAndEnableFilters(forceReload: true);
+                    },
+              child: const Icon(CupertinoIcons.refresh_circled),
             ),
-            ToolBarIconButton(
-              label: 'Show Logs',
-              icon: const MacosIcon(CupertinoIcons.doc_text_search),
-              onPressed: _showLogsView,
-              tooltipMessage: 'View application logs',
-              showLabel: true,
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                setState(() {
+                  _showingLogsView = true;
+                });
+              },
+              child: const Icon(CupertinoIcons.doc_text_search),
             ),
-            ToolBarIconButton(
-              label: 'User Scripts',
-              icon: const MacosIcon(CupertinoIcons.doc_text_fill),
-              onPressed: _showUserScriptsView,
-              tooltipMessage: 'Manage userscripts',
-              showLabel: true,
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                setState(() {
+                  _showingUserScriptsView = true;
+                });
+              },
+              child: const Icon(CupertinoIcons.doc_text_fill),
             ),
-            ToolBarIconButton(
-              label: 'Whitelisted Domains',
-              icon: const MacosIcon(CupertinoIcons.list_bullet_indent),
-              onPressed: _showWhitelistSheet,
-              tooltipMessage: 'Configure whitelisted domains',
-              showLabel: true,
-            ),
-            ToolBarIconButton(
-              label: 'Add Filter',
-              icon: const MacosIcon(CupertinoIcons.plus),
-              onPressed: _showAddFilterSheet,
-              tooltipMessage: 'Add custom filter list from URL',
-              showLabel: true,
-            ),
-            ToolBarIconButton(
-              label: 'Show Enabled Only',
-              icon: MacosIcon(_showOnlyEnabledLists ? CupertinoIcons.line_horizontal_3_decrease_circle_fill : CupertinoIcons.line_horizontal_3_decrease_circle),
-              onPressed: () => setState(() => _showOnlyEnabledLists = !_showOnlyEnabledLists),
-              tooltipMessage: 'Toggle to show only enabled filter lists',
-              showLabel: true,
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                setState(() {
+                  _showingAddFilterSheet = true;
+                });
+              },
+              child: const Icon(CupertinoIcons.plus),
             ),
           ],
         ),
-        children: [
-          ContentArea(
-            builder: (context, scrollController) => Stack(
-              children: [
-                SingleChildScrollView(
-                  controller: scrollController,
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildStatsCardsView(),
-                      const SizedBox(height: 20),
-                      ..._buildFilterSections(),
-                    ],
-                  ),
-                ),
-                if (widget.filterManager.isLoading &&
-                    !widget.filterManager.showingApplyProgressSheet &&
-                    !widget.filterManager.showMissingFiltersSheet &&
-                    !widget.filterManager.showingUpdatePopup)
-                  _buildLoadingOverlay(),
-              ],
-            ),
-          ),
-        ],
       ),
+      child: _buildContent(filterManager, null),
     );
   }
 
-  void _showAddFilterSheet() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => AddFilterListView(filterManager: widget.filterManager),
-    );
-  }
-
-  void _showLogsView() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => LogsView(onDismiss: () => Navigator.of(context).pop()),
-    );
-  }
-
-  void _showUserScriptsView() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => UserScriptManagerView(
-        userScriptManager: widget.userScriptManager,
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    );
-  }
-
-  void _showWhitelistSheet() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => WhitelistManagerView(
-        filterManager: widget.filterManager,
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    );
-  }
-
-  void _showUpdatePopup() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => UpdatePopupView(
-        filterManager: widget.filterManager,
-        userScriptManager: widget.userScriptManager,
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    ).then((_) {
-      widget.filterManager.showingUpdatePopup = false;
-    });
-  }
-
-  void _showMissingFiltersSheet() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => MissingFiltersView(
-        filterManager: widget.filterManager,
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    ).then((_) {
-      widget.filterManager.showMissingFiltersSheet = false;
-    });
-  }
-
-  void _showApplyProgressSheet() {
-    showMacosSheet(
-      context: context,
-      builder: (context) => ApplyChangesProgressView(
-        filterManager: widget.filterManager,
-        onDismiss: () => Navigator.of(context).pop(),
-      ),
-    ).then((_) {
-      widget.filterManager.showingApplyProgressSheet = false;
-    });
-  }
-
-  void _showNoUpdatesAlert() {
-    showMacosAlertDialog(
-      context: context,
-      builder: (context) => MacosAlertDialog(
-        appIcon: const MacosIcon(CupertinoIcons.info_circle),
-        title: const Text('No Updates Found'),
-        message: const Text('All your filters and userscripts are up to date.'),
-        primaryButton: PushButton(
-          controlSize: ControlSize.large,
-          child: const Text('OK'),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-    ).then((_) {
-      widget.filterManager.showingNoUpdatesAlert = false;
-    });
-  }
-
-  void _showDownloadCompleteAlert() {
-    showMacosAlertDialog(
-      context: context,
-      builder: (context) => MacosAlertDialog(
-        appIcon: const MacosIcon(CupertinoIcons.checkmark_circle),
-        title: const Text('Download Complete'),
-        message: Text(widget.filterManager.downloadCompleteMessage),
-        primaryButton: PushButton(
-          controlSize: ControlSize.large,
-          color: MacosTheme.of(context).primaryColor,
-          child: const Text('Apply Now'),
-          onPressed: () {
-            Navigator.of(context).pop();
-            widget.filterManager.applyDownloadedChanges();
-          },
-        ),
-        secondaryButton: PushButton(
-          controlSize: ControlSize.large,
-          child: const Text('Later'),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-    ).then((_) {
-      widget.filterManager.showingDownloadCompleteAlert = false;
-    });
-  }
-
-  void _showCategoryWarningAlert() {
-    showMacosAlertDialog(
-      context: context,
-      builder: (context) => MacosAlertDialog(
-        appIcon: const MacosIcon(CupertinoIcons.exclamationmark_triangle),
-        title: const Text('Category Rule Limit Warning'),
-        message: Text(widget.filterManager.categoryWarningMessage),
-        primaryButton: PushButton(
-          controlSize: ControlSize.large,
-          child: const Text('OK'),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-    ).then((_) {
-      widget.filterManager.showingCategoryWarningAlert = false;
-    });
-  }
-
-  Widget _buildIOSView() {
-    return CupertinoPageScaffold(
-      child: Stack(
-        children: [
-          CustomScrollView(
-            slivers: [
-              CupertinoSliverNavigationBar(
-                largeTitle: const Text('wBlock'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: widget.filterManager.isLoading ? null : () => widget.filterManager.checkForUpdates(),
-                      child: const Icon(CupertinoIcons.arrow_clockwise),
-                    ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed:
-                          widget.filterManager.isLoading || enabledListsCount == 0 ? null : () => widget.filterManager.checkAndEnableFilters(forceReload: true),
-                      child: const Icon(CupertinoIcons.arrow_2_circlepath),
-                    ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _showLogsViewIOS,
-                      child: const Icon(CupertinoIcons.doc_text_search),
-                    ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _showUserScriptsViewIOS,
-                      child: const Icon(CupertinoIcons.doc_text_fill),
-                    ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _showAddFilterSheetIOS,
-                      child: const Icon(CupertinoIcons.plus),
-                    ),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _showWhitelistSheetIOS,
-                      child: const Icon(CupertinoIcons.list_bullet_indent),
-                    ),
-                  ],
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      _buildStatsCardsViewIOS(),
-                      const SizedBox(height: 20),
-                      ..._buildFilterSectionsIOS(),
-                    ],
-                  ),
-                ),
-              ),
+  Widget _buildContent(AppFilterManager filterManager, ScrollController? scrollController) {
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          controller: scrollController,
+          padding: Platform.isMacOS ? const EdgeInsets.all(20) : const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: Column(
+            children: [
+              _buildStatsCardsView(filterManager),
+              const SizedBox(height: 20),
+              ..._buildFilterSections(filterManager),
+              const SizedBox(height: 20),
             ],
           ),
-          if (widget.filterManager.isLoading &&
-              !widget.filterManager.showingApplyProgressSheet &&
-              !widget.filterManager.showMissingFiltersSheet &&
-              !widget.filterManager.showingUpdatePopup)
-            _buildLoadingOverlayIOS(),
-        ],
-      ),
+        ),
+        _buildOverlay(filterManager),
+        _buildSheets(filterManager),
+        _buildAlerts(filterManager),
+      ],
     );
   }
 
-  Widget _buildStatsCardsView() {
+  Widget _buildStatsCardsView(AppFilterManager filterManager) {
     return Row(
       children: [
         Expanded(
@@ -394,35 +240,35 @@ class _ContentViewState extends State<ContentView> {
             value: '$enabledListsCount',
             icon: 'square_list',
             pillColor: Colors.transparent,
-            valueColor: MacosTheme.of(context).primaryColor,
+            valueColor: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
           child: StatCard(
             title: 'Safari Rules',
-            value: widget.filterManager.lastRuleCount.toString(),
-            icon: 'shield_lefthalf_fill',
+            value: _formatNumber(filterManager.lastRuleCount),
+            icon: 'shield.lefthalf.filled',
             pillColor: Colors.transparent,
-            valueColor: MacosTheme.of(context).primaryColor,
+            valueColor: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
           ),
         ),
       ],
     );
   }
 
-  List<Widget> _buildFilterSections() {
+  List<Widget> _buildFilterSections(AppFilterManager filterManager) {
     final sections = <Widget>[];
 
     for (final category in displayableCategories) {
-      final lists = _listsForCategory(category);
-      if (lists.isNotEmpty) {
-        sections.add(_buildFilterSectionView(category, lists));
+      final filters = _listsForCategory(category, filterManager);
+      if (filters.isNotEmpty) {
+        sections.add(_buildFilterSectionView(category, filters, filterManager));
         sections.add(const SizedBox(height: 16));
       }
     }
 
-    final customLists = _customLists;
+    final customLists = _customLists(filterManager);
     if (customLists.isNotEmpty) {
       sections.add(_buildFilterSectionView(FilterListCategory.custom, customLists));
     }
@@ -430,397 +276,185 @@ class _ContentViewState extends State<ContentView> {
     return sections;
   }
 
-  List<FilterList> _listsForCategory(FilterListCategory category) {
-    return widget.filterManager.filterLists.where((f) => f.category == category && (!_showOnlyEnabledLists || f.isSelected)).toList();
-  }
-
-  List<FilterList> get _customLists {
-    return widget.filterManager.filterLists.where((f) => f.category == FilterListCategory.custom && (!_showOnlyEnabledLists || f.isSelected)).toList();
-  }
-
-  Widget _buildFilterSectionView(FilterListCategory category, List<FilterList> filters) {
+  Widget _buildFilterSectionView(FilterListCategory category, List<FilterList> filters, AppFilterManager filterManager) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              category.displayName,
-              style: MacosTheme.of(context).typography.headline,
-            ),
-            FutureBuilder<bool>(
-              future: Future.value(widget.filterManager.isCategoryApproachingLimit(category)),
-              builder: (context, snapshot) {
-                if (snapshot.data == true) {
-                  return Row(
-                    children: [
-                      const SizedBox(width: 8),
-                      MacosIconButton(
-                        icon: const MacosIcon(
-                          CupertinoIcons.exclamationmark_triangle,
-                          color: CupertinoColors.systemOrange,
-                          size: 16,
-                        ),
-                        onPressed: () => widget.filterManager.showCategoryWarning(category),
-                      ),
-                    ],
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            children: [
+              Text(
+                category.rawValue,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+                ),
+              ),
+              if (filterManager.isCategoryApproachingLimit(category)) ...[
+                const SizedBox(width: 8),
+                GestureDetector(
+                  onTap: () {
+                    filterManager.showCategoryWarning(category);
+                  },
+                  child: const Icon(
+                    CupertinoIcons.exclamationmark_triangle,
+                    color: Colors.orange,
+                    size: 16,
+                  ),
+                ),
+              ],
+              const Spacer(),
+            ],
+          ),
         ),
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
-            color: MacosTheme.of(context).canvasColor,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: MacosTheme.of(context).dividerColor,
-              width: 0.5,
-            ),
+            color: Platform.isMacOS ? MacosColors.controlBackgroundColor : CupertinoColors.secondarySystemBackground,
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
-            children: filters.asMap().entries.map((entry) {
-              final index = entry.key;
-              final filter = entry.value;
-              return Column(
-                children: [
-                  _buildFilterRowView(filter),
-                  if (index < filters.length - 1)
-                    Divider(
-                      height: 1,
-                      color: MacosTheme.of(context).dividerColor,
-                      indent: 16,
-                      endIndent: 16,
-                    ),
-                ],
-              );
-            }).toList(),
+            children: [
+              for (int i = 0; i < filters.length; i++) ...[
+                _buildFilterRowView(filters[i], filterManager),
+                if (i < filters.length - 1)
+                  const Divider(
+                    height: 1,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
+              ],
+            ],
           ),
         ),
       ],
     );
   }
 
-  Widget _buildFilterRowView(FilterList filter) {
+  Widget _buildFilterRowView(FilterList filter, AppFilterManager filterManager) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  filter.name,
-                  style: MacosTheme.of(context).typography.body.copyWith(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      filter.name,
+                      style: TextStyle(
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
+                        color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
                       ),
-                ),
-                const SizedBox(height: 4),
-                FilterRuleCountText(
-                  filter: filter,
-                  filterManager: widget.filterManager,
-                ),
-                if (filter.description.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    filter.description,
-                    style: MacosTheme.of(context).typography.caption1.copyWith(
-                          color: MacosTheme.of(context).typography.caption1.color?.withOpacity(0.6),
+                    ),
+                    const SizedBox(height: 4),
+                    _buildRuleCountText(filter, filterManager),
+                    if (filter.description.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        filter.description,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
                         ),
-                  ),
-                ],
-                if (filter.version.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    'Version: ${filter.version}',
-                    style: MacosTheme.of(context).typography.caption2.copyWith(
-                          color: MacosTheme.of(context).typography.caption2.color?.withOpacity(0.5),
+                      ),
+                    ],
+                    if (filter.version.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        'Version: ${filter.version}',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Platform.isMacOS ? MacosColors.tertiaryLabelColor : CupertinoColors.tertiaryLabel,
                         ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          MacosSwitch(
-            value: filter.isSelected,
-            onChanged: (value) => widget.filterManager.toggleFilterListSelection(filter.id),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Platform.isMacOS
+                  ? MacosSwitch(
+                      value: filter.isSelected,
+                      onChanged: (value) {
+                        filterManager.toggleFilterListSelection(filter.id);
+                      },
+                    )
+                  : CupertinoSwitch(
+                      value: filter.isSelected,
+                      onChanged: (value) {
+                        filterManager.toggleFilterListSelection(filter.id);
+                      },
+                    ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildLoadingOverlay() {
+  Widget _buildRuleCountText(FilterList filter, AppFilterManager filterManager) {
+    String text;
+    Color color;
+
+    if (filter.sourceRuleCount != null && filter.sourceRuleCount! > 0) {
+      text = '(${_formatNumber(filter.sourceRuleCount!)} rules)';
+      color = Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel;
+    } else if (filter.sourceRuleCount == null && filter.isSelected && !filterManager.doesFilterFileExist(filter)) {
+      text = '(Counting...)';
+      color = Colors.orange;
+    } else {
+      text = '(N/A rules)';
+      color = Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel;
+    }
+
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: 12,
+        color: color,
+      ),
+    );
+  }
+
+  Widget _buildOverlay(AppFilterManager filterManager) {
+    if (!filterManager.isLoading || filterManager.showingApplyProgressSheet || filterManager.showMissingFiltersSheet || filterManager.showingUpdatePopup) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
-      color: MacosColors.black.withOpacity(0.1),
+      color: Colors.black.withOpacity(0.1),
       child: Center(
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: MacosTheme.of(context).canvasColor,
+            color: Platform.isMacOS ? MacosColors.controlBackgroundColor : CupertinoColors.secondarySystemBackground,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: MacosColors.black.withOpacity(0.2),
+                color: Colors.black.withOpacity(0.1),
                 blurRadius: 10,
-                offset: const Offset(0, 4),
               ),
             ],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const ProgressCircle(
-                value: null,
-                radius: 24,
-              ),
+              Platform.isMacOS ? const ProgressCircle(value: null) : const CupertinoActivityIndicator(radius: 12),
               const SizedBox(height: 10),
               Text(
-                widget.filterManager.statusDescription,
-                style: MacosTheme.of(context).typography.body.copyWith(
-                      color: MacosTheme.of(context).typography.body.color?.withOpacity(0.6),
-                    ),
+                filterManager.statusDescription,
                 textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // iOS-specific methods
-  void _showAddFilterSheetIOS() {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => AddFilterListViewIOS(filterManager: widget.filterManager),
-    );
-  }
-
-  void _showLogsViewIOS() {
-    Navigator.of(context).push(
-      CupertinoPageRoute(
-        builder: (context) => LogsView(onDismiss: () => Navigator.of(context).pop()),
-      ),
-    );
-  }
-
-  void _showUserScriptsViewIOS() {
-    Navigator.of(context).push(
-      CupertinoPageRoute(
-        builder: (context) => UserScriptManagerView(userScriptManager: widget.userScriptManager,
-          onDismiss: () => Navigator.of(context).pop(),
-        ),
-      ),
-    );
-  }
-
-  void _showWhitelistSheetIOS() {
-    Navigator.of(context).push(
-      CupertinoPageRoute(
-        fullscreenDialog: true,
-        builder: (context) => WhitelistView(viewModel: _whitelistViewModel,
-          onDismiss: () => Navigator.of(context).pop(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatsCardsViewIOS() {
-    return Row(
-      children: [
-        Expanded(
-          child: StatCard(
-            title: 'Enabled Lists',
-            value: '$enabledListsCount',
-            icon: 'square_list',
-            pillColor: Colors.transparent,
-            valueColor: CupertinoTheme.of(context).primaryColor ?? CupertinoColors.activeBlue,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: StatCard(
-            title: 'Safari Rules',
-            value: widget.filterManager.lastRuleCount.toString(),
-            icon: 'shield_lefthalf_fill',
-            pillColor: Colors.transparent,
-            valueColor: CupertinoTheme.of(context).primaryColor ?? CupertinoColors.activeBlue,
-          ),
-        ),
-      ],
-    );
-  }
-
-  List<Widget> _buildFilterSectionsIOS() {
-    final sections = <Widget>[];
-
-    for (final category in displayableCategories) {
-      final lists = _listsForCategory(category);
-      if (lists.isNotEmpty) {
-        sections.add(_buildFilterSectionViewIOS(category, lists));
-        sections.add(const SizedBox(height: 16));
-      }
-    }
-
-    final customLists = _customLists;
-    if (customLists.isNotEmpty) {
-      sections.add(_buildFilterSectionViewIOS(FilterListCategory.custom, customLists));
-    }
-
-    return sections;
-  }
-
-  Widget _buildFilterSectionViewIOS(FilterListCategory category, List<FilterList> filters) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              category.displayName,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            FutureBuilder<bool>(
-              future: Future.value(widget.filterManager.isCategoryApproachingLimit(category)),
-              builder: (context, snapshot) {
-                if (snapshot.data == true) {
-                  return Row(
-                    children: [
-                      const SizedBox(width: 8),
-                      CupertinoButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () => widget.filterManager.showCategoryWarning(category),
-                        child: const Icon(
-                          CupertinoIcons.exclamationmark_triangle,
-                          color: CupertinoColors.systemOrange,
-                          size: 16,
-                        ),
-                      ),
-                    ],
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Container(
-          decoration: BoxDecoration(
-            color: CupertinoTheme.of(context).barBackgroundColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            children: filters.asMap().entries.map((entry) {
-              final index = entry.key;
-              final filter = entry.value;
-              return Column(
-                children: [
-                  _buildFilterRowViewIOS(filter),
-                  if (index < filters.length - 1)
-                    Container(
-                      height: 0.5,
-                      color: CupertinoColors.separator,
-                      margin: const EdgeInsets.only(left: 16),
-                    ),
-                ],
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFilterRowViewIOS(FilterList filter) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  filter.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                FilterRuleCountText(
-                  filter: filter,
-                  filterManager: widget.filterManager,
-                  isIOS: true,
-                ),
-                if (filter.description.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    filter.description,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: CupertinoColors.secondaryLabel.resolveFrom(context),
-                    ),
-                  ),
-                ],
-                if (filter.version.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    'Version: ${filter.version}',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: CupertinoColors.tertiaryLabel.resolveFrom(context),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          CupertinoSwitch(
-            value: filter.isSelected,
-            onChanged: (value) => widget.filterManager.toggleFilterListSelection(filter.id),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLoadingOverlayIOS() {
-    return Container(
-      color: CupertinoColors.black.withOpacity(0.1),
-      child: Center(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: CupertinoTheme.of(context).barBackgroundColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CupertinoActivityIndicator(
-                radius: 20,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                widget.filterManager.statusDescription,
                 style: TextStyle(
-                  color: CupertinoColors.secondaryLabel.resolveFrom(context),
+                  color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
                 ),
-                textAlign: TextAlign.center,
               ),
             ],
           ),
@@ -828,39 +462,171 @@ class _ContentViewState extends State<ContentView> {
       ),
     );
   }
-}
 
-// Separate widget to handle async filter file exists check
-class FilterRuleCountText extends StatefulWidget {
-  final FilterList filter;
-  final AppFilterManager filterManager;
-  final bool isIOS;
-
-  const FilterRuleCountText({
-    super.key,
-    required this.filter,
-    required this.filterManager,
-    this.isIOS = false,
-  });
-
-  @override
-  State<FilterRuleCountText> createState() => _FilterRuleCountTextState();
-}
-
-class _FilterRuleCountTextState extends State<FilterRuleCountText> {
-  bool? _filterFileExists;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkFilterFileExists();
+  Widget _buildSheets(AppFilterManager filterManager) {
+    return Stack(
+      children: [
+        if (_showingAddFilterSheet) _buildAddFilterSheet(),
+        if (_showingLogsView)
+          LogsView(
+            onDismiss: () {
+              setState(() {
+                _showingLogsView = false;
+              });
+            },
+          ),
+        if (_showingUserScriptsView)
+          UserScriptManagerView(
+            userScriptManager: widget.userScriptManager,
+            onDismiss: () {
+              setState(() {
+                _showingUserScriptsView = false;
+              });
+            },
+          ),
+        if (_showingWhitelistSheet)
+          Platform.isMacOS
+              ? WhitelistManagerView(
+                  filterManager: filterManager,
+                  onDismiss: () {
+                    setState(() {
+                      _showingWhitelistSheet = false;
+                    });
+                  },
+                )
+              : WhitelistView(
+                  viewModel: filterManager.whitelistViewModel,
+                  onDismiss: () {
+                    setState(() {
+                      _showingWhitelistSheet = false;
+                    });
+                  },
+                ),
+        if (filterManager.showingUpdatePopup)
+          UpdatePopupView(
+            filterManager: filterManager,
+            userScriptManager: widget.userScriptManager,
+            onDismiss: () {
+              filterManager.showingUpdatePopup = false;
+            },
+          ),
+        if (filterManager.showMissingFiltersSheet)
+          MissingFiltersView(
+            filterManager: filterManager,
+            onDismiss: () {
+              filterManager.showMissingFiltersSheet = false;
+            },
+          ),
+        if (filterManager.showingApplyProgressSheet)
+          ApplyChangesProgressView(
+            filterManager: filterManager,
+            onDismiss: () {
+              filterManager.showingApplyProgressSheet = false;
+            },
+          ),
+      ],
+    );
   }
 
-  @override
-  void didUpdateWidget(FilterRuleCountText oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.filter.id != widget.filter.id) {
-      _checkFilterFileExists();
+  Widget _buildAlerts(AppFilterManager filterManager) {
+    return Stack(
+      children: [
+        if (filterManager.showingNoUpdatesAlert)
+          _buildAlert(
+            title: 'No Updates Found',
+            message: 'All filter lists are up to date.',
+            onDismiss: () {
+              filterManager.showingNoUpdatesAlert = false;
+            },
+          ),
+        if (filterManager.showingDownloadCompleteAlert)
+          _buildAlert(
+            title: 'Download Complete',
+            message: filterManager.downloadCompleteMessage,
+            actions: [
+              _buildAlertAction(
+                'Apply Now',
+                () {
+                  filterManager.showingDownloadCompleteAlert = false;
+                  filterManager.applyDownloadedChanges();
+                },
+              ),
+              _buildAlertAction(
+                'Later',
+                () {
+                  filterManager.showingDownloadCompleteAlert = false;
+                },
+              ),
+            ],
+          ),
+        if (filterManager.showingCategoryWarningAlert)
+          _buildAlert(
+            title: 'Category Rule Limit Warning',
+            message: filterManager.categoryWarningMessage,
+            onDismiss: () {
+              filterManager.showingCategoryWarningAlert = false;
+            },
+          ),
+      ],
+    );
+  }
+
+  Widget _buildAlert({
+    required String title,
+    required String message,
+    List<Widget>? actions,
+    VoidCallback? onDismiss,
+  }) {
+    if (Platform.isMacOS) {
+      // Use MacOS alert dialog
+      return Container(
+        color: Colors.black.withOpacity(0.3),
+        child: Center(
+          child: MacosAlertDialog(
+            appIcon: const FlutterLogo(size: 56),
+            title: Text(title),
+            message: Text(message),
+            primaryButton: PushButton(
+              controlSize: ControlSize.large,
+              onPressed: onDismiss ?? () {},
+              child: const Text('OK'),
+            ),
+            secondaryButton: actions?.isNotEmpty == true && actions!.first is PushButton ? actions.first as PushButton : null,
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        color: Colors.black.withOpacity(0.3),
+        child: Center(
+          child: CupertinoAlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: actions ??
+                [
+                  CupertinoDialogAction(
+                    onPressed: onDismiss ?? () {},
+                    child: const Text('OK'),
+                  ),
+                ],
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget _buildAlertAction(String text, VoidCallback onPressed) {
+    if (Platform.isMacOS) {
+      return PushButton(
+        controlSize: ControlSize.large,
+        onPressed: onPressed,
+        child: Text(text),
+      );
+    } else {
+      return CupertinoDialogAction(
+        onPressed: onPressed,
+        child: Text(text),
+      );
     }
   }
 
@@ -871,116 +637,56 @@ class _FilterRuleCountTextState extends State<FilterRuleCountText> {
         setState(() {
           _filterFileExists = exists;
         });
-      }
-    }
+      },
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (widget.filter.sourceRuleCount != null && widget.filter.sourceRuleCount! > 0) {
-      return Text(
-        '(${widget.filter.sourceRuleCount} rules)',
-        style: TextStyle(
-          fontSize: widget.isIOS ? 13 : 12,
-          color: widget.isIOS ? CupertinoColors.secondaryLabel.resolveFrom(context) : MacosTheme.of(context).typography.caption1.color?.withOpacity(0.6),
-        ),
-      );
-    } else if (widget.filter.sourceRuleCount == null && widget.filter.isSelected && _filterFileExists == false) {
-      return Text(
-        '(Counting...)',
-        style: TextStyle(
-          fontSize: widget.isIOS ? 13 : 12,
-          color: CupertinoColors.systemOrange,
-        ),
-      );
+  List<FilterList> _listsForCategory(FilterListCategory category, AppFilterManager filterManager) {
+    return filterManager.filterLists.where((f) => f.category == category && (!_showOnlyEnabledLists || f.isSelected)).toList();
+  }
+
+  List<FilterList> _customLists(AppFilterManager filterManager) {
+    return filterManager.filterLists.where((f) => f.category == FilterListCategory.custom && (!_showOnlyEnabledLists || f.isSelected)).toList();
+  }
+
+  String _formatNumber(int number) {
+    if (number >= 1000000) {
+      return '${(number / 1000000).toStringAsFixed(1)}M';
+    } else if (number >= 1000) {
+      return '${(number / 1000).toStringAsFixed(1)}K';
     } else {
-      return Text(
-        '(N/A rules)',
-        style: TextStyle(
-          fontSize: widget.isIOS ? 13 : 12,
-          color: widget.isIOS ? CupertinoColors.secondaryLabel.resolveFrom(context) : MacosTheme.of(context).typography.caption1.color?.withOpacity(0.6),
-        ),
-      );
+      return number.toString();
     }
   }
 }
 
 class AddFilterListView extends StatefulWidget {
   final AppFilterManager filterManager;
+  final VoidCallback onDismiss;
 
   const AddFilterListView({
     super.key,
     required this.filterManager,
+    required this.onDismiss,
   });
 
   @override
-  State<AddFilterListView> createState() => _AddFilterListViewState();
+  ConsumerState<AddFilterListViewIOS> createState() => _AddFilterListViewIOSState();
 }
 
-class _AddFilterListViewState extends State<AddFilterListView> {
+class _AddFilterListViewIOSState extends ConsumerState<AddFilterListViewIOS> {
   final _nameController = TextEditingController();
   final _urlController = TextEditingController();
-  bool _showErrorAlert = false;
-  String _errorMessage = '';
 
   @override
-  Widget build(BuildContext context) {
-    return MacosSheet(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Add Custom Filter List',
-              style: MacosTheme.of(context).typography.title3,
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Filter Name (Optional):',
-              style: MacosTheme.of(context).typography.caption1,
-            ),
-            const SizedBox(height: 4),
-            MacosTextField(
-              controller: _nameController,
-              placeholder: 'e.g., My Ad Block List',
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Filter URL:',
-              style: MacosTheme.of(context).typography.caption1,
-            ),
-            const SizedBox(height: 4),
-            MacosTextField(
-              controller: _urlController,
-              placeholder: 'https://example.com/filter.txt',
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                PushButton(
-                  controlSize: ControlSize.large,
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
-                ),
-                const SizedBox(width: 8),
-                PushButton(
-                  controlSize: ControlSize.large,
-                  color: MacosTheme.of(context).primaryColor,
-                  onPressed: _urlController.text.trim().isEmpty ? null : _validateAndAdd,
-                  child: const Text('Add'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+  void dispose() {
+    _nameController.dispose();
+    _urlController.dispose();
+    super.dispose();
   }
 
   void _validateAndAdd() {
+    final filterManager = ref.read(appFilterManagerProvider);
     final trimmedURL = _urlController.text.trim();
 
     if (trimmedURL.isEmpty) {
@@ -989,6 +695,151 @@ class _AddFilterListViewState extends State<AddFilterListView> {
 
     final uri = Uri.tryParse(trimmedURL);
     if (uri == null || !uri.hasScheme || !uri.hasAuthority) {
+      _showError('The URL entered is not valid. Please enter a complete and correct URL (e.g., http:// or https://).');
+      return;
+    }
+
+    if (filterManager.filterLists.any((f) => f.url.toString() == trimmedURL)) {
+      _showError('A filter list with this URL already exists.');
+      return;
+    }
+
+    filterManager.addFilterList(
+      name: _nameController.text.trim(),
+      urlString: trimmedURL,
+    );
+    Navigator.of(context).pop();
+  }
+
+  void _showError(String message) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text('Invalid Input'),
+        content: Text(message),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black.withOpacity(0.5),
+      child: Center(
+        child: Container(
+          width: Platform.isMacOS ? 400 : double.infinity,
+          height: Platform.isMacOS ? 220 : null,
+          margin: Platform.isMacOS ? null : const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Platform.isMacOS ? MacosColors.controlBackgroundColor : CupertinoColors.systemBackground,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Add Custom Filter List',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Platform.isMacOS ? MacosColors.labelColor : CupertinoColors.label,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Filter Name (Optional):',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Platform.isMacOS
+                      ? MacosTextField(
+                          controller: _nameController,
+                          placeholder: 'e.g., My Ad Block List',
+                        )
+                      : CupertinoTextField(
+                          controller: _nameController,
+                          placeholder: 'e.g., My Ad Block List',
+                        ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Filter URL:',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Platform.isMacOS ? MacosColors.secondaryLabelColor : CupertinoColors.secondaryLabel,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Platform.isMacOS
+                      ? MacosTextField(
+                          controller: _urlController,
+                          placeholder: 'https://example.com/filter.txt',
+                        )
+                      : CupertinoTextField(
+                          controller: _urlController,
+                          placeholder: 'https://example.com/filter.txt',
+                          keyboardType: TextInputType.url,
+                        ),
+                ],
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  Platform.isMacOS
+                      ? PushButton(
+                          controlSize: ControlSize.large,
+                          onPressed: widget.onDismiss,
+                          child: const Text('Cancel'),
+                        )
+                      : CupertinoButton(
+                          onPressed: widget.onDismiss,
+                          child: const Text('Cancel'),
+                        ),
+                  const Spacer(),
+                  Platform.isMacOS
+                      ? PushButton(
+                          controlSize: ControlSize.large,
+                          onPressed: _urlController.text.trim().isEmpty ? null : _validateAndAdd,
+                          child: const Text('Add'),
+                        )
+                      : CupertinoButton.filled(
+                          onPressed: _urlController.text.trim().isEmpty ? null : _validateAndAdd,
+                          child: const Text('Add'),
+                        ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _validateAndAdd() {
+    final trimmedUrl = _urlController.text.trim();
+
+    if (trimmedUrl.isEmpty) return;
+
+    final uri = Uri.tryParse(trimmedUrl);
+    if (uri == null || uri.scheme.isEmpty || uri.host.isEmpty) {
       setState(() {
         _errorMessage = 'The URL entered is not valid. Please enter a complete and correct URL (e.g., http:// or https://).';
         _showErrorAlert = true;
@@ -996,7 +847,9 @@ class _AddFilterListViewState extends State<AddFilterListView> {
       return;
     }
 
-    if (widget.filterManager.filterLists.any((f) => f.url.toString() == trimmedURL)) {
+    // Check if filter already exists
+    final exists = widget.filterManager.filterLists.any((f) => f.url == uri);
+    if (exists) {
       setState(() {
         _errorMessage = 'A filter list with this URL already exists.';
         _showErrorAlert = true;
@@ -1006,9 +859,9 @@ class _AddFilterListViewState extends State<AddFilterListView> {
 
     widget.filterManager.addFilterList(
       name: _nameController.text.trim(),
-      urlString: trimmedURL,
+      urlString: trimmedUrl,
     );
-    Navigator.of(context).pop();
+    widget.onDismiss();
   }
 
   @override

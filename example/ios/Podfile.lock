@@ -7,10 +7,12 @@ PODS:
   - Flutter (1.0.0)
   - flutter_wblock_plugin (2.0.0):
     - Flutter
-    - wBlockCoreService (= 3.0.0)
+    - wBlockCoreService (= 4.0.0)
   - PublicSuffixList (2.0.0)
   - Punycode (3.0.0)
-  - wBlockCoreService (3.0.0):
+  - url_launcher_ios (0.0.1):
+    - Flutter
+  - wBlockCoreService (4.0.0):
     - ContentBlockerConverter (= 2.0.48)
     - FilterEngine (= 2.0.48)
     - ZIPFoundation (= 0.9.19)
@@ -23,6 +25,7 @@ DEPENDENCIES:
   - flutter_wblock_plugin (from `.symlinks/plugins/flutter_wblock_plugin/ios`)
   - PublicSuffixList (from `../../ios/Podspecs`)
   - Punycode (from `../../ios/Podspecs`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - wBlockCoreService (from `../../ios/Podspecs`)
   - ZIPFoundation (from `../../ios/Podspecs/ZipFoundation.podspec`)
 
@@ -39,6 +42,8 @@ EXTERNAL SOURCES:
     :podspec: "../../ios/Podspecs"
   Punycode:
     :podspec: "../../ios/Podspecs"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
   wBlockCoreService:
     :podspec: "../../ios/Podspecs"
   ZIPFoundation:
@@ -48,12 +53,13 @@ SPEC CHECKSUMS:
   ContentBlockerConverter: 92635e566a6986a09538c107b3b605b590ea47bc
   FilterEngine: 887554152db46d3ca40e61648dc820272137bafb
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_wblock_plugin: cf19c4368ee277211c5de7fc948f1df45958ae4b
+  flutter_wblock_plugin: e3d4fdbff20b582cdf3811232e950cd271737e50
   PublicSuffixList: a721f52d168f67a8787bb867f25ddda90a9b4ffa
   Punycode: 177e2ef2a9b3678cbdae851be6df1ee4d27f036b
-  wBlockCoreService: 95aacd481097c18ca0b00e8fcbbbb50038512259
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  wBlockCoreService: 23ca65a1200af0870711db75f3c1cb1c848c0a3d
   ZIPFoundation: bcece1699f80b5d63488c3886daa80a14ebe0a60
 
-PODFILE CHECKSUM: 0675d8673e6bc07413ddb37fcb20cad020b56e18
+PODFILE CHECKSUM: 3d5bc3e2d9bb85852b7fbf71383981ce17e59e6d
 
 COCOAPODS: 1.16.2
